@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynthApp", "SynthApp\SynthApp.csproj", "{7775F67C-FB7D-4944-8C8A-FB4E8CD9A27B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synth", "Synth\Synth.csproj", "{AB19B91F-0355-4BA0-BA55-8AE6AFEBE882}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7775F67C-FB7D-4944-8C8A-FB4E8CD9A27B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7775F67C-FB7D-4944-8C8A-FB4E8CD9A27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7775F67C-FB7D-4944-8C8A-FB4E8CD9A27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7775F67C-FB7D-4944-8C8A-FB4E8CD9A27B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB19B91F-0355-4BA0-BA55-8AE6AFEBE882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB19B91F-0355-4BA0-BA55-8AE6AFEBE882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB19B91F-0355-4BA0-BA55-8AE6AFEBE882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB19B91F-0355-4BA0-BA55-8AE6AFEBE882}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B098ABAC-0F2A-4445-B23C-2E152D00674F}
+	EndGlobalSection
+EndGlobal
