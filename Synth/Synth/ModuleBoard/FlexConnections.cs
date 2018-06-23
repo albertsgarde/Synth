@@ -44,13 +44,14 @@ namespace SynthLib.Board
                     return true;
                 }
             }
-            index = 0;
-            return false;
+            index = connections.Count;
+            connections.Add(null);
+            return true;
         }
 
         public override IEnumerator<Connection> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return connections.GetEnumerator();
         }
     }
 }
