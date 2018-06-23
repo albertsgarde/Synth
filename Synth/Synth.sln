@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stuff", "Stuff\Stuff\Stuff.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynthLib", "Synth\SynthLib.csproj", "{98D49669-8B40-4248-859F-6C17928315E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynthConsole", "SynthConsole\SynthConsole.csproj", "{D8DCB701-F97E-42D7-B050-C53E79A945C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{98D49669-8B40-4248-859F-6C17928315E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98D49669-8B40-4248-859F-6C17928315E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98D49669-8B40-4248-859F-6C17928315E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8DCB701-F97E-42D7-B050-C53E79A945C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8DCB701-F97E-42D7-B050-C53E79A945C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8DCB701-F97E-42D7-B050-C53E79A945C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8DCB701-F97E-42D7-B050-C53E79A945C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

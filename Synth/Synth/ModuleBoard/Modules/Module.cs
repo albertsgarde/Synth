@@ -16,6 +16,8 @@ namespace SynthLib.Board.Modules
 
         public abstract float[] Process(float[] inputs);
 
+        public string Name { get; set; }
+
         public IEnumerable<Connection> Connections()
         {
             return Inputs.Concat(Outputs);
