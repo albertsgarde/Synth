@@ -81,7 +81,7 @@ namespace SynthLib.SynthProviders
 
             public float Next()
             {
-                return active ? osc.Next(frequency) : 0;
+                return active ? osc.NextValue(frequency) : 0;
             }
 
             // TODO: End() and fade.

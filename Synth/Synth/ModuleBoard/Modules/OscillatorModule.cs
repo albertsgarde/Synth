@@ -26,7 +26,7 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs)
         {
-            var next = oscillator.Next(440);
+            var next = oscillator.NextValue(440);
             var output = new float[Outputs.Count];
             for (int i = 0; i < output.Length; ++i)
                 output[i] = next;

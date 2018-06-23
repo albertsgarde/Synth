@@ -51,7 +51,7 @@ namespace SynthLib.SynthProviders
                     return 0;
             }
             positionInNote += 1d / SampleRate;
-            return oscillator.Next(melodyEnumerator.Current.Tone.Frequency);
+            return oscillator.NextValue(melodyEnumerator.Current.Tone.Frequency);
         }
     }
 }

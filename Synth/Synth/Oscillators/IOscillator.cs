@@ -27,7 +27,7 @@ namespace SynthLib.Oscillators
         /// A combined call of Next(double) and CurrentValue(float, float).
         /// Moves the oscillator forward one step, then returns the value.
         /// </summary>
-        float NextValue(double frequency, float min, float max);
+        float NextValue(double frequency, float min = -1, float max = 1);
 
         void Reset();
 
