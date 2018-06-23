@@ -15,8 +15,6 @@ namespace SynthLib.Board
     {
         private IList<Module> modules;
 
-        public Module EndModule { get; private set; }
-
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
@@ -24,7 +22,6 @@ namespace SynthLib.Board
         public ModuleBoard(int sampleRate = 44100)
         {
             modules = new List<Module>();
-            EndModule = new EndModule();
             SampleRate = sampleRate;
             Finished = false;
         }
