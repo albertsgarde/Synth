@@ -7,20 +7,27 @@ using System.Threading.Tasks;
 namespace SynthLib.Oscillators
 {
     /// <summary>
-    /// Provides an oscillation between -1 and 1
+    /// Provides an oscillation between min and max
     /// </summary>
     public interface IOscillator
     {
         int SampleRate { get; }
 
-        /// <returns>The next frame given the current frequency.</returns>
-        float Next(double frequency);
-        
         /// <summary>
-        /// Acts like Next(double), but doesn't move the oscillator forward.
+        /// Moves the oscillator forward one step. The length of the step is equal to 1 second/SampleRate.
         /// </summary>
-        /// <returns>The value in the current state.</returns>
-        float CurrentValue();
+        void Next(double frequency);
+
+        /// <param name="min">The minimum value.</param>
+        /// <param name="max">The maximum value.</param>
+        /// <returns>What the value would be, the oscillator oscillated between min and max.</returns>
+        float CurrentValue(float min = -1, float max = 1);
+
+        /// <summary>
+        /// A combined call of Next(double) and CurrentValue(float, float).
+        /// Moves the oscillator forward one step, then returns the value.
+        /// </summary>
+        float NextValue(double frequency, float min, float max);
 
         void Reset();
 

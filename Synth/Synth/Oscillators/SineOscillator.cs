@@ -21,16 +21,21 @@ namespace SynthLib.Oscillators
             SampleRate = sampleRate;
         }
 
-        public float Next(double frequency)
+        public void Next(double frequency)
         {
             curRadians += frequency / SampleRate * TAU;
             curRadians %= TAU;
-            return CurrentValue();
         }
 
-        public float CurrentValue()
+        public float CurrentValue(float min = -1, float max = 1)
         {
-            return (float)Math.Sin(curRadians);
+            return ((float)Math.Sin(curRadians) + 1) * (max - min) / 2 + min;
+        }
+
+        public float NextValue(double frequency, float min = -1, float max = 1)
+        {
+            Next(frequency);
+            return CurrentValue(min, max);
         }
 
         public void Reset()

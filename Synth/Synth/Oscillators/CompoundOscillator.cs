@@ -37,14 +37,19 @@ namespace SynthLib.Oscillators
                 this.frequencyMultiplier = frequencyMultiplier;
             }
 
-            public float Next(double frequency)
+            public void Next(double frequency)
             {
-                return oscillator.Next(frequency * frequencyMultiplier) * Weight;
+                oscillator.Next(frequency * frequencyMultiplier);
             }
 
-            public float CurrentValue()
+            public float CurrentValue(float min, float max)
             {
-                return oscillator.CurrentValue() * Weight;
+                return oscillator.CurrentValue(min, max) * Weight;
+            }
+
+            public float NextValue(double frequency, float min, float max)
+            {
+                return oscillator.NextValue(frequency, min, max);
             }
 
             public void Reset()
@@ -58,25 +63,31 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public float Next(double frequency)
+        public void Next(double frequency)
+        {
+            foreach (var osc in oscillators)
+                osc.Next(frequency);
+        }
+
+        public float CurrentValue(float min = -1, float max = 1)
         {
             float result = 0;
             float totalWeight = 0;
             foreach (var osc in oscillators)
             {
-                result += osc.Next(frequency);
+                result += osc.CurrentValue(min, max);
                 totalWeight += osc.Weight;
             }
             return result / totalWeight;
         }
 
-        public float CurrentValue()
+        public float NextValue(double frequency, float min = -1, float max = 1)
         {
             float result = 0;
             float totalWeight = 0;
             foreach (var osc in oscillators)
             {
-                result += osc.CurrentValue();
+                result += osc.NextValue(frequency, min, max);
                 totalWeight += osc.Weight;
             }
             return result / totalWeight;

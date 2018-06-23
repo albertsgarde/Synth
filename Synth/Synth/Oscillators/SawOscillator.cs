@@ -18,16 +18,21 @@ namespace SynthLib.Oscillators
             SampleRate = sampleRate;
         }
 
-        public float Next(double frequency)
+        public void Next(double frequency)
         {
             curValue += frequency / SampleRate;
             curValue %= 1;
-            return CurrentValue();
         }
 
-        public float CurrentValue()
+        public float CurrentValue(float min = -1, float max = 1)
         {
-            return (float)curValue * 2 - 1;
+            return (float)curValue * (max - min) + min;
+        }
+        
+        public float NextValue(double frequency, float min = -1, float max = 1)
+        {
+            Next(frequency);
+            return CurrentValue(min, max);
         }
 
         public void Reset()
