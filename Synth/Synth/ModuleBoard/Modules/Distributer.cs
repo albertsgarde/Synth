@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace SynthLib.Board.Modules
 {
+    /// <summary>
+    /// Distributes incoming signals according to the specified input and output weights.
+    /// The total output amplitude is equal to the weighted total input amplitude.
+    /// </summary>
     public class Distributer : Module
     {
         public override Connections Inputs { get; }
@@ -61,7 +65,7 @@ namespace SynthLib.Board.Modules
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
                 totalInput += inputs[i] * InputWeights[i];
-            totalInput /= totalInputWeight;
+            totalInput /= (totalInputWeight/inputs.Length);
 
             var totalOutput = totalInput / totalOutputWeight;
             var result = new float[Outputs.Count];
