@@ -6,6 +6,8 @@
 		Delay: Delays the signal.
 	Fix weird sounds in synth.
 	Stuff like LFOs and Envelopes.
+	Test
+	Documentation
 	Make all Connections FlexConnections?
 	Replace lists in SynthResult with thread-safe containers.
 
