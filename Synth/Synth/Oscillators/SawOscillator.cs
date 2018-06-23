@@ -22,7 +22,12 @@ namespace SynthLib.Oscillators
         {
             curValue += frequency / SampleRate;
             curValue %= 1;
-            return (float) curValue * 2 - 1;
+            return CurrentValue();
+        }
+
+        public float CurrentValue()
+        {
+            return (float)curValue * 2 - 1;
         }
 
         public void Reset()

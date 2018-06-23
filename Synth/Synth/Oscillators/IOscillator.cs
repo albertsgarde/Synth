@@ -15,6 +15,12 @@ namespace SynthLib.Oscillators
 
         /// <returns>The next frame given the current frequency.</returns>
         float Next(double frequency);
+        
+        /// <summary>
+        /// Acts like Next(double), but doesn't move the oscillator forward.
+        /// </summary>
+        /// <returns>The value in the current state.</returns>
+        float CurrentValue();
 
         void Reset();
 

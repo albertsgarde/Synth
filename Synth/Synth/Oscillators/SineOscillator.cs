@@ -25,6 +25,11 @@ namespace SynthLib.Oscillators
         {
             curRadians += frequency / SampleRate * TAU;
             curRadians %= TAU;
+            return CurrentValue();
+        }
+
+        public float CurrentValue()
+        {
             return (float)Math.Sin(curRadians);
         }
 

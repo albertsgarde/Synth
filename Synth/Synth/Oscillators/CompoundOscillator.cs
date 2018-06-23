@@ -42,6 +42,11 @@ namespace SynthLib.Oscillators
                 return oscillator.Next(frequency * frequencyMultiplier) * Weight;
             }
 
+            public float CurrentValue()
+            {
+                return oscillator.CurrentValue() * Weight;
+            }
+
             public void Reset()
             {
                 oscillator.Reset();
@@ -60,6 +65,18 @@ namespace SynthLib.Oscillators
             foreach (var osc in oscillators)
             {
                 result += osc.Next(frequency);
+                totalWeight += osc.Weight;
+            }
+            return result / totalWeight;
+        }
+
+        public float CurrentValue()
+        {
+            float result = 0;
+            float totalWeight = 0;
+            foreach (var osc in oscillators)
+            {
+                result += osc.CurrentValue();
                 totalWeight += osc.Weight;
             }
             return result / totalWeight;
