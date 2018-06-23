@@ -1,0 +1,1 @@
+When cloning use "git clone --recursive" to ensure you also get the "Stuff" submodule.

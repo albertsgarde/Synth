@@ -1,0 +1,3 @@
+[submodule "Synth/Stuff"]
+	path = Synth/Stuff
+	url = https://github.com/PenguinAgen/Stuff.git
