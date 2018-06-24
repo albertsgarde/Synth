@@ -13,7 +13,8 @@ namespace SynthConsole
     {
         static void Main(string[] args)
         {
-
+            var synth = new SynthLib.Synth();
+            Console.ReadLine();
         }
     }
 }

@@ -47,6 +47,7 @@
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
+    <Compile Include="Midi.cs" />
     <Compile Include="ModuleBoard\Connection.cs" />
     <Compile Include="ModuleBoard\Connections.cs" />
     <Compile Include="ModuleBoard\ConnectionsArray.cs" />
