@@ -8,8 +8,9 @@
 	Stuff like LFOs and Envelopes.
 	Test
 	Documentation
-	Make all Connections FlexConnections?
 	Replace lists in SynthResult with thread-safe containers.
+	Make the synth non mono.
+	Make all Connections FlexConnections?
 
 Music:
 	Let most music data be in a single object that can then be passed around.
