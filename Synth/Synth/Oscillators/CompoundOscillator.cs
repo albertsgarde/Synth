@@ -49,7 +49,7 @@ namespace SynthLib.Oscillators
 
             public float NextValue(double frequency, float min, float max)
             {
-                return oscillator.NextValue(frequency, min, max);
+                return oscillator.NextValue(frequency * frequencyMultiplier, min, max);
             }
 
             public void Reset()
