@@ -42,13 +42,6 @@ namespace SynthLib
 
         private void Setup()
         {
-            var oscillators = new List<CompoundOscillator.Oscillator>()
-            {
-                new CompoundOscillator.Oscillator(new SawOscillator(), 0.4f, 0, 0),
-                new CompoundOscillator.Oscillator(new SawOscillator(), 0.4f, 0, 10),
-                new CompoundOscillator.Oscillator(new SawOscillator(), 0.16f, 12, -10),
-            };
-            var compOsc = new CompoundOscillator(oscillators, SampleRate);
 
             var midiIn = new MidiIn(0);
 

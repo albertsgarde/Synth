@@ -48,17 +48,18 @@
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
     <Compile Include="Midi.cs" />
-    <Compile Include="ModuleBoard\Connection.cs" />
-    <Compile Include="ModuleBoard\Connections.cs" />
-    <Compile Include="ModuleBoard\ConnectionsArray.cs" />
-    <Compile Include="ModuleBoard\FlexConnections.cs" />
-    <Compile Include="ModuleBoard\ModuleBoard.cs" />
-    <Compile Include="ModuleBoard\Modules\Distributer.cs" />
-    <Compile Include="ModuleBoard\Modules\EffectModule.cs" />
-    <Compile Include="ModuleBoard\Modules\EndModule.cs" />
-    <Compile Include="ModuleBoard\Modules\Mixer.cs" />
-    <Compile Include="ModuleBoard\Modules\Module.cs" />
-    <Compile Include="ModuleBoard\Modules\OscillatorModule.cs" />
+    <Compile Include="Board\Connection.cs" />
+    <Compile Include="Board\Connections.cs" />
+    <Compile Include="Board\ConnectionsArray.cs" />
+    <Compile Include="Board\FlexConnections.cs" />
+    <Compile Include="Board\ModuleBoard.cs" />
+    <Compile Include="Board\Modules\Distributer.cs" />
+    <Compile Include="Board\Modules\EffectModule.cs" />
+    <Compile Include="Board\Modules\EndModule.cs" />
+    <Compile Include="Board\Modules\Gain.cs" />
+    <Compile Include="Board\Modules\Mixer.cs" />
+    <Compile Include="Board\Modules\Module.cs" />
+    <Compile Include="Board\Modules\OscillatorModule.cs" />
     <Compile Include="Music\BPM.cs" />
     <Compile Include="Music\Chord.cs" />
     <Compile Include="Music\Interval.cs" />
@@ -81,7 +82,8 @@
     <Compile Include="SynthProviders\TonePlayer.cs" />
     <Compile Include="SynthResult.cs" />
     <Compile Include="SynthUtils.cs" />
-    <Compile Include="ValueProviders\IValueProvider.cs" />
+    <Compile Include="ValueProviders\Constant.cs" />
+    <Compile Include="ValueProviders\ValueProvider.cs" />
     <Compile Include="ValueProviders\LFO.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +96,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Bounding.txt" />
     <Content Include="Assets\Music\Data.xml" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>

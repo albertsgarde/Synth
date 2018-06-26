@@ -10,6 +10,8 @@
 	Documentation
 	Replace lists in SynthResult with thread-safe containers.
 	Make the synth non mono.
+	ModuleTypes that are loaded from files.
+	A module holds a ModuleType from which it calls stuff?
 	Make all Connections FlexConnections?
 
 Music:

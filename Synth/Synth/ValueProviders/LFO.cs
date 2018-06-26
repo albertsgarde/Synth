@@ -9,13 +9,13 @@ namespace SynthLib.ValueProviders
 {
     public class LFO : IValueProvider
     {
-        private IOscillator oscillator;
+        private readonly IOscillator oscillator;
 
-        private float frequency;
+        private readonly float frequency;
 
         public int SampleRate { get; }
 
-        public LFO(IOscillator oscillator, float frequency, int sampleRate = 44100)
+        public LFO(IOscillator oscillator, float frequency, float min = -1, float max = 1, int sampleRate = 44100)
         {
             this.oscillator = oscillator.Clone();
             this.frequency = frequency;
@@ -30,14 +30,14 @@ namespace SynthLib.ValueProviders
             oscillator.Next(frequency);
         }
 
-        public float CurrentValue(float min = -1, float max = 1)
+        public float CurrentValue()
         {
             return oscillator.CurrentValue();
         }
 
-        public float NextValue(float min = -1, float max = 1)
+        public float NextValue()
         {
-            return oscillator.NextValue(frequency, min, max);
+            return oscillator.NextValue(frequency);
         }
     }
 }

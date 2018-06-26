@@ -1,0 +1,1 @@
+﻿((currentValue + 1) * ((max2 - min2) / 2) + min2 + 1) * (max3 - min3) / 2 + min3
