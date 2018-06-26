@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using SynthLib.SynthProviders;
 using SynthLib.Board.Modules;
+using SynthLib.ValueProviders;
 using Stuff;
 
 namespace SynthLib.Board
@@ -15,6 +16,8 @@ namespace SynthLib.Board
     {
         private IList<Module> modules;
 
+        private readonly List<IValueProvider> valueProviders;
+
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
@@ -22,6 +25,7 @@ namespace SynthLib.Board
         public ModuleBoard(int sampleRate = 44100)
         {
             modules = new List<Module>();
+            valueProviders = new List<IValueProvider>();
             SampleRate = sampleRate;
             Finished = false;
         }
@@ -50,6 +54,17 @@ namespace SynthLib.Board
             SortModules();
         }
 
+        public void AddValueProvider(params IValueProvider[] valueProviders)
+        {
+            this.valueProviders.AddRange(valueProviders);
+        }
+
+        public void RemoveValueProvider(params IValueProvider[] valueProviders)
+        {
+            foreach (var vp in valueProviders)
+                this.valueProviders.Add(vp);
+        }
+
         /// <summary>
         /// Validates the state of the module network. Does nothing if not in debug.
         /// </summary>
@@ -75,6 +90,11 @@ namespace SynthLib.Board
 
         public float Next()
         {
+            foreach (var mod in modules)
+                mod.Next();
+            foreach (var vp in valueProviders)
+                vp.Next();
+
             float result = 0;
 
             var inputTable = new Dictionary<Module, float[]>();
@@ -88,7 +108,10 @@ namespace SynthLib.Board
                 else
                 {
                     for (int i = 0; i < output.Length; ++i)
-                        inputTable[mod.Outputs[i].Destination][mod.Outputs[i].DestinationIndex] = output[i];
+                    {
+                        if (mod.Outputs[i] != null)
+                            inputTable[mod.Outputs[i].Destination][mod.Outputs[i].DestinationIndex] = output[i];
+                    }
                 }
             }
             return result;

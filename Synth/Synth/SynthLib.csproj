@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board\ValueReciever.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\Pass.cs" />
@@ -83,7 +84,7 @@
     <Compile Include="SynthResult.cs" />
     <Compile Include="SynthUtils.cs" />
     <Compile Include="ValueProviders\Constant.cs" />
-    <Compile Include="ValueProviders\ValueProvider.cs" />
+    <Compile Include="ValueProviders\IValueProvider.cs" />
     <Compile Include="ValueProviders\LFO.cs" />
   </ItemGroup>
   <ItemGroup>

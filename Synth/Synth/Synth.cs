@@ -8,6 +8,7 @@ using SynthLib.Oscillators;
 using SynthLib.Effects;
 using SynthLib.Board.Modules;
 using SynthLib.Board;
+using SynthLib.ValueProviders;
 using NAudio.Midi;
 using NAudio.Wave;
 
@@ -46,28 +47,49 @@ namespace SynthLib
             var midiIn = new MidiIn(0);
 
             var midi = new Midi(midiIn);
+        
+            var lfo = new LFO(new SineOscillator(), 0, 0.5f, 1);
 
             var o1 = new OscillatorModule(new SawOscillator(), midi, 1);
-            var o2 = new OscillatorModule(new SawOscillator(), midi, 1, 0.1f);
-            var o3 = new OscillatorModule(new SawOscillator(), midi, 1, 11.9f);
+            o1.Gain.ValueProvider = lfo;
 
-            var d1 = new Distributer(new float[] { 1, 1, 0.4f }, new float[] { 1, 1f });
+            var o2 = new OscillatorModule(new SawOscillator(), midi, 1, 0.1f);
+            o2.Gain.ValueProvider = lfo;
+
+            var o3 = new OscillatorModule(new SawOscillator(), midi, 1, 11.9f);
+            o3.Gain.ValueProvider = lfo;
+
+            var o4 = new OscillatorModule(new SawOscillator(), midi, 1, 23.95f);
+            o4.Gain.ValueProvider = lfo;
+
+            var o5 = new OscillatorModule(new SawOscillator(), midi, 1, 36.05f);
+            o5.Gain.ValueProvider = lfo;
+
+            var d1 = new Distributer(new float[] { 1, 1, 0.4f, 0.4f, 0.4f }, new float[] { 1, 1f });
             var e1 = new EffectModule(new SimpleFilter(5));
+            var m1 = new Mixer(2, 1);
+            m1.OutputGains[0] = 0.2f;
             var end = new EndModule();
 
             Connections.NewConnection(o1, d1);
             Connections.NewConnection(o2, d1);
             Connections.NewConnection(o3, d1);
+            Connections.NewConnection(o4, d1);
+            Connections.NewConnection(o5, d1);
 
             Connections.NewConnection(d1, e1);
-            Connections.NewConnection(d1, end);
+            Connections.NewConnection(d1, m1);
 
-            Connections.NewConnection(e1, end);
+            Connections.NewConnection(e1, m1);
+
+            Connections.NewConnection(m1, end);
 
             var board = new ModuleBoard()
             {
-                end, e1, d1, o3, o2, o1
+                end, m1, e1, d1, o5, o4, o3, o2, o1
             };
+
+            board.AddValueProvider(lfo);
 
             synthResult.AddSynthProvider(board);
         }

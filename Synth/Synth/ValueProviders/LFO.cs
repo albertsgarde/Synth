@@ -13,12 +13,22 @@ namespace SynthLib.ValueProviders
 
         private readonly float frequency;
 
+        private float min;
+
+        private float max;
+
         public int SampleRate { get; }
 
         public LFO(IOscillator oscillator, float frequency, float min = -1, float max = 1, int sampleRate = 44100)
         {
+            if (min < -1 || min > 1)
+                throw new ArgumentException("Min out of range. Required: -1 <= min <= 1");
+            if (max < -1 || max > 1)
+                throw new ArgumentException("Max out of range. Required: -1 <= min <= 1");
             this.oscillator = oscillator.Clone();
             this.frequency = frequency;
+            this.min = min;
+            this.max = max;
             SampleRate = sampleRate;
 
             if (oscillator.SampleRate != sampleRate)
@@ -32,12 +42,13 @@ namespace SynthLib.ValueProviders
 
         public float CurrentValue()
         {
-            return oscillator.CurrentValue();
+            return (oscillator.CurrentValue() + 1) * (max - min) / 2 + min;
         }
 
         public float NextValue()
         {
-            return oscillator.NextValue(frequency);
+            Next();
+            return CurrentValue();
         }
     }
 }
