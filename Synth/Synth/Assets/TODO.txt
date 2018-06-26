@@ -12,6 +12,7 @@
 	Make the synth non mono.
 	ModuleTypes that are loaded from files.
 	A module holds a ModuleType from which it calls stuff?
+	Static settings?
 	Make all Connections FlexConnections?
 
 Music:
