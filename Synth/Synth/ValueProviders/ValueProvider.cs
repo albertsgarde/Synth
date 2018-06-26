@@ -26,7 +26,5 @@ namespace SynthLib.ValueProviders
         /// Moves the ValueProvider forward one step, then returns the value.
         /// </summary>
         float NextValue();
-
-
     }
 }
