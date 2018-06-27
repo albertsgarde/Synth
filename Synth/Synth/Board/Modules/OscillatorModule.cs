@@ -13,7 +13,7 @@ namespace SynthLib.Board.Modules
     {
         private readonly IOscillator oscillator;
 
-        public ValueReciever Gain { get; }
+        public float Gain { get; set; }
 
         private readonly float frequencyMultiplier;
 
@@ -29,7 +29,7 @@ namespace SynthLib.Board.Modules
         {
             this.oscillator = oscillator.Clone();
             frequencyMultiplier = (float) Math.Pow(2, (1 / 12d) * halfToneOffset);
-            Gain = new ValueReciever(new Constant(gain), 0, 1);
+            Gain = gain;
             Inputs = new ConnectionsArray(0);
             Outputs = new ConnectionsArray(outputs);
             this.midi = midi;
@@ -48,7 +48,7 @@ namespace SynthLib.Board.Modules
                 return output;
             var next = oscillator.CurrentValue();
             for (int i = 0; i < output.Length; ++i)
-                output[i] = next * Gain.CurrentValue();
+                output[i] = next * Gain;
             return output;
         }
     }

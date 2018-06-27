@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SynthLib.ValueProviders
 {
-    public class Constant : IValueProvider
+    public class Constant : ValueProvider
     {
-        private float value;
+        private readonly float value;
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
         
         public Constant(float value, int sampleRate = 44100) 
         {
@@ -18,16 +18,7 @@ namespace SynthLib.ValueProviders
             SampleRate = sampleRate;
         }
 
-        public void Next()
-        {
-        }
-
-        public float CurrentValue()
-        {
-            return value;
-        }
-
-        public float NextValue()
+        protected override float NextValue()
         {
             return value;
         }

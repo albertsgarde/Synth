@@ -16,7 +16,7 @@ namespace SynthLib.Board
     {
         private IList<Module> modules;
 
-        private readonly List<IValueProvider> valueProviders;
+        private readonly List<ValueProvider> valueProviders;
 
         public int SampleRate { get; }
 
@@ -25,7 +25,7 @@ namespace SynthLib.Board
         public ModuleBoard(int sampleRate = 44100)
         {
             modules = new List<Module>();
-            valueProviders = new List<IValueProvider>();
+            valueProviders = new List<ValueProvider>();
             SampleRate = sampleRate;
             Finished = false;
         }
@@ -54,12 +54,12 @@ namespace SynthLib.Board
             SortModules();
         }
 
-        public void AddValueProvider(params IValueProvider[] valueProviders)
+        public void AddValueProvider(params ValueProvider[] valueProviders)
         {
             this.valueProviders.AddRange(valueProviders);
         }
 
-        public void RemoveValueProvider(params IValueProvider[] valueProviders)
+        public void RemoveValueProvider(params ValueProvider[] valueProviders)
         {
             foreach (var vp in valueProviders)
                 this.valueProviders.Add(vp);

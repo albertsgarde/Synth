@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace SynthLib.ValueProviders
 {
-    public class LFO : IValueProvider
+    public class LFO : ValueProvider
     {
         private readonly IOscillator oscillator;
 
         private readonly float frequency;
 
-        private float min;
+        private readonly float min;
 
-        private float max;
+        private readonly float max;
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
 
         public LFO(IOscillator oscillator, float frequency, float min = -1, float max = 1, int sampleRate = 44100)
         {
@@ -35,20 +35,9 @@ namespace SynthLib.ValueProviders
                 throw new ArgumentException("The oscillator must have the same sample rate as the LFO.");
         }
 
-        public void Next()
+        protected override float NextValue()
         {
-            oscillator.Next(frequency);
-        }
-
-        public float CurrentValue()
-        {
-            return (oscillator.CurrentValue() + 1) * (max - min) / 2 + min;
-        }
-
-        public float NextValue()
-        {
-            Next();
-            return CurrentValue();
+            return (oscillator.NextValue(frequency) + 1) *(max - min) / 2 + min;
         }
     }
 }
