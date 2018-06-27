@@ -53,17 +53,11 @@ namespace SynthLib
             var o1 = new OscillatorModule(new SawOscillator(), midi, 1);
             o1.Gain.ValueProvider = lfo;
 
-            var o2 = new OscillatorModule(new SawOscillator(), midi, 1, 0.1f);
+            var o2 = new OscillatorModule(new PulseOscillator(), midi, 1, 0.1f);
             o2.Gain.ValueProvider = lfo;
 
             var o3 = new OscillatorModule(new SawOscillator(), midi, 1, 11.9f);
             o3.Gain.ValueProvider = lfo;
-
-            var o4 = new OscillatorModule(new SawOscillator(), midi, 1, 23.95f);
-            o4.Gain.ValueProvider = lfo;
-
-            var o5 = new OscillatorModule(new SawOscillator(), midi, 1, 36.05f);
-            o5.Gain.ValueProvider = lfo;
 
             var d1 = new Distributer(new float[] { 1, 1, 0.4f, 0.4f, 0.4f }, new float[] { 1, 1f });
             var e1 = new EffectModule(new SimpleFilter(5));
@@ -74,8 +68,6 @@ namespace SynthLib
             Connections.NewConnection(o1, d1);
             Connections.NewConnection(o2, d1);
             Connections.NewConnection(o3, d1);
-            Connections.NewConnection(o4, d1);
-            Connections.NewConnection(o5, d1);
 
             Connections.NewConnection(d1, e1);
             Connections.NewConnection(d1, m1);
@@ -86,7 +78,7 @@ namespace SynthLib
 
             var board = new ModuleBoard()
             {
-                end, m1, e1, d1, o5, o4, o3, o2, o1
+                end, m1, e1, d1, o3, o2, o1
             };
 
             board.AddValueProvider(lfo);
