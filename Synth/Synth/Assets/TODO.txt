@@ -2,7 +2,8 @@
 	Modules
 		Sender: Sends the signal to a reciever, which then outputs it after a delay.
 		Reciever: Recieves signal from a sender and outputs it after a delay.
-		Delay: Delays the signal.
+		Delay
+			Let it use a timed delay.
 	Fix weird sounds in synth.
 	Stuff like LFOs and Envelopes.
 	Test
