@@ -37,12 +37,15 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs)
         {
-
-            var frequency = Tone.FrequencyFromNote(midi.CurrentNoteNumber);
+            double frequency;
+            if (midi.CurrentNoteNumbers.Count() > 0)
+                frequency = Tone.FrequencyFromNote(midi.CurrentNoteNumbers.Last());
+            else
+                frequency = 0;
             oscillator.Next(frequency * frequencyMultiplier);
 
             var output = new float[Outputs.Count];
-            if (!midi.On)
+            if (midi.CurrentNoteNumbers.Count() == 0)
                 return output;
             var next = oscillator.CurrentValue();
             for (int i = 0; i < output.Length; ++i)

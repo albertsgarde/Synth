@@ -11,31 +11,39 @@ namespace SynthLib
     {
         private readonly MidiIn midiIn;
 
-        public int CurrentNoteNumber { get; private set; }
+        private List<int> currentNoteNumbers;
 
-        public bool On { get; private set; }
+        public IReadOnlyCollection<int> CurrentNoteNumbers { get; private set; }
+
+        public delegate void NoteEventHandler(int noteNumber);
+
+        public event NoteEventHandler NoteOn;
+
+        public event NoteEventHandler NoteOff;
 
         public Midi (MidiIn midiIn)
         {
+            currentNoteNumbers = new List<int>();
+            CurrentNoteNumbers = currentNoteNumbers;
             this.midiIn = midiIn;
             this.midiIn.MessageReceived += HandleMidiIn;
             this.midiIn.ErrorReceived += HandleMidiError;
             this.midiIn.Start();
-            CurrentNoteNumber = 0;
-            On = false;
         }
 
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)
         {
             if (MidiEvent.IsNoteOn(e.MidiEvent))
             {
-                CurrentNoteNumber = ((NoteOnEvent)e.MidiEvent).NoteNumber;
-                On = true;
+                var noteNumber = ((NoteOnEvent)e.MidiEvent).NoteNumber;
+                currentNoteNumbers.Add(noteNumber);
+                NoteOn?.Invoke(noteNumber);
             }
             else if (MidiEvent.IsNoteOff(e.MidiEvent))
             {
-                if (((NoteEvent)e.MidiEvent).NoteNumber == CurrentNoteNumber)
-                    On = false;
+                var noteNumber = ((NoteEvent)e.MidiEvent).NoteNumber;
+                currentNoteNumbers.Remove(noteNumber);
+                NoteOff?.Invoke(noteNumber);
             }
         }
 
