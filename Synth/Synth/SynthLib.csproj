@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board\Modules\Delay.cs" />
+    <Compile Include="Board\Modules\Flip.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\Pass.cs" />

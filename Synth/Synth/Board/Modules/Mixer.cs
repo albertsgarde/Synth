@@ -47,10 +47,6 @@ namespace SynthLib.Board.Modules
             outputGains.CopyTo(OutputGains, 0);
         }
 
-        public override void Next()
-        {
-        }
-
         public override float[] Process(float[] inputs)
         {
             var totalInput = 0f;

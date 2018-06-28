@@ -90,8 +90,6 @@ namespace SynthLib.Board
 
         public float Next()
         {
-            foreach (var mod in modules)
-                mod.Next();
             foreach (var vp in valueProviders)
                 vp.Next();
 

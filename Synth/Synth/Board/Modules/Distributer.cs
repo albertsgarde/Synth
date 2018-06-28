@@ -60,10 +60,6 @@ namespace SynthLib.Board.Modules
             totalOutputWeight = OutputWeights.Sum();
         }
 
-        public override void Next()
-        {
-        }
-
         public override float[] Process(float[] inputs)
         {
             var totalInput = 0f;

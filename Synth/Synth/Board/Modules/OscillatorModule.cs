@@ -35,14 +35,12 @@ namespace SynthLib.Board.Modules
             this.midi = midi;
         }
 
-        public override void Next()
-        {
-            var frequency = Tone.FrequencyFromNote(midi.CurrentNoteNumber);
-            oscillator.Next(frequency * frequencyMultiplier);
-        }
-
         public override float[] Process(float[] inputs)
         {
+
+            var frequency = Tone.FrequencyFromNote(midi.CurrentNoteNumber);
+            oscillator.Next(frequency * frequencyMultiplier);
+
             var output = new float[Outputs.Count];
             if (!midi.On)
                 return output;

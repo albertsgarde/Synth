@@ -24,10 +24,6 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(1);
         }
 
-        public override void Next()
-        {
-        }
-
         public override float[] Process(float[] inputs)
         {
             return new float[] { effect.Next(inputs[0]) };

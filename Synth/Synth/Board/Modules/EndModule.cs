@@ -20,10 +20,6 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(0);
         }
 
-        public override void Next()
-        {
-        }
-
         public override float[] Process(float[] inputs)
         {
             return new float[] { inputs.Sum() };
