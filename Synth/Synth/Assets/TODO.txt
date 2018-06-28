@@ -10,8 +10,8 @@
 	Documentation
 	Replace lists in SynthResult with thread-safe containers.
 	Make the synth non mono.
-	Effects also need seperated Next() and CurrentValue()
 	ModuleTypes that are loaded from files.
+	Effects also need seperated Next() and CurrentValue()?
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
 	Make all Connections FlexConnections?
