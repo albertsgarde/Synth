@@ -1,6 +1,5 @@
 ﻿Synth:
 	Modules
-		Flip: *-1.
 		Sender: Sends the signal to a reciever, which then outputs it after a delay.
 		Reciever: Recieves signal from a sender and outputs it after a delay.
 		Delay: Delays the signal.
