@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using SynthLib.Board.Modules;
 using System.Xml.Linq;
 using Stuff;
+using System.Collections;
 
 namespace SynthLib.Board
 {
-    public class BoardTemplate
+    public class BoardTemplate : IEnumerable<Module>
     {
         private int moduleNum = -1;
 
@@ -42,9 +43,14 @@ namespace SynthLib.Board
                 Dest = dest;
                 DestIndex = destIndex;
             }
+
+            public override string ToString()
+            {
+                return $"{{{Source}[{SourceIndex}] -> {Dest}[{DestIndex}]}}";
+            }
         }
 
-        public void AddModule(Module mod)
+        public void Add(Module mod)
         {
             modules[++moduleNum] = mod;
         }
@@ -77,16 +83,32 @@ namespace SynthLib.Board
 
         public ModuleBoard CreateInstance(int sampleRate = 44100)
         {
-            var board = new ModuleBoard(44100);
             var boardModules = new CrossReferencedDictionary<int, Module>();
             foreach (var m in modules)
                 boardModules[m.Key] = m.Value.Clone();
 
-            board.Add(boardModules.Keys2.ToArray());
             foreach (var ct in connections)
+            {
                 CreateConnection(ct, boardModules);
+            }
+
+
+            var board = new ModuleBoard(sampleRate)
+            {
+                boardModules.Keys2.ToArray()
+            };
 
             return board;
+        }
+
+        public IEnumerator<Module> GetEnumerator()
+        {
+            return modules.Keys2.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board\BoardTemplate.cs" />
-    <Compile Include="Board\Modules\Delay.cs" />
     <Compile Include="Board\Modules\Flip.cs" />
     <Compile Include="Board\SuperBoard.cs" />
     <Compile Include="Effects\Boost.cs" />

@@ -53,8 +53,8 @@ namespace SynthLib.Board.Modules
         {
             Inputs = new ConnectionsArray(distributer.Inputs.Count);
             Outputs = new ConnectionsArray(distributer.Outputs.Count);
-            InputWeights = new Weights(InputWeights);
-            OutputWeights = new Weights(OutputWeights);
+            InputWeights = new Weights(distributer.InputWeights);
+            OutputWeights = new Weights(distributer.OutputWeights);
         }
 
         public class Weights
@@ -115,7 +115,6 @@ namespace SynthLib.Board.Modules
             var result = new float[Outputs.Count];
             for (int i = 0; i < result.Length; ++i)
                 result[i] = totalOutput * OutputWeights[i];
-
             return result;
         }
     }
