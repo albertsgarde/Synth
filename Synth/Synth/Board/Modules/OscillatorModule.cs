@@ -13,7 +13,7 @@ namespace SynthLib.Board.Modules
     {
         private readonly IOscillator oscillator;
 
-        public float Gain { get; set; }
+        private readonly float gain;
 
         private readonly float frequencyMultiplier;
 
@@ -29,27 +29,49 @@ namespace SynthLib.Board.Modules
         {
             this.oscillator = oscillator.Clone();
             frequencyMultiplier = (float) Math.Pow(2, (1 / 12d) * halfToneOffset);
-            Gain = gain;
+            this.gain = gain;
             Inputs = new ConnectionsArray(0);
             Outputs = new ConnectionsArray(outputs);
             this.midi = midi;
         }
 
-        public override float[] Process(float[] inputs)
+        private OscillatorModule(OscillatorModule oscMod)
         {
-            double frequency;
+            oscillator = oscMod.oscillator.Clone();
+            gain = oscMod.gain;
+            frequencyMultiplier = oscMod.frequencyMultiplier;
+            midi = oscMod.midi;
+            Inputs = new ConnectionsArray(0);
+            Outputs = new ConnectionsArray(oscMod.Outputs.Count);
+            Type = oscMod.Type;
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            oscillator.Reset();
+        }
+
+        public override Module Clone()
+        {
+            return new OscillatorModule(this);
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
+        {
+            double tempFrequency;
             if (midi.CurrentNoteNumbers.Count() > 0)
-                frequency = Tone.FrequencyFromNote(midi.CurrentNoteNumbers.Last());
+                tempFrequency = Tone.FrequencyFromNote(midi.CurrentNoteNumbers.Last());
             else
-                frequency = 0;
-            oscillator.Next(frequency * frequencyMultiplier);
+                tempFrequency = 0;
+            oscillator.Next(tempFrequency * frequencyMultiplier);
 
             var output = new float[Outputs.Count];
             if (midi.CurrentNoteNumbers.Count() == 0)
                 return output;
             var next = oscillator.CurrentValue();
             for (int i = 0; i < output.Length; ++i)
-                output[i] = next * Gain;
+                output[i] = next * gain;
             return output;
         }
     }

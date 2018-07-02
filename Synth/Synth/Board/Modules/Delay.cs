@@ -29,6 +29,12 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(1);
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            prevs.Clear();
+        }
+
         public override float[] Process(float[] inputs)
         {
             prevs.Enqueue(inputs[0]);

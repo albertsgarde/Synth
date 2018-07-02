@@ -15,6 +15,11 @@ namespace SynthLib.Effects
             prev = new float[numPrevs];
         }
 
+        public IEffect Clone()
+        {
+            return new SimpleFilter(prev.Length);
+        }
+
         public float Next(float input)
         {
             if (prev.Length == 0)

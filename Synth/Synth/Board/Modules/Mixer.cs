@@ -47,7 +47,28 @@ namespace SynthLib.Board.Modules
             outputGains.CopyTo(OutputGains, 0);
         }
 
-        public override float[] Process(float[] inputs)
+        private Mixer(Mixer mixer)
+        {
+            Inputs = new ConnectionsArray(mixer.Inputs.Count);
+            Outputs = new ConnectionsArray(mixer.Outputs.Count);
+
+            InputGains = new float[mixer.InputGains.Length];
+            for (int i = 0; i < InputGains.Length; ++i)
+                InputGains[i] = mixer.InputGains[i];
+
+            OutputGains = new float[mixer.OutputGains.Length];
+            for (int i = 0; i < OutputGains.Length; ++i)
+                OutputGains[i] = mixer.OutputGains[i];
+
+            Type = mixer.Type;
+        }
+
+        public override Module Clone()
+        {
+            return new Mixer(this);
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)

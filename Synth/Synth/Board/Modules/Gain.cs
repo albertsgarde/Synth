@@ -23,7 +23,18 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(1);
         }
 
-        public override float[] Process(float[] inputs)
+        private Gain(Gain gain)
+        {
+            this.gain = gain.gain;
+            Type = gain.Type;
+        }
+
+        public override Module Clone()
+        {
+            return new Gain(this);
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
         {
             return new float[] { inputs[0] * gain };
         }

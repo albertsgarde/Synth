@@ -76,17 +76,6 @@ namespace SynthLib
                 end, m1, e1, d1, o3, o2, o1
             };
 
-            var lfo = new LFO(new SineOscillator(), 4, 0.5f, 1);
-            lfo.ValueUpdated += (v) =>
-            {
-                var gain = (v + 1) / 2 + 1;
-                o1.Gain = gain;
-                o2.Gain = gain;
-                o3.Gain = gain;
-            };
-
-            board.AddValueProvider(lfo);
-
             synthResult.AddSynthProvider(board);
         }
     }

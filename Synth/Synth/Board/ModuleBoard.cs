@@ -12,7 +12,7 @@ using Stuff;
 
 namespace SynthLib.Board
 {
-    public class ModuleBoard : ISynthProvider, IEnumerable<Module>
+    public class ModuleBoard : IEnumerable<Module>
     {
         private IList<Module> modules;
 
@@ -88,7 +88,13 @@ namespace SynthLib.Board
             return modules.GetEnumerator();
         }
 
-        public float Next()
+        public void Reset()
+        {
+            foreach (var mod in modules)
+                mod.Reset();
+        }
+
+        public float Next(float frequency)
         {
             foreach (var vp in valueProviders)
                 vp.Next();
@@ -100,7 +106,7 @@ namespace SynthLib.Board
                 inputTable.Add(mod, new float[mod.Inputs.Count]);
             foreach (var mod in modules)
             {
-                var output = mod.Process(inputTable[mod]);
+                var output = mod.Process(inputTable[mod], frequency);
                 if (mod.Type == "End")
                     result += output[0];
                 else

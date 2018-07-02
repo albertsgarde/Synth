@@ -15,6 +15,11 @@ namespace SynthLib.Effects
             Gain = decibel ? NAudio.Utils.Decibels.DecibelsToLinear(gain) : gain;
         }
 
+        public IEffect Clone()
+        {
+            return new Boost(Gain);
+        }
+
         public float Next(float input)
         {
             return input * (float)Gain;

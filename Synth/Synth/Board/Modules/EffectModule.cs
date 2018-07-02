@@ -24,7 +24,12 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(1);
         }
 
-        public override float[] Process(float[] inputs)
+        public override Module Clone()
+        {
+            return new EffectModule(effect.Clone());
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
         {
             return new float[] { effect.Next(inputs[0]) };
         }

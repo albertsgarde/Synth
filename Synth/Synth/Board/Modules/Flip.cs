@@ -23,7 +23,12 @@ namespace SynthLib.Board.Modules
             Outputs = new ConnectionsArray(1);
         }
 
-        public override float[] Process(float[] inputs)
+        public override Module Clone()
+        {
+            return new Flip();
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
         {
             return new float[] { inputs[0] * -1 };
         }

@@ -14,13 +14,24 @@ namespace SynthLib.Board.Modules
 
         public abstract string Type { get; }
 
-        public abstract float[] Process(float[] inputs);
-
         public string Name { get; set; }
+
+        public abstract float[] Process(float[] inputs, float frequency);
 
         public IEnumerable<Connection> Connections()
         {
             return Inputs.Concat(Outputs);
         }
+
+        public virtual void Reset()
+        {
+
+        }
+
+        /// <summary>
+        /// The clone should be complete apart from the connections, which should be empty.
+        /// </summary>
+        /// <returns>A clone of the called module.</returns>
+        public abstract Module Clone();
     }
 }

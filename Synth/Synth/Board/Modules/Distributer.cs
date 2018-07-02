@@ -16,13 +16,9 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public float[] InputWeights { get; }
+        public Weights InputWeights { get; }
 
-        private float totalInputWeight;
-
-        public float[] OutputWeights { get; }
-
-        private float totalOutputWeight;
+        public Weights OutputWeights { get; }
 
         public override string Type { get; } = "Mixer";
 
@@ -31,19 +27,17 @@ namespace SynthLib.Board.Modules
             Inputs = new ConnectionsArray(inputs);
             Outputs = new ConnectionsArray(outputs);
 
-            InputWeights = new float[inputs];
+            InputWeights = new Weights(inputs);
             for (int i = 0; i < inputs; ++i)
             {
                 InputWeights[i] = 1;
             }
-            totalInputWeight = InputWeights.Sum();
 
-            OutputWeights = new float[outputs];
+            OutputWeights = new Weights(outputs);
             for (int i = 0; i < outputs; ++i)
             {
                 OutputWeights[i] = 1;
             }
-            totalOutputWeight = OutputWeights.Sum();
         }
 
         public Distributer(float[] inputWeights, float[] outputWeights)
@@ -51,23 +45,73 @@ namespace SynthLib.Board.Modules
             Inputs = new ConnectionsArray(inputWeights.Length);
             Outputs = new ConnectionsArray(outputWeights.Length);
 
-            InputWeights = new float[inputWeights.Length];
-            inputWeights.CopyTo(InputWeights, 0);
-            totalInputWeight = InputWeights.Sum();
-
-            OutputWeights = new float[outputWeights.Length];
-            outputWeights.CopyTo(OutputWeights, 0);
-            totalOutputWeight = OutputWeights.Sum();
+            InputWeights = new Weights(inputWeights);
+            OutputWeights = new Weights(outputWeights);
         }
 
-        public override float[] Process(float[] inputs)
+        private Distributer(Distributer distributer)
+        {
+            Inputs = new ConnectionsArray(distributer.Inputs.Count);
+            Outputs = new ConnectionsArray(distributer.Outputs.Count);
+            InputWeights = new Weights(InputWeights);
+            OutputWeights = new Weights(OutputWeights);
+        }
+
+        public class Weights
+        {
+            private readonly float[] weights;
+
+            public float Total { get; private set; }
+
+            public Weights(int length)
+            {
+                weights = new float[length];
+                for (int i = 0; i < length; ++i)
+                    weights[i] = 1;
+                Total = weights.Sum();
+            }
+
+            public Weights(float[] weights)
+            {
+                this.weights = new float[weights.Length];
+                weights.CopyTo(this.weights, 0);
+                Total = weights.Sum();
+            }
+
+            public Weights(Weights weights)
+            {
+                this.weights = new float[weights.weights.Length];
+                weights.weights.CopyTo(this.weights, 0);
+                Total = weights.Total;
+            }
+
+            public float this[int index]
+            {
+                get
+                {
+                    return weights[index];
+                }
+                set
+                {
+                    weights[index] = value;
+                    Total = weights.Sum();
+                }
+            }
+        }
+
+        public override Module Clone()
+        {
+            return new Distributer(this);
+        }
+
+        public override float[] Process(float[] inputs, float frequency)
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
                 totalInput += inputs[i] * InputWeights[i];
-            totalInput /= (totalInputWeight/inputs.Length);
+            totalInput /= (InputWeights.Total/inputs.Length);
 
-            var totalOutput = totalInput / totalOutputWeight;
+            var totalOutput = totalInput / OutputWeights.Total;
             var result = new float[Outputs.Count];
             for (int i = 0; i < result.Length; ++i)
                 result[i] = totalOutput * OutputWeights[i];
