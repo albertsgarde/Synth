@@ -24,6 +24,8 @@ namespace SynthLib.Board.Modules
 
         public override string Type { get; } = "Oscillator";
 
+        private float[] output;
+
         public OscillatorModule(IOscillator oscillator, int outputs, float halfToneOffset = 0, float gain = 1f)
         {
             this.oscillator = oscillator.Clone();
@@ -31,6 +33,7 @@ namespace SynthLib.Board.Modules
             this.gain = gain;
             Inputs = new ConnectionsArray(0);
             Outputs = new ConnectionsArray(outputs);
+            output = new float[outputs];
         }
 
         private OscillatorModule(OscillatorModule oscMod)
@@ -40,6 +43,7 @@ namespace SynthLib.Board.Modules
             frequencyMultiplier = oscMod.frequencyMultiplier;
             Inputs = new ConnectionsArray(0);
             Outputs = new ConnectionsArray(oscMod.Outputs.Count);
+            output = new float[Outputs.Count];
             Type = oscMod.Type;
         }
 
@@ -56,11 +60,9 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs, float frequency)
         {
-            //Console.WriteLine(Outputs[0].Destination);
 
             oscillator.Next(frequency * frequencyMultiplier);
-
-            var output = new float[Outputs.Count];
+            
             var next = oscillator.CurrentValue();
             for (int i = 0; i < output.Length; ++i)
                 output[i] = next * gain;

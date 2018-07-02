@@ -93,10 +93,7 @@ namespace SynthLib.Board
             }
 
 
-            var board = new ModuleBoard(sampleRate)
-            {
-                boardModules.Keys2.ToArray()
-            };
+            var board = new ModuleBoard(boardModules.Keys2.ToArray(), sampleRate);
 
             return board;
         }

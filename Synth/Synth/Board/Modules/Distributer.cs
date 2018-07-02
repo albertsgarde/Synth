@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Stuff;
 
 namespace SynthLib.Board.Modules
 {
@@ -26,18 +27,10 @@ namespace SynthLib.Board.Modules
         {
             Inputs = new ConnectionsArray(inputs);
             Outputs = new ConnectionsArray(outputs);
+            
+            InputWeights = new Weights(ContainerUtils.UniformArray(1f, inputs));
 
-            InputWeights = new Weights(inputs);
-            for (int i = 0; i < inputs; ++i)
-            {
-                InputWeights[i] = 1;
-            }
-
-            OutputWeights = new Weights(outputs);
-            for (int i = 0; i < outputs; ++i)
-            {
-                OutputWeights[i] = 1;
-            }
+            OutputWeights = new Weights(ContainerUtils.UniformArray(1f, outputs));
         }
 
         public Distributer(float[] inputWeights, float[] outputWeights)
@@ -57,45 +50,24 @@ namespace SynthLib.Board.Modules
             OutputWeights = new Weights(distributer.OutputWeights);
         }
 
-        public class Weights
+        public struct Weights
         {
-            private readonly float[] weights;
+            public readonly float[] weights;
 
-            public float Total { get; private set; }
-
-            public Weights(int length)
-            {
-                weights = new float[length];
-                for (int i = 0; i < length; ++i)
-                    weights[i] = 1;
-                Total = weights.Sum();
-            }
+            public float total;
 
             public Weights(float[] weights)
             {
                 this.weights = new float[weights.Length];
                 weights.CopyTo(this.weights, 0);
-                Total = weights.Sum();
+                total = weights.Sum();
             }
 
             public Weights(Weights weights)
             {
                 this.weights = new float[weights.weights.Length];
                 weights.weights.CopyTo(this.weights, 0);
-                Total = weights.Total;
-            }
-
-            public float this[int index]
-            {
-                get
-                {
-                    return weights[index];
-                }
-                set
-                {
-                    weights[index] = value;
-                    Total = weights.Sum();
-                }
+                total = weights.total;
             }
         }
 
@@ -108,13 +80,13 @@ namespace SynthLib.Board.Modules
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
-                totalInput += inputs[i] * InputWeights[i];
-            totalInput /= (InputWeights.Total/inputs.Length);
+                totalInput += inputs[i] * InputWeights.weights[i];
+            totalInput /= (InputWeights.total/inputs.Length);
 
-            var totalOutput = totalInput / OutputWeights.Total;
+            var totalOutput = totalInput / OutputWeights.total;
             var result = new float[Outputs.Count];
             for (int i = 0; i < result.Length; ++i)
-                result[i] = totalOutput * OutputWeights[i];
+                result[i] = totalOutput * OutputWeights.weights[i];
             return result;
         }
     }

@@ -12,9 +12,11 @@ using Stuff;
 
 namespace SynthLib.Board
 {
-    public class ModuleBoard : IEnumerable<Module>
+    public class ModuleBoard
     {
-        private IList<Module> modules;
+        private Module[] modules;
+
+        private InputTable inputTable;
 
         private readonly List<ValueProvider> valueProviders;
 
@@ -22,9 +24,13 @@ namespace SynthLib.Board
 
         public bool Finished { get; private set; }
 
-        public ModuleBoard(int sampleRate = 44100)
+        public ModuleBoard(Module[] modules, int sampleRate = 44100)
         {
-            modules = new List<Module>();
+            this.modules = modules;
+            SortModules();
+
+            inputTable = new InputTable(this.modules);
+
             valueProviders = new List<ValueProvider>();
             SampleRate = sampleRate;
             Finished = false;
@@ -33,25 +39,7 @@ namespace SynthLib.Board
         private void SortModules()
         {
             Validate();
-            modules = modules.TopologicalSort(m => m.Inputs.Where(con => con != null).Select(con => con.Source));
-        }
-
-        public void Add(params Module[] modules)
-        {
-            foreach (var mod in modules)
-                this.modules.Add(mod);
-            SortModules();
-        }
-
-        public void Remove(params Module[] modules)
-        {
-            foreach (var mod in modules)
-            {
-                this.modules.Remove(mod);
-                foreach (var con in mod.Connections())
-                    con.Destroy();
-            }
-            SortModules();
+            modules = modules.TopologicalSort(m => m.Inputs.Where(con => con != null).Select(con => con.Source)).ToArray();
         }
 
         public void AddValueProvider(params ValueProvider[] valueProviders)
@@ -78,16 +66,6 @@ namespace SynthLib.Board
             }
         }
 
-        public IEnumerator<Module> GetEnumerator()
-        {
-            return modules.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return modules.GetEnumerator();
-        }
-
         public void Reset()
         {
             foreach (var mod in modules)
@@ -101,24 +79,53 @@ namespace SynthLib.Board
 
             float result = 0;
 
-            var inputTable = new Dictionary<Module, float[]>();
-            foreach (var mod in modules)
-                inputTable.Add(mod, new float[mod.Inputs.Count]);
-            foreach (var mod in modules)
+            inputTable.ResetInputs();
+            for (int i = 0; i < modules.Length; ++i)
             {
-                var output = mod.Process(inputTable[mod], frequency);
-                if (mod.Type == "End")
+                var output = inputTable.modules[i].Process(inputTable.input[i], frequency);
+                if (inputTable.modules[i].Type == "End")
                     result += output[0];
                 else
                 {
-                    for (int i = 0; i < output.Length; ++i)
+                    for (int j = 0; j < output.Length; ++j)
                     {
-                        if (mod.Outputs[i] != null)
-                            inputTable[mod.Outputs[i].Destination][mod.Outputs[i].DestinationIndex] = output[i];
+                        if (inputTable.modules[i].Outputs[j] != null)
+                            inputTable.GetInput(inputTable.modules[i].Outputs[j].Destination)[inputTable.modules[i].Outputs[j].DestinationIndex] = output[j];
                     }
                 }
             }
             return result;
+        }
+
+        private struct InputTable
+        {
+            public Module[] modules;
+
+            public float[][] input;
+
+            public InputTable(Module[] modules)
+            {
+                this.modules = modules;
+                input = new float[modules.Length][];
+                for (int i = 0; i < modules.Length; ++i)
+                    input[i] = new float[modules[i].Inputs.Count];
+            }
+
+            public float[] GetInput(Module mod)
+            {
+                int i = -1;
+                while (modules[++i] != mod) ;
+                return input[i];
+            }
+
+            public void ResetInputs()
+            {
+                for (int i = 0; i < input.Length; ++i)
+                {
+                    for (int j = 0; j < input[i].Length; ++j)
+                        input[i][j] = 0;
+                }
+            }
         }
     }
 }
