@@ -34,7 +34,7 @@ namespace SynthLib.Board.Modules
             return new Gain(this);
         }
 
-        public override float[] Process(float[] inputs, float frequency)
+        public override float[] Process(float[] inputs)
         {
             return new float[] { inputs[0] * gain };
         }

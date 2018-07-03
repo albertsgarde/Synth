@@ -8,31 +8,51 @@ namespace SynthLib.Oscillators
 {
     public class SawOscillator : IOscillator
     {
+        private float frequency;
+        private float valueIncrement;
+
         public int SampleRate { get; }
 
-        private double curValue ;
+        private float curValue;
 
-        public SawOscillator(double startValue = 0, int sampleRate = 44100)
+        public SawOscillator(float frequency, float startValue = 0, int sampleRate = 44100)
         {
+            Frequency = frequency;
             curValue = (startValue + 1) / 2;
             SampleRate = sampleRate;
         }
 
-        public void Next(double frequency)
+        public float Frequency
         {
-            curValue += frequency / SampleRate;
+            get => frequency;
+            set
+            {
+                frequency = value;
+                valueIncrement = frequency / SampleRate;
+            }
+        }
+
+        public void Next()
+        {
+            curValue += valueIncrement;
             curValue %= 1;
         }
 
         public float CurrentValue(float min = -1, float max = 1)
         {
-            return (float)curValue * (max - min) + min;
+            return curValue * (max - min) + min;
         }
         
-        public float NextValue(double frequency, float min = -1, float max = 1)
+        public float NextValue(float min, float max = 1)
         {
-            Next(frequency);
+            Next();
             return CurrentValue(min, max);
+        }
+
+        public float NextValue()
+        {
+            Next();
+            return curValue;
         }
 
         public void Reset()

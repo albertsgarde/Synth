@@ -11,12 +11,14 @@ namespace SynthLib.Oscillators
     /// </summary>
     public interface IOscillator
     {
+        float Frequency { get; set; }
+
         int SampleRate { get; }
 
         /// <summary>
         /// Moves the oscillator forward one step. The length of the step is equal to 1 second/SampleRate.
         /// </summary>
-        void Next(double frequency);
+        void Next();
 
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
@@ -24,10 +26,15 @@ namespace SynthLib.Oscillators
         float CurrentValue(float min = -1, float max = 1);
 
         /// <summary>
-        /// A combined call of Next(double) and CurrentValue(float, float).
+        /// A combined call of Next() and CurrentValue(float, float).
         /// Moves the oscillator forward one step, then returns the value.
         /// </summary>
-        float NextValue(double frequency, float min = -1, float max = 1);
+        float NextValue(float min, float max = 1);
+
+        /// <summary>
+        /// Like the above, but optimized for min=-1 and max=1;
+        /// </summary>
+        float NextValue();
 
         void Reset();
 

@@ -10,17 +10,32 @@ namespace SynthLib.Oscillators
     {
         public int SampleRate { get; }
 
-        private double curValue = 0;
+        private float frequency;
 
-        private double dutyCycle;
+        private float incrementValue;
 
-        public PulseOscillator(double dutyCycle = 0.5, int sampleRate = 44100)
+        private float curValue = 0;
+
+        private float dutyCycle;
+
+        public PulseOscillator(float frequency, float dutyCycle = 0.5f, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
+            Frequency = frequency;
             this.dutyCycle = dutyCycle;
         }
 
-        public double DutyCycle
+        public float Frequency
+        {
+            get => frequency;
+            set
+            {
+                frequency = value;
+                incrementValue = frequency / SampleRate;
+            }
+        }
+
+        public float DutyCycle
         {
             get
             {
@@ -36,9 +51,9 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public void Next(double frequency)
+        public void Next()
         {
-            curValue += frequency / SampleRate;
+            curValue += incrementValue;
             curValue %= 1;
         }
 
@@ -47,10 +62,19 @@ namespace SynthLib.Oscillators
             return curValue < dutyCycle ? min : max;
         }
 
-        public float NextValue(double frequency, float min = -1, float max = 1)
+        public float NextValue(float min = -1, float max = 1)
         {
-            Next(frequency);
+            Next();
             return CurrentValue(min, max);
+        }
+
+        public float NextValue()
+        {
+            Next();
+            if (curValue < dutyCycle)
+                return -1;
+            else
+                return 1;
         }
 
         public void Reset()

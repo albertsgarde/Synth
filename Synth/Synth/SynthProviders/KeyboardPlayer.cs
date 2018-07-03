@@ -58,14 +58,14 @@ namespace SynthLib.SynthProviders
         {
             private IOscillator osc;
 
-            private double frequency;
+            private float frequency;
 
             private bool active;
 
             public Key(IOscillator oscillator, int noteNumber)
             {
                 osc = oscillator;
-                frequency = Tone.FrequencyFromNote(noteNumber);
+                frequency = (float)Tone.FrequencyFromNote(noteNumber);
                 active = false;
             }
 

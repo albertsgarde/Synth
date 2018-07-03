@@ -20,20 +20,37 @@ namespace SynthLib.Board
 
         private readonly List<ValueProvider> valueProviders;
 
+        private float frequency;
+
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
 
-        public ModuleBoard(Module[] modules, int sampleRate = 44100)
+        public ModuleBoard(float frequency, Module[] modules, int sampleRate = 44100)
         {
             this.modules = modules;
             SortModules();
+            for (int i = 0; i < modules.Length; ++i)
+                this.modules[i].num = i;
+
+            Frequency = frequency;
 
             inputTable = new InputTable(this.modules);
 
             valueProviders = new List<ValueProvider>();
             SampleRate = sampleRate;
             Finished = false;
+        }
+
+        public float Frequency
+        {
+            get => frequency;
+            set
+            {
+                frequency = value;
+                foreach (var mod in modules)
+                    mod.UpdateFrequency(value);
+            }
         }
 
         private void SortModules()
@@ -72,7 +89,7 @@ namespace SynthLib.Board
                 mod.Reset();
         }
 
-        public float Next(float frequency)
+        public float Next()
         {
             foreach (var vp in valueProviders)
                 vp.Next();
@@ -82,7 +99,7 @@ namespace SynthLib.Board
             inputTable.ResetInputs();
             for (int i = 0; i < modules.Length; ++i)
             {
-                var output = inputTable.modules[i].Process(inputTable.input[i], frequency);
+                var output = inputTable.modules[i].Process(inputTable.input[i]);
                 if (inputTable.modules[i].Type == "End")
                     result += output[0];
                 else
@@ -90,7 +107,7 @@ namespace SynthLib.Board
                     for (int j = 0; j < output.Length; ++j)
                     {
                         if (inputTable.modules[i].Outputs[j] != null)
-                            inputTable.GetInput(inputTable.modules[i].Outputs[j].Destination)[inputTable.modules[i].Outputs[j].DestinationIndex] = output[j];
+                            inputTable.input[inputTable.modules[i].Outputs[j].Destination.num][inputTable.modules[i].Outputs[j].DestinationIndex] = output[j];
                     }
                 }
             }
@@ -103,18 +120,22 @@ namespace SynthLib.Board
 
             public float[][] input;
 
+            private int i;
+
             public InputTable(Module[] modules)
             {
                 this.modules = modules;
                 input = new float[modules.Length][];
                 for (int i = 0; i < modules.Length; ++i)
                     input[i] = new float[modules[i].Inputs.Count];
+                i = -1;
             }
 
             public float[] GetInput(Module mod)
             {
-                int i = -1;
-                while (modules[++i] != mod) ;
+                i = -1;
+                while (modules[++i] != mod)
+                    ;
                 return input[i];
             }
 

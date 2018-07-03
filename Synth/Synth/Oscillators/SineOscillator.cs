@@ -10,20 +10,35 @@ namespace SynthLib.Oscillators
     {
         public int SampleRate { get; }
 
-        private double curRadians;
+        private float frequency;
 
-        private const double TAU = Math.PI * 2;
+        private float incrementValue;
+
+        private float curRadians;
+
+        private const float TAU = (float)Math.PI * 2;
         
         /// <param name="startValue">The initial value of the oscillator. Used to avoid noise when switching oscillators.</param>
-        public SineOscillator (double startValue = 0, int sampleRate = 44100)
+        public SineOscillator (float frequency, float startValue = 0, int sampleRate = 44100)
         {
-            curRadians = Math.Asin(startValue);
+            curRadians = (float)Math.Asin(startValue);
             SampleRate = sampleRate;
+            Frequency = frequency;
         }
 
-        public void Next(double frequency)
+        public float Frequency
         {
-            curRadians += frequency / SampleRate * TAU;
+            get => frequency;
+            set
+            {
+                frequency = value;
+                incrementValue = frequency / SampleRate * TAU;
+            }
+        }
+
+        public void Next()
+        {
+            curRadians += incrementValue;
             curRadians %= TAU;
         }
 
@@ -32,10 +47,16 @@ namespace SynthLib.Oscillators
             return ((float)Math.Sin(curRadians) + 1) * (max - min) / 2 + min;
         }
 
-        public float NextValue(double frequency, float min = -1, float max = 1)
+        public float NextValue(float min, float max = 1)
         {
-            Next(frequency);
+            Next();
             return CurrentValue(min, max);
+        }
+
+        public float NextValue()
+        {
+            Next();
+            return (float)Math.Sin(curRadians);
         }
 
         public void Reset()
@@ -45,7 +66,7 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SineOscillator(Math.Sin(curRadians), SampleRate);
+            return new SineOscillator((float)Math.Sin(curRadians), SampleRate);
         }
     }
 }

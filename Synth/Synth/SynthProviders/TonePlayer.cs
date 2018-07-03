@@ -56,7 +56,7 @@ namespace SynthLib.SynthProviders
         {
             if (position++ >= duration)
                 Finished = true;
-            return oscillator.NextValue(frequency);
+            return oscillator.NextValue((float)frequency);
         }
     }
 }

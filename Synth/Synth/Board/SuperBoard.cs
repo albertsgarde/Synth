@@ -16,6 +16,8 @@ namespace SynthLib.Board
 
         private readonly Midi midi;
 
+        private readonly float[] frequencies;
+
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
@@ -29,11 +31,15 @@ namespace SynthLib.Board
             this.midi = midi;
             midi.NoteOn += HandleNoteOn;
             midi.NoteOff += HandleNoteOff;
+
+            frequencies = new float[128];
+            for (int i = 0; i < frequencies.Length; ++i)
+                frequencies[i] = (float)Tone.FrequencyFromNote(i);
         }
 
         private void HandleNoteOn(int noteNumber)
         {
-            boards[noteNumber] = boardTemplate.CreateInstance();
+            boards[noteNumber] = boardTemplate.CreateInstance(frequencies[noteNumber]);
         }
 
         private void HandleNoteOff(int noteNumber)
@@ -45,7 +51,10 @@ namespace SynthLib.Board
         {
             float result = 0;
             for (int i = 0; i < 128; ++i)
-                result += boards[i] == null ? 0 : boards[i].Next((float)Tone.FrequencyFromNote(i));
+            {
+                if (boards[i] != null)
+                    result += boards[i].Next();
+            }
             return result;
         }
     }

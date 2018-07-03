@@ -47,6 +47,11 @@ namespace SynthLib.Board.Modules
             Type = oscMod.Type;
         }
 
+        public override void UpdateFrequency(float frequency)
+        {
+            oscillator.Frequency = frequency * frequencyMultiplier;
+        }
+
         public override void Reset()
         {
             base.Reset();
@@ -58,14 +63,11 @@ namespace SynthLib.Board.Modules
             return new OscillatorModule(this);
         }
 
-        public override float[] Process(float[] inputs, float frequency)
+        public override float[] Process(float[] inputs)
         {
-
-            oscillator.Next(frequency * frequencyMultiplier);
-            
-            var next = oscillator.CurrentValue();
+            var next = oscillator.NextValue() * gain;
             for (int i = 0; i < output.Length; ++i)
-                output[i] = next * gain;
+                output[i] = next;
             return output;
         }
     }

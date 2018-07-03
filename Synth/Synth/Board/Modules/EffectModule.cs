@@ -29,7 +29,7 @@ namespace SynthLib.Board.Modules
             return new EffectModule(effect.Clone());
         }
 
-        public override float[] Process(float[] inputs, float frequency)
+        public override float[] Process(float[] inputs)
         {
             return new float[] { effect.Next(inputs[0]) };
         }

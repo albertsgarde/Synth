@@ -14,10 +14,13 @@ namespace SynthLib.Board.Modules
 
         public override string Type { get; } = "End";
 
+        private float[] output;
+
         public EndModule()
         {
             Inputs = new FlexConnections();
             Outputs = new ConnectionsArray(0);
+            output = new float[1];
         }
 
         public override Module Clone()
@@ -25,9 +28,12 @@ namespace SynthLib.Board.Modules
             return new EndModule();
         }
 
-        public override float[] Process(float[] inputs, float frequency)
+        public override float[] Process(float[] inputs)
         {
-            return new float[] { inputs.Sum() };
+            output[0] = 0;
+            for (int i = 0; i < inputs.Length; ++i)
+                output[0] += inputs[i];
+            return output;
         }
     }
 }

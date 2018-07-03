@@ -43,33 +43,30 @@ namespace SynthLib
 
         private void Setup()
         {
-
-            var midiIn = new MidiIn(0);
+            MidiIn midiIn;
+            try
+            {
+                 midiIn = new MidiIn(0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(MidiIn.NumberOfDevices);
+                throw e;
+            }
 
             var midi = new Midi(midiIn);
 
-            var o1 = new OscillatorModule(new SawOscillator(), 1);
+            var o1 = new OscillatorModule(new SawOscillator(0), 1);
 
-            var o2 = new OscillatorModule(new PulseOscillator(), 1, 0.1f);
+            var o2 = new OscillatorModule(new PulseOscillator(0), 1, 0.1f);
 
-            var o3 = new OscillatorModule(new SawOscillator(), 1, 11.9f);
+            var o3 = new OscillatorModule(new SawOscillator(0), 1, 11.9f);
 
             var d1 = new Distributer(new float[] { 1, 1, 0.4f, 0.4f, 0.4f }, new float[] { 1, 1f });
             var e1 = new EffectModule(new SimpleFilter(5));
             var m1 = new Mixer(2, 1);
             m1.OutputGains[0] = 0.2f;
             var end = new EndModule();
-
-            Connections.NewConnection(o1, d1);
-            Connections.NewConnection(o2, d1);
-            Connections.NewConnection(o3, d1);
-
-            Connections.NewConnection(d1, e1);
-            Connections.NewConnection(d1, m1);
-
-            Connections.NewConnection(e1, m1);
-
-            Connections.NewConnection(m1, end);
 
             var board = new BoardTemplate()
             {

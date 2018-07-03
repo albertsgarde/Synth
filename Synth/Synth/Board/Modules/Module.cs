@@ -16,7 +16,14 @@ namespace SynthLib.Board.Modules
 
         public string Name { get; set; }
 
-        public abstract float[] Process(float[] inputs, float frequency);
+        public abstract float[] Process(float[] inputs);
+
+        public int num;
+
+        public virtual void UpdateFrequency(float frequency)
+        {
+            
+        }
 
         public IEnumerable<Connection> Connections()
         {
