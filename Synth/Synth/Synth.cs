@@ -58,11 +58,11 @@ namespace SynthLib
 
             var o1 = new OscillatorModule(new SawOscillator(0), 1);
 
-            var o2 = new OscillatorModule(new PulseOscillator(0), 1, 0.1f);
+            var o2 = new OscillatorModule(new SawOscillator(0), 1, 0.1f);
 
             var o3 = new OscillatorModule(new SawOscillator(0), 1, 11.9f);
 
-            var d1 = new Distributer(new float[] { 1, 1, 0.4f, 0.4f, 0.4f }, new float[] { 1, 1f });
+            var d1 = new Distributer(new float[] { 1, 1, 0.4f }, new float[] { 1, 1f });
             var e1 = new EffectModule(new SimpleFilter(5));
             var m1 = new Mixer(2, 1);
             m1.OutputGains[0] = 0.2f;
