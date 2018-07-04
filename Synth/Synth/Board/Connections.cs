@@ -18,6 +18,11 @@ namespace SynthLib.Board
         public abstract int Count { get; }
 
         /// <summary>
+        /// From which index non-specifically assigned connections can be connected.
+        /// </summary>
+        public abstract int FreeConnectionsStart { get; }
+
+        /// <summary>
         /// Creates a new connection between two modules at the specified indexes.
         /// If the modules already have a connection at those indexes, the existing connections will be destroyed and returned.
         /// </summary>

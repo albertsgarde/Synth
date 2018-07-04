@@ -10,9 +10,14 @@ namespace SynthLib.Board
     {
         private Connection[] connections;
 
-        public ConnectionsArray(int size)
+        public override int FreeConnectionsStart { get; }
+
+        public ConnectionsArray(int size, int freeConnectionsStart = 0)
         {
+            if (size < freeConnectionsStart)
+                throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
             connections = new Connection[size];
+            FreeConnectionsStart = freeConnectionsStart;
             for (int i = 0; i < connections.Length; ++i)
                 connections[i] = null;
         }
@@ -48,7 +53,7 @@ namespace SynthLib.Board
 
         protected override bool FirstFreeConnection(out int index)
         {
-            for (int i = 0; i < connections.Length; ++i)
+            for (int i = FreeConnectionsStart; i < connections.Length; ++i)
             {
                 if (connections[i] == null)
                 {
@@ -56,7 +61,7 @@ namespace SynthLib.Board
                     return true;
                 }
             }
-            index = 0;
+            index = FreeConnectionsStart;
             return false;
         }
 

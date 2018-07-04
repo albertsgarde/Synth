@@ -31,7 +31,7 @@ namespace SynthLib.Board.Modules
             this.oscillator = oscillator.Clone();
             frequencyMultiplier = (float) Math.Pow(2, (1 / 12d) * halfToneOffset);
             this.gain = gain;
-            Inputs = new ConnectionsArray(0);
+            Inputs = new ConnectionsArray(0, 1);
             Outputs = new ConnectionsArray(outputs);
             output = new float[outputs];
         }
@@ -65,8 +65,8 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs)
         {
-            var next = oscillator.NextValue() * gain;
-            for (int i = 0; i < output.Length; ++i)
+            var next = oscillator.NextValue() * gain * (inputs[0] + 1);
+            for (int i = 1; i < output.Length; ++i)
                 output[i] = next;
             return output;
         }

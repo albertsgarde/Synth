@@ -59,7 +59,6 @@
     <Compile Include="Board\Modules\Distributer.cs" />
     <Compile Include="Board\Modules\EffectModule.cs" />
     <Compile Include="Board\Modules\EndModule.cs" />
-    <Compile Include="Board\Modules\Gain.cs" />
     <Compile Include="Board\Modules\Mixer.cs" />
     <Compile Include="Board\Modules\Module.cs" />
     <Compile Include="Board\Modules\OscillatorModule.cs" />
