@@ -17,7 +17,7 @@ namespace SynthLib.Board
 
         public override Connection this[int index] => connections[index];
 
-        public FlexConnections(int size, int freeConnectionsStart = 0)
+        public FlexConnections(int size = 0, int freeConnectionsStart = 0)
         {
             if (size < freeConnectionsStart)
                 throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
@@ -50,7 +50,7 @@ namespace SynthLib.Board
                     return true;
                 }
             }
-            Debug.Assert(connections.Count < FreeConnectionsStart);
+            Debug.Assert(connections.Count >= FreeConnectionsStart);
             index = connections.Count;
             connections.Add(null);
             return true;
