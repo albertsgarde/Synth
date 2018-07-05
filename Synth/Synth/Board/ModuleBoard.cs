@@ -18,8 +18,6 @@ namespace SynthLib.Board
 
         private InputTable inputTable;
 
-        private readonly List<ValueProvider> valueProviders;
-
         private float frequency;
 
         public int SampleRate { get; }
@@ -36,8 +34,7 @@ namespace SynthLib.Board
             Frequency = frequency;
 
             inputTable = new InputTable(this.modules);
-
-            valueProviders = new List<ValueProvider>();
+            
             SampleRate = sampleRate;
             Finished = false;
         }
@@ -59,17 +56,6 @@ namespace SynthLib.Board
             modules = modules.TopologicalSort(m => m.Inputs.Where(con => con != null).Select(con => con.Source)).ToArray();
         }
 
-        public void AddValueProvider(params ValueProvider[] valueProviders)
-        {
-            this.valueProviders.AddRange(valueProviders);
-        }
-
-        public void RemoveValueProvider(params ValueProvider[] valueProviders)
-        {
-            foreach (var vp in valueProviders)
-                this.valueProviders.Add(vp);
-        }
-
         /// <summary>
         /// Validates the state of the module network. Does nothing if not in debug.
         /// </summary>
@@ -85,9 +71,6 @@ namespace SynthLib.Board
 
         public float Next()
         {
-            foreach (var vp in valueProviders)
-                vp.Next();
-
             float result = 0;
 
             inputTable.ResetInputs();
