@@ -32,7 +32,7 @@ namespace SynthLib.Oscillators
             set
             {
                 frequency = value;
-                incrementValue = frequency / SampleRate * TAU;
+                incrementValue = (frequency / SampleRate) * TAU;
             }
         }
 
@@ -66,7 +66,7 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SineOscillator((float)Math.Sin(curRadians), SampleRate);
+            return new SineOscillator(frequency, (float)Math.Sin(curRadians), SampleRate);
         }
     }
 }

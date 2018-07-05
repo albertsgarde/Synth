@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Board\BoardTemplate.cs" />
     <Compile Include="Board\Modules\Flip.cs" />
+    <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\SuperBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\IEffect.cs" />
@@ -59,7 +60,6 @@
     <Compile Include="Board\Modules\Distributer.cs" />
     <Compile Include="Board\Modules\EffectModule.cs" />
     <Compile Include="Board\Modules\EndModule.cs" />
-    <Compile Include="Board\Modules\Gain.cs" />
     <Compile Include="Board\Modules\Mixer.cs" />
     <Compile Include="Board\Modules\Module.cs" />
     <Compile Include="Board\Modules\OscillatorModule.cs" />

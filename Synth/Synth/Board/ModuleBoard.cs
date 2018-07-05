@@ -83,12 +83,6 @@ namespace SynthLib.Board
             }
         }
 
-        public void Reset()
-        {
-            foreach (var mod in modules)
-                mod.Reset();
-        }
-
         public float Next()
         {
             foreach (var vp in valueProviders)

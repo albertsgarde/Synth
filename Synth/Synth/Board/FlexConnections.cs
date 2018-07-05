@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace SynthLib.Board
 {
@@ -12,10 +13,15 @@ namespace SynthLib.Board
 
         public override int Count => connections.Count;
 
+        public override int FreeConnectionsStart { get; }
+
         public override Connection this[int index] => connections[index];
 
-        public FlexConnections(int size = 0)
+        public FlexConnections(int size = 0, int freeConnectionsStart = 0)
         {
+            if (size < freeConnectionsStart)
+                throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
+            FreeConnectionsStart = freeConnectionsStart;
             connections = new List<Connection>(size);
         }
 
@@ -36,7 +42,7 @@ namespace SynthLib.Board
 
         protected override bool FirstFreeConnection(out int index)
         {
-            for (int i = 0; i < connections.Count; ++i)
+            for (int i = FreeConnectionsStart; i < connections.Count; ++i)
             {
                 if (connections[i] == null)
                 {
@@ -44,6 +50,7 @@ namespace SynthLib.Board
                     return true;
                 }
             }
+            Debug.Assert(connections.Count >= FreeConnectionsStart);
             index = connections.Count;
             connections.Add(null);
             return true;
