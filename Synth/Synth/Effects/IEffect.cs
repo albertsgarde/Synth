@@ -8,8 +8,10 @@ namespace SynthLib.Effects
 {
     public interface IEffect
     {
+        int Values { get; }
+
         IEffect Clone();
 
-        float Next(float input);
+        float Next(float[] input);
     }
 }

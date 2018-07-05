@@ -20,7 +20,7 @@ namespace SynthLib.Board.Modules
         public EffectModule(IEffect effect)
         {
             this.effect = effect;
-            Inputs = new ConnectionsArray(1);
+            Inputs = new ConnectionsArray(effect.Values + 1, effect.Values);
             Outputs = new ConnectionsArray(1);
         }
 
@@ -31,7 +31,7 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs)
         {
-            return new float[] { effect.Next(inputs[0]) };
+            return new float[] { effect.Next(inputs) };
         }
     }
 }

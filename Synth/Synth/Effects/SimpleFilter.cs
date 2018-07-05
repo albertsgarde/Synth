@@ -8,6 +8,8 @@ namespace SynthLib.Effects
 {
     public class SimpleFilter : IEffect
     {
+        public int Values => 0;
+
         public float[] prev;
 
         public SimpleFilter(int numPrevs)
@@ -20,10 +22,10 @@ namespace SynthLib.Effects
             return new SimpleFilter(prev.Length);
         }
 
-        public float Next(float input)
+        public float Next(float[] input)
         {
             if (prev.Length == 0)
-                return input;
+                return input[0];
 
             float result = prev[0];
 
@@ -32,8 +34,8 @@ namespace SynthLib.Effects
                 prev[i - 1] = prev[i];
                 result += prev[i];
             }
-            prev[prev.Length - 1] = input;
-            return (result + input) / prev.Length;
+            prev[prev.Length - 1] = input[0];
+            return (result + input[0]) / prev.Length;
         }
     }
 }

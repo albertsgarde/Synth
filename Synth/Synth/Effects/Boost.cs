@@ -8,6 +8,8 @@ namespace SynthLib.Effects
 {
     public class Boost : IEffect
     {
+        public int Values => 1;
+
         public double Gain { get; }
 
         public Boost(double gain, bool decibel = false)
@@ -20,9 +22,9 @@ namespace SynthLib.Effects
             return new Boost(Gain);
         }
 
-        public float Next(float input)
+        public float Next(float[] input)
         {
-            return input * (float)Gain;
+            return input[Values] * (float)Gain * (input[0] + 1);
         }
     }
 }

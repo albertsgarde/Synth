@@ -8,14 +8,16 @@ namespace SynthLib.Effects
 {
     public class Pass : IEffect
     {
+        public int Values => 0;
+
         public IEffect Clone()
         {
             return new Pass();
         }
 
-        public float Next(float input)
+        public float Next(float[] input)
         {
-            return input;
+            return input[0];
         }
     }
 }
