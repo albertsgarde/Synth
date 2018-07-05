@@ -49,6 +49,7 @@
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Flip.cs" />
     <Compile Include="Effects\IEffect.cs" />
+    <Compile Include="Effects\Translate.cs" />
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
     <Compile Include="Midi.cs" />

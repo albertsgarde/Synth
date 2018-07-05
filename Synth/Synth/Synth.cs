@@ -58,6 +58,8 @@ namespace SynthLib
 
             var lfo1 = new ConstantOscillatorModule(new SineOscillator(2f), 3, 0.5f);
 
+            var t1 = new EffectModule(new Translate(-0.5f, 0));
+
             var o1 = new OscillatorModule(new SawOscillator(0), 1);
 
             var o2 = new OscillatorModule(new SawOscillator(0), 1, 0.1f);
@@ -72,15 +74,17 @@ namespace SynthLib
 
             var sf1 = new EffectModule(new SimpleFilter(5));
             var m2 = new Mixer(2, 1);
-            m1.OutputGains[0] = 0.2f;
+            m2.OutputGains[0] = 0.2f;
             var end = new EndModule();
 
             var board = new BoardTemplate()
             {
-                end, m1, m2, b1, sf1, d1, o3, o2, o1, lfo1
+                end, m1, m2, b1, sf1, d1, o3, o2, o1, lfo1, t1
             };
 
-            board.AddConnection(lfo1, b1, destIndex: 0);
+            board.AddConnection(lfo1, t1);
+
+            board.AddConnection(t1, b1, destIndex: 0);
 
             board.AddConnection(o1, d1);
             board.AddConnection(o2, d1);
