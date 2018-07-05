@@ -19,12 +19,6 @@ namespace SynthLib
 
         private readonly List<ISynthProvider> synthProviders;
 
-        private readonly List<IEffect> addEffects;
-
-        private readonly List<IEffect> effects;
-
-        private readonly List<IEffect> removeEffects;
-
         public WaveFormat WaveFormat { get; private set; }
 
         public float Gain { get; set; }
@@ -34,9 +28,6 @@ namespace SynthLib
             WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channel);
             addSynthProviders = new List<ISynthProvider>();
             synthProviders = new List<ISynthProvider>();
-            effects = new List<IEffect>();
-            addEffects = new List<IEffect>();
-            removeEffects = new List<IEffect>();
             Gain = 1;
         }
 
@@ -55,38 +46,10 @@ namespace SynthLib
             }
         }
 
-        public void AddEffect(IEffect e)
-        {
-            lock (addEffects)
-                addEffects.Add(e);
-        }
-
-        public void RemoveEffect(IEffect e)
-        {
-            lock (removeEffects)
-                removeEffects.Add(e);
-        }
-
-        private void AddRemoveEffects()
-        {
-            lock (addEffects)
-            {
-                effects.AddRange(addEffects);
-                addEffects.Clear();
-            }
-            lock (removeEffects)
-            {
-                foreach (var effect in removeEffects)
-                    effects.Remove(effect);
-                removeEffects.Clear();
-            }
-        }
-
         public int Read(float[] buffer, int offset, int count)
         {
             AddProviders();
             synthProviders.RemoveAll(sp => sp.Finished);
-            AddRemoveEffects();
 
 
             var bufferCount = 0;
@@ -95,8 +58,6 @@ namespace SynthLib
                 float sample = 0;
                 foreach (var sp in synthProviders)
                     sample += sp.Next();
-                foreach (var effect in effects)
-                    sample = effect.Next(sample);
                 buffer[bufferCount++] = sample * Gain;
 
             }
