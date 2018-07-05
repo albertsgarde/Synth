@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Board\BoardTemplate.cs" />
     <Compile Include="Board\Modules\Flip.cs" />
+    <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\SuperBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\IEffect.cs" />

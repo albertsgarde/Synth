@@ -30,11 +30,6 @@ namespace SynthLib.Board.Modules
             return Inputs.Concat(Outputs);
         }
 
-        public virtual void Reset()
-        {
-
-        }
-
         /// <summary>
         /// The clone should be complete apart from the connections, which should be empty.
         /// </summary>

@@ -84,7 +84,7 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new PulseOscillator(SampleRate);
+            return new PulseOscillator(frequency, SampleRate);
         }
     }
 }

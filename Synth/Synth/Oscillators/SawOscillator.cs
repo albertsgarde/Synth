@@ -62,7 +62,7 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SawOscillator(curValue * 2 - 1, SampleRate);
+            return new SawOscillator(frequency, curValue * 2 - 1, SampleRate);
         }
     }
 }
