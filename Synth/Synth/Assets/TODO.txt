@@ -5,17 +5,14 @@
 		Delay
 			Let it use a timed delay.
 	Fix weird sounds in synth.
-	Stuff like LFOs and Envelopes.
 	Test
 	Documentation
-	Replace lists in SynthResult with thread-safe containers.
-	Make the synth non mono.
 	ModuleTypes that are loaded from files.
-	Let effects be affected by valueInputs.
+	Add values to simpleFilter.
 	Effects also need seperated Next() and CurrentValue()?
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
-	Make all Connections FlexConnections?
+		SampleRate
 
 Music:
 	Let most music data be in a single object that can then be passed around.
