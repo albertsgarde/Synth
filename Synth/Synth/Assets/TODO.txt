@@ -4,6 +4,11 @@
 		Reciever: Recieves signal from a sender and outputs it after a delay.
 		Delay
 			Let it use a timed delay.
+	Effects
+		Filter
+		Distortion
+		Chorus
+	Glide
 	Fix weird sounds in synth.
 	Test
 	Documentation
