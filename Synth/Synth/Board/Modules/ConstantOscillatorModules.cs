@@ -27,7 +27,7 @@ namespace SynthLib.Board.Modules
         public ConstantOscillatorModule(IOscillator oscillator, int outputs, float frequency, float gain = 1f)
         {
             this.oscillator = oscillator.Clone();
-            oscillator.Frequency = frequency;
+            this.oscillator.Frequency = frequency;
             this.gain = gain;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(outputs);
@@ -51,7 +51,7 @@ namespace SynthLib.Board.Modules
 
         public override float[] Process(float[] inputs, int time, bool noteOn)
         {
-            var next = oscillator.NextValue() * gain;
+            var next = oscillator.NextValue() * gain * (inputs[0] + 1);
             for (int i = 0; i < output.Length; ++i)
                 output[i] = next;
             return output;
