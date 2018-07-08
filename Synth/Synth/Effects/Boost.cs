@@ -10,11 +10,11 @@ namespace SynthLib.Effects
     {
         public int Values => 1;
 
-        public double Gain { get; }
+        public float Gain { get; }
 
-        public Boost(double gain, bool decibel = false)
+        public Boost(float gain, bool decibel = false)
         {
-            Gain = decibel ? NAudio.Utils.Decibels.DecibelsToLinear(gain) : gain;
+            Gain = decibel ? (float)NAudio.Utils.Decibels.DecibelsToLinear(gain) : gain;
         }
 
         public IEffect Clone()
@@ -24,7 +24,7 @@ namespace SynthLib.Effects
 
         public float Next(float[] input)
         {
-            return input[Values] * (float)Gain * (input[0] + 1);
+            return input[Values] * Gain * (input[0] + 1);
         }
     }
 }
