@@ -18,7 +18,7 @@ namespace SynthLib.Oscillators
         public SawOscillator(float frequency, float startValue = 0, int sampleRate = 44100)
         {
             Frequency = frequency;
-            curValue = (startValue + 1) / 2;
+            curValue = startValue;
             SampleRate = sampleRate;
         }
 
@@ -62,7 +62,7 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SawOscillator(frequency, curValue * 2 - 1, SampleRate);
+            return new SawOscillator(frequency, curValue, SampleRate);
         }
     }
 }
