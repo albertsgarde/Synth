@@ -26,7 +26,7 @@ namespace SynthLib.Effects
             this.min = min;
             this.max = max;
             mxmn2 = (max - min) / 2;
-            mxmn2mn = mxmn2 + mxmn2mn;
+            mxmn2mn = mxmn2 + min;
         }
 
         public IEffect Clone()
