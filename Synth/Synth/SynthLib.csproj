@@ -89,9 +89,6 @@
     <Compile Include="SynthProviders\TonePlayer.cs" />
     <Compile Include="SynthResult.cs" />
     <Compile Include="SynthUtils.cs" />
-    <Compile Include="ValueProviders\Constant.cs" />
-    <Compile Include="ValueProviders\ValueProvider.cs" />
-    <Compile Include="ValueProviders\LFO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

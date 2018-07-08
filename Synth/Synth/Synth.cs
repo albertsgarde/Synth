@@ -8,7 +8,7 @@ using SynthLib.Oscillators;
 using SynthLib.Effects;
 using SynthLib.Board.Modules;
 using SynthLib.Board;
-using SynthLib.ValueProviders;
+
 using NAudio.Midi;
 using NAudio.Wave;
 
@@ -74,7 +74,7 @@ namespace SynthLib
 
             var m1 = new Mixer(1, 2);
 
-            var de1 = new EffectModule(new Delay(0.5f, 0.5f));
+            var de1 = new EffectModule(new Delay(0.001f, 0.0f));
 
             var m2 = new Mixer(2, 1);
             m2.OutputGains[0] = 0.2f;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SynthLib.Oscillators;
 using SynthLib.Music;
-using SynthLib.ValueProviders;
+
 using Stuff;
 
 namespace SynthLib.Board.Modules

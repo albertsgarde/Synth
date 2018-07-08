@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using SynthLib.SynthProviders;
 using SynthLib.Board.Modules;
-using SynthLib.ValueProviders;
+
 using Stuff;
 
 namespace SynthLib.Board
