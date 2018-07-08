@@ -56,9 +56,11 @@ namespace SynthLib
 
             var midi = new Midi(midiIn);
 
+            var lfo1 = new ConstantOscillatorModule(new SineOscillator(0), 1, 1f);
+
             var env1 = new Envelope(30, 80, 0.8f, 40, 3);
 
-            var t1 = new EffectModule(new Translate(-1.0f, 1));
+            var t1 = new EffectModule(new Translate(-1.0f, 0));
 
             var o1 = new OscillatorModule(new SawOscillator(0), 1);
 
@@ -74,7 +76,7 @@ namespace SynthLib
 
             var m1 = new Mixer(1, 2);
 
-            var de1 = new EffectModule(new Delay(0.001f, 0.0f));
+            var de1 = new EffectModule(new Delay(0.5f, 0.5f));
 
             var m2 = new Mixer(2, 1);
             m2.OutputGains[0] = 0.2f;
@@ -82,8 +84,11 @@ namespace SynthLib
 
             var board = new BoardTemplate()
             {
-                end, m1, m2, b1, sf1, d1, o3, o2, o1, env1, t1, de1
+                end, m1, m2, b1, sf1, d1, o3, o2, o1, env1, t1, de1, lfo1
             };
+
+            //board.AddConnection(lfo1, t1);
+            //board.AddConnection(t1, de1, destIndex: 0);
 
             board.AddConnection(env1, o1, destIndex: 0);
             board.AddConnection(env1, o2, destIndex: 0);

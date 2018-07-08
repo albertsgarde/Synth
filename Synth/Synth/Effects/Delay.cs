@@ -11,7 +11,7 @@ namespace SynthLib.Effects
     /// </summary>
     public class Delay : IEffect
     {
-        public int Values => 0;
+        public int Values => 1;
 
         private readonly float[] prevs;
 
@@ -43,7 +43,7 @@ namespace SynthLib.Effects
 
         public float Next(float[] input)
         {
-            prevs[curPrev] = prevs[curPrev] * feedback + input[0];
+            prevs[curPrev] = prevs[curPrev] * feedback * (input[0] + 1) + input[1];
             float result = prevs[curPrev];
             if (++curPrev >= prevs.Length)
                 curPrev = 0;
