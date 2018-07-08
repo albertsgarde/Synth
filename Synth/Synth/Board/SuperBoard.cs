@@ -61,14 +61,15 @@ namespace SynthLib.Board
             float[] result = new float[samples];
             for (int i = 0; i < samples; ++i)
                 result[i] = 0;
-            /*Parallel.ForEach(boards, b =>
-            {*/
-            foreach (var b in boards)
+            Parallel.ForEach(boards, b =>
             {
                 for (int i = 0; i < samples; ++i)
-                    result[i] += b.Next();
-            }
-            //});
+                {
+                    var next = b.Next();
+                    lock (result)
+                        result[i] += next;
+                }
+            });
             return result;
         }
     }
