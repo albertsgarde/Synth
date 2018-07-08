@@ -59,9 +59,9 @@ namespace SynthLib.Board
         public float Next()
         {
             float result = 0;
-            for (int i = 0; i < voices; ++i)
+            foreach (var board in boards)
             {
-                result += boards[i].Next();
+                result += board.Next();
             }
             return result;
         }
