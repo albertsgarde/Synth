@@ -56,13 +56,20 @@ namespace SynthLib.Board
             }
         }
 
-        public float Next()
+        public float[] Next(int samples)
         {
-            float result = 0;
-            foreach (var board in boards)
+            float[] result = new float[samples];
+            for (int i = 0; i < samples; ++i)
+                result[i] = 0;
+            Parallel.ForEach(boards, b =>
             {
-                result += board.Next();
-            }
+                for (int i = 0; i < samples; ++i)
+                {
+                    var next = b.Next();
+                    lock (result)
+                        result[i] += next;
+                }
+            });
             return result;
         }
     }

@@ -51,13 +51,16 @@ namespace SynthLib
             AddProviders();
             synthProviders.RemoveAll(sp => sp.Finished);
 
+            var spResults = new List<float[]>();
+            foreach (var sp in synthProviders)
+                spResults.Add(sp.Next(count));
 
             var bufferCount = 0;
             for (var outI = 0; outI < count; outI++)
             {
                 float sample = 0;
-                foreach (var sp in synthProviders)
-                    sample += sp.Next();
+                foreach (var spr in spResults)
+                    sample += spr[outI];
                 buffer[bufferCount++] = sample * Gain;
 
             }

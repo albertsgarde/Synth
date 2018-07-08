@@ -101,7 +101,7 @@ namespace SynthLib
             
             board.AddConnection(m2, end);
 
-            var superBoard = new SuperBoard(board, midi, 12);
+            var superBoard = new SuperBoard(board, midi, 36);
 
             synthResult.AddSynthProvider(superBoard);
         }

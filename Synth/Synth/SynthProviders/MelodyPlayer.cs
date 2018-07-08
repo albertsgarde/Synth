@@ -41,9 +41,10 @@ namespace SynthLib.SynthProviders
 
         }
 
-        public float Next()
+        public float[] Next(int samples)
         {
-            while (!Finished && positionInNote >= melodyEnumerator.Current.Duration(bpm))
+            throw new NotImplementedException();
+            /*while (!Finished && positionInNote >= melodyEnumerator.Current.Duration(bpm))
             {
                 positionInNote -= melodyEnumerator.Current.Duration(bpm);
                 oscillator.Reset();
@@ -51,7 +52,7 @@ namespace SynthLib.SynthProviders
                     return 0;
             }
             positionInNote += 1d / SampleRate;
-            return oscillator.NextValue((float)melodyEnumerator.Current.Tone.Frequency);
+            return oscillator.NextValue((float)melodyEnumerator.Current.Tone.Frequency);*/
         }
     }
 }

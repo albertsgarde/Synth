@@ -87,9 +87,10 @@ namespace SynthLib.SynthProviders
             // TODO: End() and fade.
         }
 
-        public float Next()
+        public float[] Next(int samples)
         {
-            return keys.Aggregate(0f, (total, key) => total + key.Next());
+            throw new NotImplementedException();
+            //return keys.Aggregate(0f, (total, key) => total + key.Next());
         }
     }
 }
