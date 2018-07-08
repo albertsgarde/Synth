@@ -2,8 +2,6 @@
 	Modules
 		Sender: Sends the signal to a reciever, which then outputs it after a delay.
 		Reciever: Recieves signal from a sender and outputs it after a delay.
-		Delay
-			Let it use a timed delay.
 	Effects
 		Filter
 		Distortion
@@ -14,9 +12,6 @@
 	Documentation
 	ModuleTypes that are loaded from files.
 	Add values to simpleFilter.
-	Let boards keep going after their key has been released.
-		Otherwise effects like Delay can't work.
-	Envelope
 	Stereo
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
