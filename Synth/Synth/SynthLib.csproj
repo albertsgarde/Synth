@@ -49,6 +49,7 @@
     <Compile Include="Board\SuperBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />
+    <Compile Include="Effects\Stall.cs" />
     <Compile Include="Effects\Flip.cs" />
     <Compile Include="Effects\IEffect.cs" />
     <Compile Include="Effects\Translate.cs" />

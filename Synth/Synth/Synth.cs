@@ -74,7 +74,7 @@ namespace SynthLib
 
             var m1 = new Mixer(1, 2);
 
-            var de1 = new EffectModule(new Delay(0.5f));
+            var de1 = new EffectModule(new Delay(0.5f, 0.5f));
 
             var m2 = new Mixer(2, 1);
             m2.OutputGains[0] = 0.2f;
@@ -95,11 +95,9 @@ namespace SynthLib
 
             board.AddConnection(d1, b1);
             board.AddConnection(b1, sf1);
-            board.AddConnection(sf1, m1);
-
-            board.AddConnection(m1, m2);
+            board.AddConnection(sf1, de1);
             
-            board.AddConnection(m2, end);
+            board.AddConnection(de1, end);
 
             var superBoard = new SuperBoard(board, midi, 36);
 
