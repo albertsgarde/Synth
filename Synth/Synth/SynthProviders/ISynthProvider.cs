@@ -15,6 +15,6 @@ namespace SynthLib.SynthProviders
         /// </summary>
         bool Finished { get; }
 
-        float Next();
+        float[] Next(int samples);
     }
 }

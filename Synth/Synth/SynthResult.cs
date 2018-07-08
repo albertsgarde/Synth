@@ -51,15 +51,15 @@ namespace SynthLib
             AddProviders();
             synthProviders.RemoveAll(sp => sp.Finished);
 
-
-            var bufferCount = 0;
-            for (var outI = 0; outI < count; outI++)
+            foreach (var sp in synthProviders)
             {
-                float sample = 0;
-                foreach (var sp in synthProviders)
-                    sample += sp.Next();
-                buffer[bufferCount++] = sample * Gain;
+                var samples = sp.Next(count);
+                var bufferCount = 0;
+                for (var outI = 0; outI < count; outI++)
+                {
+                    buffer[bufferCount++] += samples[outI] * Gain;
 
+                }
             }
             return count;
         }

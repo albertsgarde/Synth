@@ -52,11 +52,13 @@ namespace SynthLib.SynthProviders
         {
         }
 
-        public float Next()
+        public float[] Next(int samples)
         {
+            throw new NotImplementedException();
+            /*
             if (position++ >= duration)
                 Finished = true;
-            return oscillator.NextValue((float)frequency);
+            return oscillator.NextValue((float)frequency);*/
         }
     }
 }
