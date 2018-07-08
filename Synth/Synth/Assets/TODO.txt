@@ -1,7 +1,7 @@
 ﻿Synth:
 	Modules
-		Sender: Sends the signal to a reciever, which then outputs it after a delay.
-		Reciever: Recieves signal from a sender and outputs it after a delay.
+		Sender: Sends the signal to a reciever, which then outputs it next sample.
+		Reciever: Recieves signal from a sender and outputs it next sample.
 	Effects
 		Filter
 		Distortion
