@@ -14,7 +14,10 @@
 	Documentation
 	ModuleTypes that are loaded from files.
 	Add values to simpleFilter.
-	Effects also need seperated Next() and CurrentValue()?
+	Let boards keep going after their key has been released.
+		Otherwise effects like Delay can't work.
+	Envelope
+	Stereo
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
 		SampleRate
