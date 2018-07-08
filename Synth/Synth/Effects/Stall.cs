@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SynthLib.Effects
 {
+    /// <summary>
+    /// Delays the signal, but does not repeat it like the delay effect does.
+    /// </summary>
     public class Stall : IEffect
     {
         public int SampleRate { get; }

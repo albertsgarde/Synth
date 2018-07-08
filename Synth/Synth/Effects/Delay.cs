@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SynthLib.Effects
 {
+    /// <summary>
+    /// The traditional delay effect.
+    /// </summary>
     public class Delay : IEffect
     {
         public int Values => 0;
