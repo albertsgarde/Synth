@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SynthLib.SynthProviders;
 using SynthLib.Music;
+using Stuff;
 
 namespace SynthLib.Board
 {
@@ -16,44 +17,51 @@ namespace SynthLib.Board
 
         private readonly Midi midi;
 
-        private readonly float[] frequencies;
+        private readonly int voices;
 
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
 
-        public SuperBoard(BoardTemplate boardTemplate, Midi midi, int sampleRate = 44100)
+        public SuperBoard(BoardTemplate boardTemplate, Midi midi, int voices, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
             Finished = false;
-            boards = new ModuleBoard[128];
             this.boardTemplate = boardTemplate;
             this.midi = midi;
+            this.voices = voices;
+            boards = new ModuleBoard[voices];
+
+            for (int i = 0; i < voices; ++i)
+                boards[i] = boardTemplate.CreateInstance();
+
             midi.NoteOn += HandleNoteOn;
             midi.NoteOff += HandleNoteOff;
-
-            frequencies = new float[128];
-            for (int i = 0; i < frequencies.Length; ++i)
-                frequencies[i] = (float)Tone.FrequencyFromNote(i);
         }
 
         private void HandleNoteOn(int noteNumber)
         {
-            boards[noteNumber] = boardTemplate.CreateInstance(frequencies[noteNumber]);
+            if (boards.Count(mb => !mb.IsNoteOn) > 0)
+                boards.Where(mb => !mb.IsNoteOn).MaxValue(mb => mb.Time).NoteOn(noteNumber);
+            else
+                boards.MaxValue(mb => mb.Time).NoteOn(noteNumber);
         }
 
         private void HandleNoteOff(int noteNumber)
         {
-            boards[noteNumber] = null;
+            foreach (var mb in boards)
+            {
+                if (mb.Note == noteNumber)
+                    mb.NoteOff();
+            }
         }
 
         public float Next()
         {
             float result = 0;
-            for (int i = 0; i < 128; ++i)
+            for (int i = 0; i < voices; ++i)
             {
-                if (boards[i] != null)
-                    result += boards[i].Next();
+                result += boards[i].Next();
             }
             return result;
         }

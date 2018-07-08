@@ -20,23 +20,37 @@ namespace SynthLib.Board
 
         private float frequency;
 
+        /// <summary>
+        /// Time in milliseconds since last note event.
+        /// </summary>
+        public int Time { get; private set; }
+
+        /// <summary>
+        /// The number of samples since last note event;
+        /// </summary>
+        private int samples;
+
+        public bool IsNoteOn { get; private set; }
+
+        public int Note { get; private set; }
+
         public int SampleRate { get; }
 
-        public bool Finished { get; private set; }
-
-        public ModuleBoard(float frequency, Module[] modules, int sampleRate = 44100)
+        public ModuleBoard(Module[] modules, int sampleRate = 44100)
         {
             this.modules = modules;
             SortModules();
             for (int i = 0; i < modules.Length; ++i)
                 this.modules[i].num = i;
 
-            Frequency = frequency;
-
             inputTable = new InputTable(this.modules);
             
             SampleRate = sampleRate;
-            Finished = false;
+
+            frequency = 0;
+
+            Time = 0;
+            samples = 0;
         }
 
         public float Frequency
@@ -48,6 +62,22 @@ namespace SynthLib.Board
                 foreach (var mod in modules)
                     mod.UpdateFrequency(value);
             }
+        }
+
+        public void NoteOn(int note)
+        {
+            Frequency = Midi.Frequencies[note];
+            Note = note;
+            Time = 0;
+            IsNoteOn = true;
+            samples = 0;
+        }
+
+        public void NoteOff()
+        {
+            Time = 0;
+            IsNoteOn = false;
+            samples = 0;
         }
 
         private void SortModules()
@@ -71,6 +101,11 @@ namespace SynthLib.Board
 
         public float Next()
         {
+            if (frequency == 0)
+                return 0;
+            ++samples;
+            Time = samples / (SampleRate / 1000); 
+
             float result = 0;
             Module curModule;
 
@@ -78,7 +113,7 @@ namespace SynthLib.Board
             for (int i = 0; i < modules.Length; ++i)
             {
                 curModule = inputTable.modules[i];
-                var output = curModule.Process(inputTable.input[i]);
+                var output = curModule.Process(inputTable.input[i], (int)Time, IsNoteOn);
                 if (curModule.Type == "E")
                     result += output[0];
                 else

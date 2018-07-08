@@ -68,7 +68,7 @@ namespace SynthLib.Board.Modules
             return new Mixer(this);
         }
 
-        public override float[] Process(float[] inputs)
+        public override float[] Process(float[] inputs, int time, bool noteOn)
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)

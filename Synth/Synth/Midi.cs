@@ -21,6 +21,16 @@ namespace SynthLib
 
         public event NoteEventHandler NoteOff;
 
+        public static IReadOnlyList<float> Frequencies { get; }
+
+        static Midi()
+        {
+            var frequencies = new List<float>(128);
+            for (int i = 0; i < 128; ++i)
+                frequencies.Add((float)Music.Tone.FrequencyFromNote(i));
+            Frequencies = frequencies;
+        }
+
         public Midi (MidiIn midiIn)
         {
             currentNoteNumbers = new List<int>();

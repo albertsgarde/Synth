@@ -16,7 +16,7 @@ namespace SynthLib.Board.Modules
 
         public string Name { get; set; }
 
-        public abstract float[] Process(float[] inputs);
+        public abstract float[] Process(float[] inputs, int time, bool noteOn);
 
         public int num;
 

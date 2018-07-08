@@ -20,7 +20,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override string Type { get; } = "Oscillator";
+        public override string Type { get; } = "ConstOscillator";
 
         private float[] output;
 
@@ -49,7 +49,7 @@ namespace SynthLib.Board.Modules
             return new ConstantOscillatorModule(this);
         }
 
-        public override float[] Process(float[] inputs)
+        public override float[] Process(float[] inputs, int time, bool noteOn)
         {
             var next = oscillator.NextValue() * gain;
             for (int i = 0; i < output.Length; ++i)

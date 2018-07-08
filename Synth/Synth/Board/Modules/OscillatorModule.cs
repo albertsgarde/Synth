@@ -57,7 +57,7 @@ namespace SynthLib.Board.Modules
             return new OscillatorModule(this);
         }
 
-        public override float[] Process(float[] inputs)
+        public override float[] Process(float[] inputs, int time, bool noteOn)
         {
             var next = oscillator.NextValue() * gain * (inputs[0] + 1);
             for (int i = 0; i < output.Length; ++i)

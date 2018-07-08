@@ -81,13 +81,12 @@ namespace SynthLib.Board
             }
         }
 
-        public ModuleBoard CreateInstance(float frequency, int sampleRate = 44100)
+        public ModuleBoard CreateInstance(int sampleRate = 44100)
         {
             var boardModules = new CrossReferencedDictionary<int, Module>();
             foreach (var m in modules)
             {
                 boardModules[m.Key] = m.Value.Clone();
-                boardModules[m.Key].UpdateFrequency(frequency); // Isn't really necessary because the module board does it too.
             }
 
             foreach (var ct in connections)
@@ -96,7 +95,7 @@ namespace SynthLib.Board
             }
 
 
-            var board = new ModuleBoard(frequency, boardModules.Keys2.ToArray(), sampleRate);
+            var board = new ModuleBoard(boardModules.Keys2.ToArray(), sampleRate);
 
             return board;
         }
