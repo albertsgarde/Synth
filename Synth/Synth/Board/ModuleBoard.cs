@@ -72,19 +72,24 @@ namespace SynthLib.Board
         public float Next()
         {
             float result = 0;
+            Module curModule;
 
             inputTable.ResetInputs();
             for (int i = 0; i < modules.Length; ++i)
             {
-                var output = inputTable.modules[i].Process(inputTable.input[i]);
-                if (inputTable.modules[i].Type == "End")
+                curModule = inputTable.modules[i];
+                var output = curModule.Process(inputTable.input[i]);
+                if (curModule.Type == "E")
                     result += output[0];
                 else
                 {
                     for (int j = 0; j < output.Length; ++j)
                     {
-                        if (inputTable.modules[i].Outputs[j] != null)
-                            inputTable.input[inputTable.modules[i].Outputs[j].Destination.num][inputTable.modules[i].Outputs[j].DestinationIndex] = output[j];
+                        if (curModule.Outputs[j] != null)
+                        {
+                            var dest = curModule.Outputs[j];
+                            inputTable.input[dest.Destination.num][dest.DestinationIndex] = output[j];
+                        }
                     }
                 }
             }
