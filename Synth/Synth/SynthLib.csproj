@@ -81,6 +81,7 @@
     <Compile Include="Oscillators\SawOscillator.cs" />
     <Compile Include="Oscillators\SineOscillator.cs" />
     <Compile Include="Oscillators\PulseOscillator.cs" />
+    <Compile Include="Oscillators\TriangleOscillator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synth.cs" />
     <Compile Include="SynthProviders\ISynthProvider.cs" />
