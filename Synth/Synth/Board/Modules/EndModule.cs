@@ -14,7 +14,7 @@ namespace SynthLib.Board.Modules
 
         public override string Type { get; } = "E";
 
-        private float[] output;
+        private readonly float[] output;
 
         public EndModule()
         {
