@@ -46,6 +46,7 @@
     <Compile Include="Board\BoardTemplate.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
+    <Compile Include="Board\ModuleTemplate.cs" />
     <Compile Include="Board\SuperBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />
