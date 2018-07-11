@@ -126,7 +126,7 @@ namespace SynthLib.Board
 
             var modulesElement = new XElement("modules");
             foreach (var mod in modules.Keys2)
-                modulesElement.Add(mod.ToXElement(modules[mod]));
+                modulesElement.Add(mod.ToXElement("savedModule" + modules[mod]));
             element.Add(modulesElement);
 
             var connectionsElement = new XElement("connections");

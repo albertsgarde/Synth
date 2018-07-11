@@ -77,7 +77,7 @@ namespace SynthLib.Board.Modules
             {
                 var element = new XElement(name);
                 for (int i = 0; i < weights.Length; ++i)
-                    element.AddValue("" + i, weights[i]);
+                    element.AddValue("_" + i, weights[i]);
                 return element;
             }
         }

@@ -103,6 +103,8 @@ namespace SynthLib
 
             var superBoard = new SuperBoard(board, midi, 36);
 
+            board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
+
             synthResult.AddSynthProvider(superBoard);
         }
     }
