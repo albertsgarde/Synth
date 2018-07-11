@@ -10,11 +10,11 @@ using System.Collections;
 
 namespace SynthLib.Board
 {
-    public class BoardTemplate : IEnumerable<Module>
+    public class BoardTemplate : IEnumerable<Module>, ISaveable
     {
         private int moduleNum = -1;
 
-        private readonly CrossReferencedDictionary<int, Module> modules;
+        private readonly CrossReferencedDictionary<string, Module> modules;
 
         private readonly List<ConnectionTemplate> connections;
 
@@ -25,18 +25,18 @@ namespace SynthLib.Board
 
         public BoardTemplate()
         {
-            modules = new CrossReferencedDictionary<int, Module>();
+            modules = new CrossReferencedDictionary<string, Module>();
             connections = new List<ConnectionTemplate>();
         }
 
-        private class ConnectionTemplate
+        private class ConnectionTemplate : ISaveable
         {
-            public int Source { get; }
+            public string Source { get; }
             public int SourceIndex { get; }
-            public int Dest { get; }
+            public string Dest { get; }
             public int DestIndex { get; }
             
-            public ConnectionTemplate(int source, int sourceIndex, int dest, int destIndex)
+            public ConnectionTemplate(string source, int sourceIndex, string dest, int destIndex)
             {
                 Source = source;
                 SourceIndex = sourceIndex;
@@ -48,11 +48,21 @@ namespace SynthLib.Board
             {
                 return $"{{{Source}[{SourceIndex}] -> {Dest}[{DestIndex}]}}";
             }
+
+            public XElement ToXElement(string name)
+            {
+                var element = new XElement(name);
+                element.AddValue("source", Source);
+                element.AddValue("sourceIndex", SourceIndex);
+                element.AddValue("dest", Dest);
+                element.AddValue("destIndex", DestIndex);
+                return element;
+            }
         }
 
         public void Add(Module mod)
         {
-            modules[++moduleNum] = mod;
+            modules["" + ++moduleNum] = mod;
         }
 
         public void AddConnection(Module source, Module dest, int sourceIndex = -1, int destIndex = -1)
@@ -63,7 +73,7 @@ namespace SynthLib.Board
             connections.Add(new ConnectionTemplate(modules[source], sourceIndex, modules[dest], destIndex));
         }
 
-        private void CreateConnection(ConnectionTemplate ct, CrossReferencedDictionary<int, Module> modules)
+        private void CreateConnection(ConnectionTemplate ct, CrossReferencedDictionary<string, Module> modules)
         {
             if (ct.SourceIndex == -1)
             {
@@ -83,7 +93,7 @@ namespace SynthLib.Board
 
         public ModuleBoard CreateInstance(int sampleRate = 44100)
         {
-            var boardModules = new CrossReferencedDictionary<int, Module>();
+            var boardModules = new CrossReferencedDictionary<string, Module>();
             foreach (var m in modules)
             {
                 boardModules[m.Key] = m.Value.Clone();
@@ -108,6 +118,23 @@ namespace SynthLib.Board
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+
+            var modulesElement = new XElement("modules");
+            foreach (var mod in modules.Keys2)
+                modulesElement.Add(mod.ToXElement(modules[mod]));
+            element.Add(modulesElement);
+
+            var connectionsElement = new XElement("connections");
+            foreach (var con in connections)
+                connectionsElement.Add(con.ToXElement("connection"));
+            element.Add(connectionsElement);
+
+            return element;
         }
     }
 }
