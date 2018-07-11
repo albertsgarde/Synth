@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Collections;
 using SynthLib.Board.Modules;
+using Stuff;
+using System.Xml.Linq;
 
 namespace SynthLib.Board
 {
