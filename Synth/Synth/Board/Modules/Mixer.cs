@@ -44,14 +44,9 @@ namespace SynthLib.Board.Modules
         {
             Inputs = new ConnectionsArray(mixer.Inputs.Count);
             Outputs = new ConnectionsArray(mixer.Outputs.Count);
-
-            InputGains = new float[mixer.InputGains.Length];
-            for (int i = 0; i < InputGains.Length; ++i)
-                InputGains[i] = mixer.InputGains[i];
-
-            OutputGains = new float[mixer.OutputGains.Length];
-            for (int i = 0; i < OutputGains.Length; ++i)
-                OutputGains[i] = mixer.OutputGains[i];
+            
+            InputGains = mixer.InputGains;
+            OutputGains = mixer.OutputGains;
 
             Type = mixer.Type;
         }
@@ -84,6 +79,8 @@ namespace SynthLib.Board.Modules
                     element.AddValue("" + i, gains[i]);
                 return element;
             }
+
+            public int Length => gains.Length;
         }
 
         public override Module Clone()

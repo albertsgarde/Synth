@@ -77,7 +77,6 @@ namespace SynthLib
             var de1 = new EffectModule(new Delay(0.5f, 0.5f));
 
             var m2 = new Mixer(2, 1);
-            m2.OutputGains[0] = 0.2f;
             var end = new EndModule();
 
             var board = new BoardTemplate()

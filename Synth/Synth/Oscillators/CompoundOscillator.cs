@@ -157,9 +157,9 @@ namespace SynthLib.Oscillators
             return new CompoundOscillator(clonedOscillators, SampleRate);
         }
 
-        public XElement ToXML()
+        public XElement ToXElement(string name)
         {
-            var element = new XElement("Oscillator");
+            var element = new XElement(name);
             element.AddValue("type", Type);
             foreach (var osc in oscillators)
                 element.Add(osc.ToXElement("osc"));
