@@ -19,9 +19,7 @@ namespace SynthLib
         public int SampleRate { get; }
 
         private readonly SynthResult synthResult;
-
-        private readonly WaveOutEvent aOut;
-
+        
         public Synth(int sampleRate = 44100)
         {
             SampleRate = sampleRate;
