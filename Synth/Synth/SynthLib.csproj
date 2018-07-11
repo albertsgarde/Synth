@@ -83,6 +83,7 @@
     <Compile Include="Oscillators\PulseOscillator.cs" />
     <Compile Include="Oscillators\TriangleOscillator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Synth.cs" />
     <Compile Include="SynthProviders\ISynthProvider.cs" />
     <Compile Include="SynthProviders\KeyboardPlayer.cs" />
@@ -103,6 +104,7 @@
   <ItemGroup>
     <Content Include="Assets\Bounding.txt" />
     <Content Include="Assets\Music\Data.xml" />
+    <Content Include="Assets\Settings\paths.txt" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,1 @@
+﻿sampleRate = 44100
