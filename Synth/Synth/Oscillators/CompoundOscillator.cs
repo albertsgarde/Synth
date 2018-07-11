@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 
 namespace SynthLib.Oscillators
 {
     public class CompoundOscillator : IOscillator
     {
+        public string Type => "Compound";
+
         private readonly Oscillator[] oscillators;
 
         private float frequency;
@@ -16,10 +20,10 @@ namespace SynthLib.Oscillators
 
         public int SampleRate { get; }
 
-        public CompoundOscillator(float frequency, IEnumerable<Oscillator> oscillators, int sampleRate = 44100)
+        public CompoundOscillator(IEnumerable<Oscillator> oscillators, int sampleRate = 44100)
         {
             this.oscillators = oscillators.ToArray();
-            Frequency = frequency;
+            Frequency = 0;
 
             totalWeight = 0;
             for (int i = 0; i < this.oscillators.Length; ++i)
@@ -38,7 +42,7 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public class Oscillator
+        public class Oscillator : ISaveable
         {
             private readonly IOscillator oscillator;
 
@@ -91,6 +95,14 @@ namespace SynthLib.Oscillators
             {
                 return new Oscillator(oscillator.Clone(), Weight, frequencyMultiplier);
             }
+
+            public XElement ToXElement(string name)
+            {
+                var element = new XElement(name);
+                element.Add(oscillator.ToXElement("osc"));
+                element.AddValue("weight", Weight);
+                return element;
+            }
         }
 
         public void Next()
@@ -142,7 +154,16 @@ namespace SynthLib.Oscillators
             var clonedOscillators = new List<Oscillator>();
             foreach (var osc in oscillators.Select(osc => osc.Clone()))
                 clonedOscillators.Add(osc);
-            return new CompoundOscillator(Frequency, clonedOscillators, SampleRate);
+            return new CompoundOscillator(clonedOscillators, SampleRate);
+        }
+
+        public XElement ToXML()
+        {
+            var element = new XElement("Oscillator");
+            element.AddValue("type", Type);
+            foreach (var osc in oscillators)
+                element.Add(osc.ToXElement("osc"));
+            return element;
         }
     }
 }

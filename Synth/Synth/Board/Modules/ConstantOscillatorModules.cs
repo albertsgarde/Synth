@@ -7,6 +7,7 @@ using SynthLib.Oscillators;
 using SynthLib.Music;
 
 using Stuff;
+using System.Xml.Linq;
 
 namespace SynthLib.Board.Modules
 {
@@ -15,6 +16,8 @@ namespace SynthLib.Board.Modules
         private readonly IOscillator oscillator;
 
         private readonly float gain;
+
+        private readonly float frequency;
 
         public override Connections Inputs { get; } // 0: Gain modifier;
 
@@ -29,6 +32,7 @@ namespace SynthLib.Board.Modules
             this.oscillator = oscillator.Clone();
             this.oscillator.Frequency = frequency;
             this.gain = gain;
+            this.frequency = frequency;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(outputs);
             output = new float[outputs];
@@ -38,6 +42,7 @@ namespace SynthLib.Board.Modules
         {
             oscillator = oscMod.oscillator.Clone();
             gain = oscMod.gain;
+            frequency = oscMod.frequency;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(oscMod.Outputs.Count);
             output = new float[Outputs.Count];
@@ -55,6 +60,15 @@ namespace SynthLib.Board.Modules
             for (int i = 0; i < output.Length; ++i)
                 output[i] = next;
             return output;
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.Add(oscillator.ToXElement("osc"));
+            element.AddValue("gain", gain);
+            element.AddValue("frequency", frequency);
+            return element;
         }
     }
 }

@@ -56,17 +56,17 @@ namespace SynthLib
 
             var midi = new Midi(midiIn);
 
-            var lfo1 = new ConstantOscillatorModule(new SineOscillator(0), 1, 1f);
+            var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 1, 1f);
 
             var env1 = new Envelope(30, 80, 0.8f, 40, 3);
 
             var t1 = new EffectModule(new Translate(-1.0f, 0));
 
-            var o1 = new OscillatorModule(new SawOscillator(0), 1);
+            var o1 = new OscillatorModule(new SawOscillator(), 1);
 
-            var o2 = new OscillatorModule(new SawOscillator(0), 1, 0.1f);
+            var o2 = new OscillatorModule(new SawOscillator(), 1, 0.1f);
 
-            var o3 = new OscillatorModule(new SawOscillator(0), 1, 11.9f);
+            var o3 = new OscillatorModule(new SawOscillator(), 1, 11.9f);
 
             var d1 = new Distributer(new float[] { 1, 1, 0.4f }, new float[] { 1 });
 

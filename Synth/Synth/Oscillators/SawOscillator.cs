@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Oscillators
 {
     public class SawOscillator : IOscillator
     {
+        public string Type => "Saw";
+
         private float frequency;
         private float valueIncrement;
 
@@ -15,9 +19,9 @@ namespace SynthLib.Oscillators
 
         private float curValue;
 
-        public SawOscillator(float frequency, float startValue = 0, int sampleRate = 44100)
+        public SawOscillator(float startValue = 0, int sampleRate = 44100)
         {
-            Frequency = frequency;
+            Frequency = 0;
             curValue = startValue;
             SampleRate = sampleRate;
         }
@@ -62,7 +66,14 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SawOscillator(frequency, curValue, SampleRate);
+            return new SawOscillator(curValue, SampleRate);
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            return element;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Board.Modules
 {
@@ -104,6 +106,16 @@ namespace SynthLib.Board.Modules
             for (int i = 0; i < output.Length; ++i)
                 output[i] = curValue;
             return output;
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.AddValue("attack", Attack);
+            element.AddValue("decay", Decay);
+            element.AddValue("sustain", Sustain);
+            element.AddValue("release", Release);
+            return element;
         }
     }
 }

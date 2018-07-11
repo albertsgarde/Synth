@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Oscillators
 {
     public class TriangleOscillator : IOscillator
     {
+        public string Type => "Triangle";
+
         public int SampleRate { get; }
 
         private float frequency;
@@ -16,10 +20,10 @@ namespace SynthLib.Oscillators
 
         private float curValue;
 
-        public TriangleOscillator(float frequency, float startValue = 0, int sampleRate = 44100)
+        public TriangleOscillator(float startValue = 0, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
-            Frequency = frequency;
+            Frequency = 0;
             curValue = startValue;
         }
 
@@ -63,12 +67,19 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new TriangleOscillator(Frequency, curValue, SampleRate);
+            return new TriangleOscillator(curValue, SampleRate);
         }
 
         public void Reset()
         {
             curValue = 0;
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            return element;
         }
     }
 }

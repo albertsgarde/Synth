@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 
 namespace SynthLib.Oscillators
 {
     /// <summary>
     /// Provides an oscillation between min and max
     /// </summary>
-    public interface IOscillator
+    public interface IOscillator : ISaveable
     {
+        string Type { get; }
+
         float Frequency { get; set; }
 
         int SampleRate { get; }

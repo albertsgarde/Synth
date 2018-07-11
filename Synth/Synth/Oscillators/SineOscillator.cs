@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Oscillators
 {
     public class SineOscillator : IOscillator
     {
+        public string Type => "Sine";
+
         public int SampleRate { get; }
 
         private float frequency;
@@ -19,11 +23,11 @@ namespace SynthLib.Oscillators
         private const float TAU = (float)Math.PI * 2;
         
         /// <param name="startValue">The initial value of the oscillator. Used to avoid noise when switching oscillators.</param>
-        public SineOscillator (float frequency, float startValue = 0, int sampleRate = 44100)
+        public SineOscillator (float startValue = 0, int sampleRate = 44100)
         {
             curRadians = (float)Math.Asin(startValue);
+            Frequency = 0;
             SampleRate = sampleRate;
-            Frequency = frequency;
         }
 
         public float Frequency
@@ -66,7 +70,14 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new SineOscillator(frequency, (float)Math.Sin(curRadians), SampleRate);
+            return new SineOscillator((float)Math.Sin(curRadians), SampleRate);
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            return element;
         }
     }
 }

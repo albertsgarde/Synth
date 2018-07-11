@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Effects
 {
@@ -11,6 +13,8 @@ namespace SynthLib.Effects
     /// </summary>
     public class Translate : IEffect
     {
+        public string Type => "Translate";
+
         public int Values => 0;
 
         private readonly float min;
@@ -37,6 +41,15 @@ namespace SynthLib.Effects
         public float Next(float[] input)
         {
             return input[0] * mxmn2 + mxmn2mn;
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            element.AddValue("min", min);
+            element.AddValue("max", max);
+            return element;
         }
     }
 }

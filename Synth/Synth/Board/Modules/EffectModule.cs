@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 using SynthLib.Effects;
 
 namespace SynthLib.Board.Modules
@@ -32,6 +34,13 @@ namespace SynthLib.Board.Modules
         public override float[] Process(float[] inputs, int time, bool noteOn)
         {
             return new float[] { effect.Next(inputs) };
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.Add(effect.ToXElement("effect"));
+            return element;
         }
     }
 }

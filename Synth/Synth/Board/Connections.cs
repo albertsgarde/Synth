@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SynthLib.Board.Modules;
+using Stuff;
+using System.Xml.Linq;
 
 namespace SynthLib.Board
 {
-    public abstract class Connections : IEnumerable<Connection>
+    public abstract class Connections : IEnumerable<Connection>, ISaveable
     {
         public abstract Connection this[int index]
         {
@@ -123,6 +125,21 @@ namespace SynthLib.Board
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        /// <summary>
+        /// Starts the construction of an XElement that describes the connections. Should be called at the start of any Connections ToXElement implementation.
+        /// Saves data about the number of connections and start of the free connections, the rest should be saved by the individual connections.
+        /// </summary>
+        /// <remarks>
+        /// Note that the connections should not be saved, as they are a property of the module board, not the individual modules.
+        /// </remarks>
+        public virtual XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("count", Count);
+            element.AddValue("freeConnectionsStart", FreeConnectionsStart);
+            return element;
         }
     }
 }

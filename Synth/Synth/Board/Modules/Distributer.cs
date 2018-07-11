@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Stuff;
 
 namespace SynthLib.Board.Modules
@@ -50,24 +51,34 @@ namespace SynthLib.Board.Modules
             OutputWeights = new Weights(distributer.OutputWeights);
         }
 
-        public struct Weights
+        public struct Weights : ISaveable
         {
-            public readonly float[] weights;
+            private readonly float[] weights;
 
-            public float total;
+            public float Total { get; private set; }
 
             public Weights(float[] weights)
             {
                 this.weights = new float[weights.Length];
                 weights.CopyTo(this.weights, 0);
-                total = weights.Sum();
+                Total = weights.Sum();
             }
 
             public Weights(Weights weights)
             {
                 this.weights = new float[weights.weights.Length];
                 weights.weights.CopyTo(this.weights, 0);
-                total = weights.total;
+                Total = weights.Total;
+            }
+
+            public float this[int i] => weights[i];
+
+            public XElement ToXElement(string name)
+            {
+                var element = new XElement(name);
+                for (int i = 0; i < weights.Length; ++i)
+                    element.AddValue("" + i, weights[i]);
+                return element;
             }
         }
 
@@ -80,14 +91,22 @@ namespace SynthLib.Board.Modules
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
-                totalInput += inputs[i] * InputWeights.weights[i];
-            totalInput /= (InputWeights.total/inputs.Length);
+                totalInput += inputs[i] * InputWeights[i];
+            totalInput /= (InputWeights.Total/inputs.Length);
 
-            var totalOutput = totalInput / OutputWeights.total;
+            var totalOutput = totalInput / OutputWeights.Total;
             var result = new float[Outputs.Count];
             for (int i = 0; i < result.Length; ++i)
-                result[i] = totalOutput * OutputWeights.weights[i];
+                result[i] = totalOutput * OutputWeights[i];
             return result;
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.Add(InputWeights.ToXElement("inputWeights"));
+            element.Add(OutputWeights.ToXElement("outputWeights"));
+            return element;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Board
 {
@@ -69,6 +70,11 @@ namespace SynthLib.Board
         {
             for (int i = 0; i < connections.Length; ++i)
                 yield return connections[i];
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            return base.ToXElement(name);
         }
     }
 }

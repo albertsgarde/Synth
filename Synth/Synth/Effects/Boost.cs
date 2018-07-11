@@ -1,13 +1,17 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Effects
 {
     public class Boost : IEffect
     {
+        public string Type => "Boost";
+
         public int Values => 1;
 
         public float Gain { get; }
@@ -25,6 +29,14 @@ namespace SynthLib.Effects
         public float Next(float[] input)
         {
             return input[Values] * Gain * (input[0] + 1);
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            element.AddValue("gain", Gain);
+            return element;
         }
     }
 }

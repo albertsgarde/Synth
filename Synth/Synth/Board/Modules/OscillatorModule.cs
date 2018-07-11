@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SynthLib.Oscillators;
 using SynthLib.Music;
 using Stuff;
+using System.Xml.Linq;
 
 namespace SynthLib.Board.Modules
 {
@@ -62,6 +63,15 @@ namespace SynthLib.Board.Modules
             for (int i = 0; i < output.Length; ++i)
                 output[i] = next;
             return output;
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.Add(oscillator.ToXElement("osc"));
+            element.AddValue("gain", gain);
+            element.AddValue("frequencyMultiplier", frequencyMultiplier);
+            return element;
         }
     }
 }

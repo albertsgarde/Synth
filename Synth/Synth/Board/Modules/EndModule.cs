@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SynthLib.Board.Modules
 {
@@ -14,7 +15,7 @@ namespace SynthLib.Board.Modules
 
         public override string Type { get; } = "E";
 
-        private float[] output;
+        private readonly float[] output;
 
         public EndModule()
         {

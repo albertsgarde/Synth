@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Stuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 
 namespace SynthLib.Board.Modules
 {
@@ -15,9 +18,9 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public float[] InputGains { get; }
+        public Gains InputGains { get; }
 
-        public float[] OutputGains { get; }
+        public Gains OutputGains { get; }
 
         public override string Type { get; } = "Mixer";
 
@@ -25,26 +28,16 @@ namespace SynthLib.Board.Modules
         {
             Inputs = new ConnectionsArray(inputs);
             Outputs = new ConnectionsArray(outputs);
-            InputGains = new float[inputs];
-            for (int i = 0; i < inputs; ++i)
-            {
-                InputGains[i] = 1;
-            }
-            OutputGains = new float[outputs];
-            for (int i = 0; i < outputs; ++i)
-            {
-                OutputGains[i] = 1;
-            }
+            InputGains = new Gains(inputs);
+            OutputGains = new Gains(outputs);
         }
 
         public Mixer(float[] inputGains, float[] outputGains)
         {
             Inputs = new ConnectionsArray(inputGains.Length);
             Outputs = new ConnectionsArray(outputGains.Length);
-            InputGains = new float[inputGains.Length];
-            inputGains.CopyTo(InputGains, 0);
-            OutputGains = new float[outputGains.Length];
-            outputGains.CopyTo(OutputGains, 0);
+            InputGains = new Gains(inputGains);
+            OutputGains = new Gains(outputGains);
         }
 
         private Mixer(Mixer mixer)
@@ -63,6 +56,36 @@ namespace SynthLib.Board.Modules
             Type = mixer.Type;
         }
 
+        public struct Gains : ISaveable
+        {
+            private readonly float[] gains;
+
+            public float this[int i] => gains[i];
+
+            public Gains(int inputs)
+            {
+                gains = new float[inputs];
+                for (int i = 0; i < inputs; ++i)
+                {
+                    gains[i] = 1;
+                }
+            }
+
+            public Gains(float[] gains)
+            {
+                this.gains = new float[gains.Length];
+                gains.CopyTo(this.gains, 0);
+            }
+
+            public XElement ToXElement(string name)
+            {
+                var element = new XElement(name);
+                for (int i = 0; i < gains.Length; ++i)
+                    element.AddValue("" + i, gains[i]);
+                return element;
+            }
+        }
+
         public override Module Clone()
         {
             return new Mixer(this);
@@ -79,6 +102,14 @@ namespace SynthLib.Board.Modules
                 result[i] = totalInput * OutputGains[i];
             
             return result;
+        }
+
+        public override XElement ToXElement(string name)
+        {
+            var element = base.ToXElement(name);
+            element.Add(InputGains.ToXElement("inputGains"));
+            element.Add(OutputGains.ToXElement("outputGains"));
+            return element;
         }
     }
 }

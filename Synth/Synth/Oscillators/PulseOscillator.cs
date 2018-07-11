@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 
 namespace SynthLib.Oscillators
 {
     public class PulseOscillator : IOscillator
     {
+        public string Type => "Pulse";
+
         public int SampleRate { get; }
 
         private float frequency;
@@ -16,12 +20,12 @@ namespace SynthLib.Oscillators
 
         private float curValue = 0;
 
-        private float dutyCycle;
+        private readonly float dutyCycle;
 
-        public PulseOscillator(float frequency, float dutyCycle = 0.5f, int sampleRate = 44100)
+        public PulseOscillator(float dutyCycle = 0.5f, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
-            Frequency = frequency;
+            Frequency = 0;
             this.dutyCycle = dutyCycle;
         }
 
@@ -32,22 +36,6 @@ namespace SynthLib.Oscillators
             {
                 frequency = value;
                 incrementValue = frequency / SampleRate;
-            }
-        }
-
-        public float DutyCycle
-        {
-            get
-            {
-                return dutyCycle;
-            }
-
-            set
-            {
-                if (value > 1 || value < 0)
-                    throw new ArgumentException("Duty cycle must be between 0 and 1.");
-                else
-                    dutyCycle = value;
             }
         }
 
@@ -84,7 +72,15 @@ namespace SynthLib.Oscillators
 
         public IOscillator Clone()
         {
-            return new PulseOscillator(frequency, SampleRate);
+            return new PulseOscillator(dutyCycle, SampleRate);
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            element.AddValue("dutyCycle", dutyCycle);
+            return element;
         }
     }
 }
