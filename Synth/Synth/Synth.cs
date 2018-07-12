@@ -20,18 +20,19 @@ namespace SynthLib
 
         private readonly SynthResult synthResult;
         
-        public Synth(int sampleRate = 44100)
+        public Synth(SynthSettings settings)
         {
-            SampleRate = sampleRate;
+            SampleRate = settings.SampleRate;
 
-            synthResult = new SynthResult(sampleRate, 1)
+            synthResult = new SynthResult(SampleRate, 1)
             {
                 Gain = 0.1f
             };
 
             var aOut = new WaveOutEvent
             {
-                DesiredLatency = 64
+                DesiredLatency = settings.DesiredLatency,
+                DeviceNumber = -1
             };
             aOut.Init(synthResult);
             aOut.Play();

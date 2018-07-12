@@ -90,6 +90,7 @@
     <Compile Include="SynthProviders\MelodyPlayer.cs" />
     <Compile Include="SynthProviders\TonePlayer.cs" />
     <Compile Include="SynthResult.cs" />
+    <Compile Include="SynthSettings.cs" />
     <Compile Include="SynthUtils.cs" />
   </ItemGroup>
   <ItemGroup>
