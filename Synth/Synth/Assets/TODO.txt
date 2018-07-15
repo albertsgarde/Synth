@@ -6,7 +6,6 @@
 		Filter
 		Distortion
 		Chorus
-	Change IEffect.Next() to take a float and not an array of floats.
 	Glide
 	Fix weird sounds in synth.
 	Test
