@@ -24,7 +24,7 @@ namespace SynthApp
         public MainWindow()
         {
             InitializeComponent();
-            var synth = new Synth();
+            var synth = new Synth(new SynthSettings());
         }
 
         

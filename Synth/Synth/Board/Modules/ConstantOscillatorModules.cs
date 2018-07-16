@@ -43,6 +43,7 @@ namespace SynthLib.Board.Modules
             oscillator = oscMod.oscillator.Clone();
             gain = oscMod.gain;
             frequency = oscMod.frequency;
+            oscillator.Frequency = frequency;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(oscMod.Outputs.Count);
             output = new float[Outputs.Count];

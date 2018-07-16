@@ -55,7 +55,7 @@ namespace SynthLib
 
             var midi = new Midi(midiIn);
 
-            var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 1, 1f);
+            var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 3, 1f);
 
             var env1 = new Envelope(30, 80, 0.8f, 40, 3);
 
@@ -75,7 +75,7 @@ namespace SynthLib
 
             var m1 = new Mixer(1, 2);
 
-            var de1 = new EffectModule(new Delay(0.5f, 0.5f));
+            var de1 = new EffectModule(new Delay(0.5f, 0.0f));
 
             var m2 = new Mixer(2, 1);
             var end = new EndModule();
@@ -102,7 +102,7 @@ namespace SynthLib
             
             board.AddConnection(de1, end);
 
-            var superBoard = new SuperBoard(board, midi, 36);
+            var superBoard = new SuperBoard(board, midi, 12);
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
 
