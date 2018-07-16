@@ -106,9 +106,6 @@ namespace SynthLib.Board.Modules
                 if (curValue < -1)
                     curValue = -1;
             }
-            if (Sustain == 0.04f)
-                //Console.WriteLine(curValue)
-                    ;
             for (int i = 0; i < output.Length; ++i)
                 output[i] = curValue;
             return output;
