@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SynthLib.Board.Modules
 {
+    /// <summary>
+    /// Returns a value between -1 and 0 as long as the given values are between 0 and 1.
+    /// </summary>
     public class Envelope : Module
     {
         public int SampleRate { get; }
@@ -57,7 +60,7 @@ namespace SynthLib.Board.Modules
             output = new float[outputs];
         }
 
-        public Envelope(int outputs, int sampleRate = 44100) : this(0, 0, 1, 0, outputs)
+        public Envelope(int outputs, int sampleRate = 44100) : this(0, 0, 1, 0, outputs, sampleRate)
         {
 
         }
@@ -101,6 +104,9 @@ namespace SynthLib.Board.Modules
                 if (curValue < -1)
                     curValue = -1;
             }
+            if (Sustain == 0.04f)
+                //Console.WriteLine(curValue)
+                    ;
             for (int i = 0; i < output.Length; ++i)
                 output[i] = curValue;
             return output;
