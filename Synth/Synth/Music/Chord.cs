@@ -10,15 +10,13 @@ namespace SynthLib.Music
 {
     public class Chord
     {
-        public static Dictionary<string, ChordType> ChordTypes { get; } = LoadChordTypes();
+        public Tone Root { get; }
 
-        public Tone Root { get; private set; }
+        public Tone BassNote { get; }
 
-        public Tone BassNote { get; private set; }
+        public ChordType Type { get; }
 
-        public ChordType Type { get; private set; }
-
-        public int Inversion { get; private set; }
+        public int Inversion { get; }
         
 
         /// <summary>
@@ -57,7 +55,7 @@ namespace SynthLib.Music
         }
     }
 
-    public struct ChordType
+    public class ChordType
     {
         public string Name { get; private set; }
 

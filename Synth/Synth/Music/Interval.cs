@@ -18,15 +18,15 @@ namespace SynthLib.Music
 
         private static readonly string[] intervalNames = { "Prime", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Octave" };
 
-        public int Number { get; private set; }
+        public int Number { get; }
         
-        public bool Direction { get; private set; }
+        public bool Direction { get; }
 
-        public IntervalQuality Quality { get; private set; }
+        public IntervalQuality Quality { get; }
 
-        private int noteNumQualitySize;
+        private readonly int noteNumQualitySize;
 
-        public int HalfTones { get; private set; }
+        public int HalfTones { get; }
 
         public Interval(int number, IntervalQuality quality)
         {

@@ -16,16 +16,16 @@ namespace SynthLib.Music
         /// <summary>
         /// The number of the interval from the C below it to this note.
         /// </summary>
-        public int Letter { get; private set; }
+        public int Letter { get; }
 
-        public int Octave { get; private set; }
+        public int Octave { get; }
 
-        public int Modifier { get; private set; }
+        public int Modifier { get; }
 
         /// <summary>
-        /// The number of half-tones this note is from C0.
+        /// This tones midi number
         /// </summary>
-        public int ToneNumber { get; private set; }
+        public int ToneNumber { get; }
 
         private double? frequency = null;
         
@@ -154,9 +154,7 @@ namespace SynthLib.Music
 
         public Tone AddModifier(int modifier)
         {
-            var result = new Tone(this);
-            result.Modifier += modifier;
-            return result;
+            return new Tone(Letter, Octave, Modifier + modifier);
         }
         
         /// <returns>This note in the specified octave.</returns>

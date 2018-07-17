@@ -12,11 +12,11 @@ namespace SynthLib.Music
     {
         private readonly List<Note> notes;
 
-        public Melody(XElement element)
+        public Melody(XElement element, IReadOnlyDictionary<string, double> noteValues)
         {
             notes = new List<Note>();
             foreach (var note in element.Elements("note"))
-                notes.Add(new Note(note));
+                notes.Add(new Note(note, noteValues));
         }
 
         public IEnumerator GetEnumerator()

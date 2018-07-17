@@ -10,54 +10,52 @@ namespace SynthLib.Music
 {
     public class MusicData
     {
-        public ScaleContainer Scales { get; }
+        public IReadOnlyDictionary<string, ChordType> ChordTypes { get; }
 
+        public IReadOnlyDictionary<string, Scale> Scales { get; }
 
+        public IReadOnlyDictionary<string, double> NoteValues { get; }
 
-        public MusicData(string path)
+        public IReadOnlyDictionary<string, Melody> Melodies { get; }
+
+        public MusicData(string path, Action<string> log)
         {
-            var data = XDocument.Load(path);
-            Scales = new ScaleContainer(data.Element("scales"));
-        }
-
-        public class ScaleContainer
-        {
-            private readonly Dictionary<string, Scale> scales;
-
-            internal ScaleContainer(XElement element)
+            var chordTypes = new Dictionary<string, ChordType>();
+            foreach (var element in XMLUtil.FindElements(path, e => e.Name == "chordTypes"))
             {
-                scales = new Dictionary<string, Scale>();
-                foreach (var scale in element.Element("scales").Elements())
-                    scales[scale.Element("name").Value] = new Scale(Chord.ChordTypes[scale.Element("rootChordType").Value], new int[] { 0 }.Union(scale.Elements("step").Select(e => int.Parse(e.Value))).ToArray());
+                foreach (var chordType in element.Elements())
+                    chordTypes[chordType.ElementValue("name")] = new ChordType(chordType);
             }
+            ChordTypes = chordTypes;
 
-            public Scale this[string name]
+            var scales = new Dictionary<string, Scale>();
+            foreach (var element in XMLUtil.FindElements(path, e => e.Name == "scales"))
             {
-                get
+                foreach (var scale in element.Elements())
+                    scales[scale.ElementValue("name")] = new Scale(scale, ChordTypes);
+            }
+            Scales = scales;
+
+            var noteValues = new Dictionary<string, double>();
+            foreach (var element in XMLUtil.FindElements(path, e => e.Name == "noteValues"))
+            {
+                foreach (var noteValue in element.Elements())
                 {
-                    return scales[name];
+                    string value = noteValue.ElementValue("value");
+                    if (!double.TryParse(value, out double result) || result <= 0)
+                        log.Invoke("Invalid noteValue " + value + ". Note values must be numbers and above 0.");
+                    noteValues[noteValue.ElementValue("name")] = result;
                 }
             }
-        }
+            NoteValues = noteValues;
 
-        public class MelodyContainer
-        {
-            private readonly Dictionary<string, Melody> melodies;
-
-            internal MelodyContainer(XElement element)
+            var melodies = new Dictionary<string, Melody>();
+            foreach (var element in XMLUtil.FindElements(path, e => e.Name == "melodies"))
             {
-                melodies = new Dictionary<string, Melody>();
-                foreach (var melody in element.Element("melodies").Elements())
-                    melodies[melody.Element("name").Value] = new Melody(melody);
+                foreach (var melody in element.Elements())
+                    melodies[melody.ElementValue("name")] = new Melody(melody, noteValues);
             }
-
-            public Melody this[string name]
-            {
-                get
-                {
-                    return melodies[name];
-                }
-            }
+            Melodies = melodies;
         }
     }
 }

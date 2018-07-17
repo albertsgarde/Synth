@@ -8,9 +8,9 @@ namespace SynthLib.Music
 {
     public class Key
     {
-        public Scale Scale { get; private set; }
+        public Scale Scale { get; }
         
-        public Tone Root { get; private set; }
+        public Tone Root { get; }
 
         public Key (Tone note, Scale scale)
         {

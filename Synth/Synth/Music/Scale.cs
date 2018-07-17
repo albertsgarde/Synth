@@ -9,44 +9,41 @@ using SynthLib.Music;
 
 namespace SynthLib.Music
 {
-    public class Scale
+    public class Scale : ISaveable
     {
-        public static readonly Scales Scales = new Scales();
+        public int[] Steps { get; }
 
-        public int[] Steps { get; private set; }
+        public string Name { get; }
 
-        public ChordType RootChordType { get; private set; }
+        public ChordType RootChordType { get; }
 
-        public Scale(ChordType rootChordType, params int[] steps)
+        public Scale(string name, ChordType rootChordType, params int[] steps)
         {
+            Name = name;
             Steps = steps.OrderBy(i => i).ToArray();
             RootChordType = rootChordType;
+        }
+
+        public Scale(XElement element, IReadOnlyDictionary<string, ChordType> chordTypes)
+        {
+            Name = element.ElementValue("name");
+            RootChordType = chordTypes[element.ElementValue("rootChordType")];
+            new int[] { 0 }.Union(element.Elements("step").Select(e => int.Parse(e.Value))).ToArray();
         }
 
         public int Step(int step)
         {
             return Steps[step % Steps.Length];
         }
-    }
 
-    public class Scales
-    {
-        private Dictionary<string, Scale> scales;
-
-        internal Scales()
+        public XElement ToXElement(string name)
         {
-            scales = new Dictionary<string, Scale>();
-            var data = XElement.Load("Assets/Music/Data.xml");
-            foreach (var scale in data.Element("scales").Elements())
-                scales[scale.Element("name").Value] = new Scale(Chord.ChordTypes[scale.Element("rootChordType").Value], new int[] { 0 }.Union(scale.Elements("step").Select(e => int.Parse(e.Value))).ToArray());
-        }
-
-        public Scale this[string name]
-        {
-            get
-            {
-                return scales[name];
-            }
+            var steps = new XElement("steps");
+            foreach (var step in Steps)
+                steps.Add(new XElement("step", step));
+            return new XElement(name,
+                new XElement("name", Name),
+                steps);
         }
     }
 }

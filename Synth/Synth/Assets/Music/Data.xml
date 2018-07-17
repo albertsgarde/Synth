@@ -109,23 +109,23 @@
   <noteValues>
     <noteValue>
       <name>Whole</name>
-      <value>1</value>
+      <value>4</value>
     </noteValue>
     <noteValue>
       <name>Half</name>
-      <value>0.5</value>
+      <value>2</value>
     </noteValue>
     <noteValue>
       <name>Quarter</name>
-      <value>0.25</value>
+      <value>1</value>
     </noteValue>
     <noteValue>
       <name>Eighth</name>
-      <value>0.125</value>
+      <value>0.5</value>
     </noteValue>
     <noteValue>
       <name>Sixteenth</name>
-      <value>0.0625</value>
+      <value>0.25</value>
     </noteValue>
   </noteValues>
   <melodies>

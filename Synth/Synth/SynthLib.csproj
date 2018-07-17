@@ -72,6 +72,8 @@
     <Compile Include="Music\Interval.cs" />
     <Compile Include="Music\Key.cs" />
     <Compile Include="Music\Melody.cs" />
+    <Compile Include="Music\Midi\MidiEvent.cs" />
+    <Compile Include="Music\Midi\NoteEvent.cs" />
     <Compile Include="Music\MusicData.cs" />
     <Compile Include="Music\Note.cs" />
     <Compile Include="Music\Scale.cs" />
@@ -104,7 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Bounding.txt" />
-    <Content Include="Assets\Music\Data.xml" />
+    <Content Include="Assets\Music\Data.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Assets\Settings\paths.txt" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
