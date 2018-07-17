@@ -19,10 +19,24 @@ namespace SynthLib
         public int SampleRate { get; }
 
         private readonly SynthResult synthResult;
+
+        private readonly Midi midi;
         
         public Synth(SynthSettings settings)
         {
             SampleRate = settings.SampleRate;
+
+            MidiIn midiIn;
+            try
+            {
+                midiIn = new MidiIn(0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(MidiIn.NumberOfDevices);
+                throw e;
+            }
+            midi = new Midi(midiIn);
 
             synthResult = new SynthResult(SampleRate, 1)
             {
@@ -42,19 +56,6 @@ namespace SynthLib
 
         private void Setup()
         {
-            MidiIn midiIn;
-            try
-            {
-                 midiIn = new MidiIn(0);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(MidiIn.NumberOfDevices);
-                throw e;
-            }
-
-            var midi = new Midi(midiIn);
-
             var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 3, 1f);
 
             var env1 = new Envelope(30, 80, 0.8f, 40, 3);
@@ -102,7 +103,9 @@ namespace SynthLib
             
             board.AddConnection(de1, end);
 
-            var superBoard = new SuperBoard(board, midi, 12);
+            var superBoard = new SuperBoard(board, 12);
+            midi.NoteOn += superBoard.HandleNoteOn;
+            midi.NoteOff += superBoard.HandleNoteOff;
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
 

@@ -72,8 +72,6 @@
     <Compile Include="Music\Interval.cs" />
     <Compile Include="Music\Key.cs" />
     <Compile Include="Music\Melody.cs" />
-    <Compile Include="Music\Midi\MidiEvent.cs" />
-    <Compile Include="Music\Midi\NoteEvent.cs" />
     <Compile Include="Music\MusicData.cs" />
     <Compile Include="Music\Note.cs" />
     <Compile Include="Music\Scale.cs" />

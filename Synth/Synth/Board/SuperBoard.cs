@@ -15,31 +15,25 @@ namespace SynthLib.Board
 
         private readonly BoardTemplate boardTemplate;
 
-        private readonly Midi midi;
-
         private readonly int voices;
 
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
 
-        public SuperBoard(BoardTemplate boardTemplate, Midi midi, int voices, int sampleRate = 44100)
+        public SuperBoard(BoardTemplate boardTemplate, int voices, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
             Finished = false;
             this.boardTemplate = boardTemplate;
-            this.midi = midi;
             this.voices = voices;
             boards = new ModuleBoard[voices];
 
             for (int i = 0; i < voices; ++i)
                 boards[i] = boardTemplate.CreateInstance();
-
-            midi.NoteOn += HandleNoteOn;
-            midi.NoteOff += HandleNoteOff;
         }
 
-        private void HandleNoteOn(int noteNumber)
+        public void HandleNoteOn(int noteNumber)
         {
             if (boards.Count(mb => !mb.IsNoteOn) > 0)
                 boards.Where(mb => !mb.IsNoteOn).MaxValue(mb => mb.Time).NoteOn(noteNumber);
@@ -47,7 +41,7 @@ namespace SynthLib.Board
                 boards.MaxValue(mb => mb.Time).NoteOn(noteNumber);
         }
 
-        private void HandleNoteOff(int noteNumber)
+        public void HandleNoteOff(int noteNumber)
         {
             foreach (var mb in boards)
             {

@@ -11,7 +11,7 @@ namespace SynthLib
     {
         private readonly MidiIn midiIn;
 
-        private List<int> currentNoteNumbers;
+        private readonly List<int> currentNoteNumbers;
 
         public IReadOnlyCollection<int> CurrentNoteNumbers { get; private set; }
 
