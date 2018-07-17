@@ -26,17 +26,8 @@ namespace SynthLib
         {
             SampleRate = settings.SampleRate;
 
-            MidiIn midiIn;
-            try
-            {
-                midiIn = new MidiIn(0);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(MidiIn.NumberOfDevices);
-                throw e;
-            }
-            midi = new Midi(midiIn);
+            midi = new Midi();
+            midi.SetMidiIn(0);
 
             synthResult = new SynthResult(SampleRate, 1)
             {

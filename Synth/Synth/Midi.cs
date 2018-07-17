@@ -9,7 +9,7 @@ namespace SynthLib
 {
     public class Midi
     {
-        private readonly MidiIn midiIn;
+        private MidiIn midiIn;
 
         private readonly List<int> currentNoteNumbers;
 
@@ -31,14 +31,27 @@ namespace SynthLib
             Frequencies = frequencies;
         }
 
-        public Midi (MidiIn midiIn)
+        public Midi ()
         {
             currentNoteNumbers = new List<int>();
             CurrentNoteNumbers = currentNoteNumbers;
-            this.midiIn = midiIn;
-            this.midiIn.MessageReceived += HandleMidiIn;
-            this.midiIn.ErrorReceived += HandleMidiError;
-            this.midiIn.Start();
+            midiIn = null;
+        }
+
+        public void SetMidiIn(int deviceNo)
+        {
+            try
+            {
+                midiIn = new MidiIn(deviceNo);
+            }
+            catch (NAudio.MmException mme)
+            {
+                Console.WriteLine($"Midi device {deviceNo} not available.");
+                throw mme;
+            }
+            midiIn.MessageReceived += HandleMidiIn;
+            midiIn.ErrorReceived += HandleMidiError;
+            midiIn.Start();
         }
 
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)
