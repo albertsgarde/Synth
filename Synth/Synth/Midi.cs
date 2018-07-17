@@ -31,7 +31,7 @@ namespace SynthLib
             Frequencies = frequencies;
         }
 
-        public Midi ()
+        public Midi()
         {
             currentNoteNumbers = new List<int>();
             CurrentNoteNumbers = currentNoteNumbers;
