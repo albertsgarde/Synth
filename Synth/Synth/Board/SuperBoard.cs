@@ -64,6 +64,14 @@ namespace SynthLib.Board
                         result[i] += next;
                 }
             });
+
+            /*foreach (var b in boards)
+            {
+                for (int i = 0; i < samples; ++i)
+                {
+                    result[i] += b.Next();
+                }
+            }*/
             return result;
         }
     }

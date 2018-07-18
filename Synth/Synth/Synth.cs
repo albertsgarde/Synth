@@ -26,9 +26,6 @@ namespace SynthLib
         {
             SampleRate = settings.SampleRate;
 
-            midi = new Midi();
-            midi.SetMidiIn(0);
-
             synthResult = new SynthResult(SampleRate, 1)
             {
                 Gain = 0.1f
@@ -42,24 +39,33 @@ namespace SynthLib
             aOut.Init(synthResult);
             aOut.Play();
 
+            //midi.SetMidiIn(0);
+
+            MidiFile file = new MidiFile("D:/PenguinAgen/Documents/Synth/midi/Join_the_Rain-Cello_I.mid");
+            var rythm = new MidiFile("D:/PenguinAgen/Documents/Synth/midi/Join_the_Rain-Cello_II.mid");
+
+            midi = new Midi(file.DeltaTicksPerQuarterNote);
+
             Setup();
+
+            midi.PlayTrack(file.Events[0].Concat(rythm.Events[0]).OrderBy(me => me.AbsoluteTime));
         }
 
         private void Setup()
         {
             var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 3, 1f);
 
-            var env1 = new Envelope(30, 80, 0.8f, 40, 3);
+            var env1 = new Envelope(0, 80, 0.8f, 20, 3);
 
             var t1 = new EffectModule(new Translate(-1.0f, 0));
 
             var o1 = new OscillatorModule(new SawOscillator(), 1);
 
-            var o2 = new OscillatorModule(new SawOscillator(), 1, 0.1f);
+            var o2 = new OscillatorModule(new SawOscillator(), 1, 0.08f);
 
-            var o3 = new OscillatorModule(new SawOscillator(), 1, 11.9f);
+            var o3 = new OscillatorModule(new SawOscillator(), 1, 11.92f);
 
-            var d1 = new Distributer(new float[] { 1, 1, 0.4f }, new float[] { 1 });
+            var d1 = new Distributer(new float[] { 1, 1, 0.7f }, new float[] { 1 });
 
             var b1 = new EffectModule(new Boost(1));
 
@@ -69,12 +75,13 @@ namespace SynthLib
 
             var de1 = new EffectModule(new Delay(0.5f, 0.0f));
 
-            var m2 = new Mixer(2, 1);
+            var g1 = new EffectModule(new Boost(0.01f));
+
             var end = new EndModule();
 
             var board = new BoardTemplate()
             {
-                end, m1, m2, b1, sf1, d1, o3, o2, o1, env1, t1, de1, lfo1
+                end, m1,  b1, sf1, d1, o3, o2, o1, env1, t1, de1, lfo1, g1
             };
 
             //board.AddConnection(lfo1, t1);
@@ -90,17 +97,18 @@ namespace SynthLib
 
             board.AddConnection(d1, b1);
             board.AddConnection(b1, sf1);
-            board.AddConnection(sf1, de1);
+            board.AddConnection(sf1, g1);
             
-            board.AddConnection(de1, end);
+            board.AddConnection(g1, end);
 
-            var superBoard = new SuperBoard(board, 12);
-            midi.NoteOn += superBoard.HandleNoteOn;
-            midi.NoteOff += superBoard.HandleNoteOff;
+            var superBoard = new SuperBoard(board, 3);
+           // midi.NoteOn += superBoard.HandleNoteOn;
+            //midi.NoteOff += superBoard.HandleNoteOff;
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
 
-            synthResult.AddSynthProvider(superBoard);
+            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", board, 6);
+            //synthResult.AddSynthProvider(superBoard);
         }
     }
 }

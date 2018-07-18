@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using SynthLib.Oscillators;
 using SynthLib.SynthProviders;
 using SynthLib.Music;
+using NAudio.Midi;
+using SynthLib.Board;
+using NAudio.Wave;
 
 namespace SynthLib
 {
@@ -54,6 +57,36 @@ namespace SynthLib
         public static void PlayMelody(this SynthResult sr, Melody melody, BPM bpm)
         {
             sr.PlayMelody(melody, bpm, new SineOscillator(sr.WaveFormat.SampleRate));
+        }
+
+        public static void PlayMidiToFile(string midiFile, string destFile, BoardTemplate bt, int voices, int sampleRate = 44100)
+        {
+            float sampleNum = 0;
+
+            var waveFormat = new WaveFormat(sampleRate, 1);
+
+            var file = new MidiFile(midiFile);
+            int ticksPerQuarterNote = file.DeltaTicksPerQuarterNote;
+            var events = file.Events.Aggregate((IEnumerable<MidiEvent>)new List<MidiEvent>(), (totalList, list) => totalList.Concat(list)).OrderBy(me => me.AbsoluteTime);
+            var totalEvents = events.Count();
+
+            var board = new SuperBoard(bt, voices, sampleRate);
+            var midi = new Midi(ticksPerQuarterNote);
+            midi.NoteOn += board.HandleNoteOn;
+            midi.NoteOff += board.HandleNoteOff;
+            using (var output = new WaveFileWriter(destFile, waveFormat))
+            {
+                int eventCount = 0;
+                foreach (var me in events)
+                {
+                    var absSample = midi.MidiTicksToSamples(me.AbsoluteTime, sampleRate);
+                    var samples = (int)(absSample - sampleNum);
+                    output.WriteSamples(board.Next(samples), 0, samples);
+                    sampleNum = absSample;
+                    midi.HandleMidiEvent(me);
+                    Console.WriteLine($"{++eventCount}/{totalEvents}");
+                }
+            }
         }
     }
 }

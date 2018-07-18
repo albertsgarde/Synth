@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NAudio.Midi;
+using Stuff;
+using System.Diagnostics;
 
 namespace SynthLib
 {
@@ -21,6 +23,10 @@ namespace SynthLib
 
         public event NoteEventHandler NoteOff;
 
+        private int microsecondsPerQuarterNote;
+
+        private readonly int ticksPerQuarterNote;
+
         public static IReadOnlyList<float> Frequencies { get; }
 
         static Midi()
@@ -31,11 +37,13 @@ namespace SynthLib
             Frequencies = frequencies;
         }
 
-        public Midi()
+        public Midi(int ticksPerQuarterNote)
         {
+            this.ticksPerQuarterNote = ticksPerQuarterNote;
             currentNoteNumbers = new List<int>();
             CurrentNoteNumbers = currentNoteNumbers;
             midiIn = null;
+            microsecondsPerQuarterNote = 2000000; // 120 Bpm = 2 Bps
         }
 
         public void SetMidiIn(int deviceNo)
@@ -54,19 +62,59 @@ namespace SynthLib
             midiIn.Start();
         }
 
+        private void HandleNoteOn(int noteNumber)
+        {
+            currentNoteNumbers.Add(noteNumber);
+            NoteOn?.Invoke(noteNumber);
+        }
+
+        private void HandleNoteOff(int noteNumber)
+        {
+            currentNoteNumbers.Remove(noteNumber);
+            NoteOff?.Invoke(noteNumber);
+        }
+
+        private void HandleTempoChange(int microsecondsPerQuarterNote)
+        {
+            this.microsecondsPerQuarterNote = microsecondsPerQuarterNote;
+        }
+
+        public void HandleMidiEvent(MidiEvent me)
+        {
+            if (MidiEvent.IsNoteOn(me))
+                HandleNoteOn(((NoteOnEvent)me).NoteNumber);
+            else if (MidiEvent.IsNoteOff(me))
+                HandleNoteOff(((NoteEvent)me).NoteNumber);
+            else if (me.CommandCode == MidiCommandCode.MetaEvent)
+            {
+                Debug.Assert(me is MetaEvent);
+                if (me is TempoEvent)
+                    HandleTempoChange(((TempoEvent)me).MicrosecondsPerQuarterNote);
+            }
+        }
+
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)
         {
-            if (MidiEvent.IsNoteOn(e.MidiEvent))
+            HandleMidiEvent(e.MidiEvent);
+        }
+
+        public long MidiTicksToDateTimeTicks(long midiTicks)
+        {
+            return midiTicks * (microsecondsPerQuarterNote * TimeSpan.TicksPerMillisecond / 1000) / ticksPerQuarterNote;
+        }
+
+        public float MidiTicksToSamples(long midiTicks, int sampleRate = 44100)
+        {
+            return midiTicks * ((float)sampleRate * microsecondsPerQuarterNote) / ticksPerQuarterNote / 1000000;
+        }
+
+        public void PlayTrack(IEnumerable<MidiEvent> track)
+        {
+            long startTime = DateTime.Now.Ticks;
+            foreach(var midiEvent in track)
             {
-                var noteNumber = ((NoteOnEvent)e.MidiEvent).NoteNumber;
-                currentNoteNumbers.Add(noteNumber);
-                NoteOn?.Invoke(noteNumber);
-            }
-            else if (MidiEvent.IsNoteOff(e.MidiEvent))
-            {
-                var noteNumber = ((NoteEvent)e.MidiEvent).NoteNumber;
-                currentNoteNumbers.Remove(noteNumber);
-                NoteOff?.Invoke(noteNumber);
+                while (DateTime.Now.Ticks - startTime < MidiTicksToDateTimeTicks(midiEvent.AbsoluteTime)) ;
+                HandleMidiEvent(midiEvent);
             }
         }
 

@@ -13,6 +13,7 @@
 	ModuleTypes that are loaded from files.
 	Add values to simpleFilter.
 	Stereo
+	Export to file
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
 		SampleRate
