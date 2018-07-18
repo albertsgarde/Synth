@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using SynthLib.SynthProviders;
 using SynthLib.Music;
 using Stuff;
+using NAudio.Wave;
 
 namespace SynthLib.Board
 {
-    public class SuperBoard : ISynthProvider
+    public class PolyBoard : IMidiSampleProvider
     {
         private readonly ModuleBoard[] boards;
 
@@ -17,12 +18,18 @@ namespace SynthLib.Board
 
         private readonly int voices;
 
+        private readonly int channel;
+
         public int SampleRate { get; }
 
         public bool Finished { get; private set; }
 
-        public SuperBoard(BoardTemplate boardTemplate, int voices, int sampleRate = 44100)
+        public WaveFormat WaveFormat { get; }
+
+        public PolyBoard(BoardTemplate boardTemplate, int voices, int channel, int sampleRate = 44100)
         {
+            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channel);
+            this.channel = channel;
             SampleRate = sampleRate;
             Finished = false;
             this.boardTemplate = boardTemplate;
@@ -50,18 +57,22 @@ namespace SynthLib.Board
             }
         }
 
-        public float[] Next(int samples)
+        public IMidiSampleProvider Clone()
         {
-            float[] result = new float[samples];
-            for (int i = 0; i < samples; ++i)
-                result[i] = 0;
+            return new PolyBoard(boardTemplate, voices, channel, SampleRate);
+        }
+
+        public int Read(float[] buffer, int offset, int count)
+        {
+            for (int i = 0; i < count; ++i)
+                buffer[i] = 0;
             Parallel.ForEach(boards, b =>
             {
-                for (int i = 0; i < samples; ++i)
+                for (int i = 0; i < count; ++i)
                 {
                     var next = b.Next();
-                    lock (result)
-                        result[i] += next;
+                    lock (buffer)
+                        buffer[i] += next;
                 }
             });
 
@@ -72,7 +83,7 @@ namespace SynthLib.Board
                     result[i] += b.Next();
                 }
             }*/
-            return result;
+            return count;
         }
     }
 }

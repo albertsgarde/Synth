@@ -46,7 +46,7 @@
     <Compile Include="Board\BoardTemplate.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
-    <Compile Include="Board\SuperBoard.cs" />
+    <Compile Include="Board\PolyBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />
     <Compile Include="Effects\Stall.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="Effects\Translate.cs" />
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
+    <Compile Include="IMidiSampleProvider.cs" />
     <Compile Include="Midi.cs" />
     <Compile Include="Board\Connection.cs" />
     <Compile Include="Board\Connections.cs" />

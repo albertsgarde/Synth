@@ -101,13 +101,12 @@ namespace SynthLib
             
             board.AddConnection(g1, end);
 
-            var superBoard = new SuperBoard(board, 3);
+            var superBoard = new PolyBoard(board, 6, 1);
            // midi.NoteOn += superBoard.HandleNoteOn;
             //midi.NoteOff += superBoard.HandleNoteOff;
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
-
-            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", board, 6);
+            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard, 6);
             //synthResult.AddSynthProvider(superBoard);
         }
     }
