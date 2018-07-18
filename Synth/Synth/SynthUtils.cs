@@ -59,7 +59,7 @@ namespace SynthLib
             sr.PlayMelody(melody, bpm, new SineOscillator(sr.WaveFormat.SampleRate));
         }
 
-        public static void PlayMidiToFile(string midiFile, string destFile, IMidiSampleProvider msp, int sampleRate = 44100)
+        public static void PlayMidiToFile(string midiFile, string destFile, IMidiSampleProvider msp)
         {
             float sampleNum = 0;
 
@@ -89,6 +89,36 @@ namespace SynthLib
                     midi.HandleMidiEvent(me);
                     Console.WriteLine($"{++eventCount}/{totalEvents}");
                 }
+            }
+        }
+
+        public static void PlayMidi(string midiFile, IMidiSampleProvider msp, int desiredLatency)
+        {
+            //throw new Exception("Doesn't work yet");
+            var file = new MidiFile(midiFile);
+            int ticksPerQuarterNote = file.DeltaTicksPerQuarterNote;
+            var events = file.Events.Aggregate((IEnumerable<MidiEvent>)new List<MidiEvent>(), (totalList, list) => totalList.Concat(list)).OrderBy(me => me.AbsoluteTime);
+            var totalEvents = events.Count();
+
+            var board = msp.Clone();
+            var midi = new Midi(ticksPerQuarterNote);
+            midi.NoteOn += board.HandleNoteOn;
+            midi.NoteOff += board.HandleNoteOff;
+
+            var aOut = new WaveOutEvent
+            {
+                DesiredLatency = desiredLatency,
+                DeviceNumber = -1
+            };
+            aOut.Init(board);
+            aOut.Play();
+
+            long startTime = DateTime.Now.Ticks;
+            foreach (var me in events)
+            {
+                while (DateTime.Now.Ticks - startTime < midi.MidiTicksToDateTimeTicks(me.AbsoluteTime)) ;
+                midi.HandleMidiEvent(me);
+
             }
         }
     }

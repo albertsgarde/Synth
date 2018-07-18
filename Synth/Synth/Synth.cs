@@ -48,7 +48,6 @@ namespace SynthLib
 
             Setup();
 
-            midi.PlayTrack(file.Events[0].Concat(rythm.Events[0]).OrderBy(me => me.AbsoluteTime));
         }
 
         private void Setup()
@@ -106,8 +105,11 @@ namespace SynthLib
             //midi.NoteOff += superBoard.HandleNoteOff;
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
-            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard, 6);
+            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard);
             //synthResult.AddSynthProvider(superBoard);
+
+
+            SynthUtils.PlayMidi("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", superBoard, 64);
         }
     }
 }

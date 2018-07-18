@@ -108,16 +108,6 @@ namespace SynthLib
             return midiTicks * ((float)sampleRate * microsecondsPerQuarterNote) / ticksPerQuarterNote / 1000000;
         }
 
-        public void PlayTrack(IEnumerable<MidiEvent> track)
-        {
-            long startTime = DateTime.Now.Ticks;
-            foreach(var midiEvent in track)
-            {
-                while (DateTime.Now.Ticks - startTime < MidiTicksToDateTimeTicks(midiEvent.AbsoluteTime)) ;
-                HandleMidiEvent(midiEvent);
-            }
-        }
-
         private void HandleMidiError(object sender, MidiInMessageEventArgs e)
         {
             Console.WriteLine(e);
