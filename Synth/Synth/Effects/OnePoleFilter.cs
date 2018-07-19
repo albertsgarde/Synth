@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Stuff;
 
 namespace SynthLib.Effects
 {
@@ -15,6 +17,8 @@ namespace SynthLib.Effects
         private readonly float a1;
 
         private const float MAX_A1 = 0.999f;
+
+        public string Type => "OnePoleFilter";
 
         public OnePoleFilter(float a1)
         {
@@ -31,6 +35,14 @@ namespace SynthLib.Effects
         {
             prev = input[Values] + prev * -a1 * (input[0] + 1)*0.999f;
             return prev;
+        }
+
+        public XElement ToXElement(string name)
+        {
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            element.AddValue("a1", a1);
+            return element;
         }
     }
 }
