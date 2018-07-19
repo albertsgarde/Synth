@@ -23,12 +23,21 @@ namespace SynthLib.Effects
 
         private readonly float delaySeconds;
 
+        private readonly int delaySamples;
+
         private int curPrev;
 
-        public Stall(float delaySeconds, int sampleRate = 44100)
+        public Stall(float delaySeconds, int sampleRate = 44100) : this((int)(delaySeconds * sampleRate), sampleRate)
         {
-            this.delaySeconds = delaySeconds;
-            prevs = new float[(int)(delaySeconds * sampleRate)];
+
+        }
+
+        public Stall(int delaySamples, int sampleRate = 44100)
+        {
+            SampleRate = sampleRate;
+            this.delaySamples = delaySamples;
+            delaySeconds = (float)delaySamples / sampleRate;
+            prevs = new float[delaySamples];
             for (int i = 0; i < prevs.Length; ++i)
                 prevs[i] = 0;
             curPrev = 0;
@@ -37,6 +46,7 @@ namespace SynthLib.Effects
         private Stall(Stall stall)
         {
             delaySeconds = stall.delaySeconds;
+            delaySamples = stall.delaySamples;
             SampleRate = stall.SampleRate;
             prevs = new float[stall.prevs.Length];
             stall.prevs.CopyTo(prevs, 0);
