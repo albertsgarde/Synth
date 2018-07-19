@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using SynthLib.SynthProviders;
 using SynthLib.Board.Modules;
 
 using Stuff;

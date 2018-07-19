@@ -87,10 +87,6 @@
     <Compile Include="Oscillators\TriangleOscillator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synth.cs" />
-    <Compile Include="SynthProviders\ISynthProvider.cs" />
-    <Compile Include="SynthProviders\KeyboardPlayer.cs" />
-    <Compile Include="SynthProviders\MelodyPlayer.cs" />
-    <Compile Include="SynthProviders\TonePlayer.cs" />
     <Compile Include="SynthResult.cs" />
     <Compile Include="SynthSettings.cs" />
     <Compile Include="SynthUtils.cs" />

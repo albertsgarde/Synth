@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SynthLib.SynthProviders;
 using SynthLib.Oscillators;
 using SynthLib.Effects;
 using SynthLib.Board.Modules;
@@ -28,7 +27,7 @@ namespace SynthLib
 
             synthResult = new SynthResult(SampleRate, 1)
             {
-                Gain = 0.1f
+                Gain = 1f
             };
 
             var aOut = new WaveOutEvent
@@ -39,12 +38,12 @@ namespace SynthLib
             aOut.Init(synthResult);
             aOut.Play();
 
-            //midi.SetMidiIn(0);
 
             MidiFile file = new MidiFile("D:/PenguinAgen/Documents/Synth/midi/Join_the_Rain-Cello_I.mid");
             var rythm = new MidiFile("D:/PenguinAgen/Documents/Synth/midi/Join_the_Rain-Cello_II.mid");
 
             midi = new Midi(file.DeltaTicksPerQuarterNote);
+            midi.SetMidiIn(0);
 
             Setup();
 
@@ -101,15 +100,15 @@ namespace SynthLib
             board.AddConnection(g1, end);
 
             var superBoard = new PolyBoard(board, 6, 1);
-           // midi.NoteOn += superBoard.HandleNoteOn;
-            //midi.NoteOff += superBoard.HandleNoteOff;
+            midi.NoteOn += superBoard.HandleNoteOn;
+            midi.NoteOff += superBoard.HandleNoteOff;
 
             board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
-            SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard);
-            //synthResult.AddSynthProvider(superBoard);
+            //SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard);
+            synthResult.AddSynthProvider(superBoard);
 
 
-            SynthUtils.PlayMidi("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", superBoard, 64);
+            //SynthUtils.PlayMidi("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", superBoard, 64);
         }
     }
 }
