@@ -22,22 +22,19 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
-        public bool Finished { get; private set; }
-
         public WaveFormat WaveFormat { get; }
 
         public PolyBoard(BoardTemplate boardTemplate, int voices, int channel, int sampleRate = 44100)
         {
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channel);
+            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 16);
             this.channel = channel;
             SampleRate = sampleRate;
-            Finished = false;
             this.boardTemplate = boardTemplate;
             this.voices = voices;
             boards = new ModuleBoard[voices];
 
             for (int i = 0; i < voices; ++i)
-                boards[i] = boardTemplate.CreateInstance();
+                boards[i] = boardTemplate.CreateInstance(sampleRate);
         }
 
         public void HandleNoteOn(int noteNumber)

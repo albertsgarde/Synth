@@ -103,7 +103,7 @@ namespace SynthLib.Board
             if (frequency == 0)
                 return 0;
             ++samples;
-            Time = samples / (SampleRate / 1000); 
+            Time = samples * 1000 / SampleRate; 
 
             float result = 0;
             Module curModule;
