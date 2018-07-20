@@ -86,7 +86,6 @@ namespace SynthLib.MidiSampleProviders
             Debug.Assert(On);
             destFreq = (float)Tone.FrequencyFromNote(noteNumber);
             freqPerSample = (destFreq - board.Frequency) / glideSamples;
-            Console.WriteLine(freqPerSample);
 
         }
 

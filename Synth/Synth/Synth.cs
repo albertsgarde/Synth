@@ -101,7 +101,7 @@ namespace SynthLib
             
             board.AddConnection(de1, end);
 
-            var superBoard = new MonoBoard(board, 1, 40);
+            var superBoard = new PolyBoard(board, 12, 1);
             midi.NoteOn += superBoard.HandleNoteOn;
             midi.NoteOff += superBoard.HandleNoteOff;
 
