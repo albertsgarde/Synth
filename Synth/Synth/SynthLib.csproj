@@ -108,5 +108,8 @@
     <Content Include="Assets\Settings\paths.txt" />
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MidiSampleProviders\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
