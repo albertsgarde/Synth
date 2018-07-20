@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Midi;
 using Stuff;
+using SynthLib.Settings;
 
 namespace SynthConsole
 {
@@ -15,7 +16,7 @@ namespace SynthConsole
     {
         static void Main(string[] args)
         {
-            var synth = new SynthLib.Synth(new SynthLib.SynthSettings());
+            var synth = new SynthLib.Synth(new SynthSettings());
             Console.ReadLine();
         }
     }

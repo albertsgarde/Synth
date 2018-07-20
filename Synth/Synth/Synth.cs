@@ -7,6 +7,7 @@ using SynthLib.Oscillators;
 using SynthLib.Effects;
 using SynthLib.Board.Modules;
 using SynthLib.Board;
+using SynthLib.Settings;
 
 using NAudio.Midi;
 using NAudio.Wave;
@@ -45,15 +46,15 @@ namespace SynthLib
             midi = new Midi(file.DeltaTicksPerQuarterNote);
             midi.SetMidiIn(0);
 
-            Setup();
+            Setup(settings);
 
         }
 
-        private void Setup()
+        private void Setup(SynthSettings settings)
         {
             var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 3, 1f);
 
-            var env1 = new Envelope(0, 80, 0.8f, 20, 3);
+            var env1 = new Envelope(30, 80, 0.8f, 40, 3);
 
             var t1 = new EffectModule(new Translate(-1.0f, 0));
 
@@ -73,7 +74,7 @@ namespace SynthLib
 
             var de1 = new EffectModule(new Delay(0.5f, 0.0f));
 
-            var g1 = new EffectModule(new Boost(0.01f));
+            var g1 = new EffectModule(new Boost(0.04f));
 
             var end = new EndModule();
 
@@ -103,8 +104,8 @@ namespace SynthLib
             midi.NoteOn += superBoard.HandleNoteOn;
             midi.NoteOff += superBoard.HandleNoteOff;
 
-            board.ToXElement("board").Save("D:/PenguinAgen/Documents/Synth/board.xml");
-            //SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", "D:/PenguinAgen/Documents/Synth/output/test.wav", superBoard);
+            board.ToXElement("board").Save(settings.BoardPaths.FilePath("board.xml"));
+            //SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", settings.WavPaths.FirstDir() + "test.wav", superBoard);
             synthResult.AddSynthProvider(superBoard);
 
 

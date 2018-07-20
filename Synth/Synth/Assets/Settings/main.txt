@@ -1,1 +1,2 @@
-﻿sampleRate = 44100
+﻿sampleRate 44100
+desiredLatency 64
