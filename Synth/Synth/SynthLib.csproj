@@ -46,7 +46,7 @@
     <Compile Include="Board\BoardTemplate.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
-    <Compile Include="Board\PolyBoard.cs" />
+    <Compile Include="MidiSampleProviders\PolyBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />
     <Compile Include="Effects\OnePoleFilter.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="Effects\Translate.cs" />
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
-    <Compile Include="IMidiSampleProvider.cs" />
+    <Compile Include="MidiSampleProviders\IMidiSampleProvider.cs" />
     <Compile Include="Midi.cs" />
     <Compile Include="Board\Connection.cs" />
     <Compile Include="Board\Connections.cs" />
@@ -113,8 +113,6 @@
     </Content>
     <Content Include="Assets\TODO.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MidiSampleProviders\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

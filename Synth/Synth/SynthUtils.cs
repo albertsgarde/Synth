@@ -8,6 +8,7 @@ using SynthLib.Music;
 using NAudio.Midi;
 using SynthLib.Board;
 using NAudio.Wave;
+using SynthLib.MidiSampleProviders;
 
 namespace SynthLib
 {

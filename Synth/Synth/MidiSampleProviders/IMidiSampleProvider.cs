@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
 
-namespace SynthLib
+namespace SynthLib.MidiSampleProviders
 {
     public interface IMidiSampleProvider : ISampleProvider
     {

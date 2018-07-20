@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using SynthLib.Music;
 using Stuff;
 using NAudio.Wave;
+using SynthLib.Board;
 
-namespace SynthLib.Board
+namespace SynthLib.MidiSampleProviders
 {
     public class PolyBoard : IMidiSampleProvider
     {

@@ -9,6 +9,7 @@ using SynthLib.Music;
 using SynthLib.Oscillators;
 using SynthLib.Effects;
 using Stuff;
+using SynthLib.MidiSampleProviders;
 
 namespace SynthLib
 {

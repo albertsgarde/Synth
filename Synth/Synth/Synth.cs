@@ -8,7 +8,7 @@ using SynthLib.Effects;
 using SynthLib.Board.Modules;
 using SynthLib.Board;
 using SynthLib.Settings;
-
+using SynthLib.MidiSampleProviders;
 using NAudio.Midi;
 using NAudio.Wave;
 
