@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NAudio.Wave;
 using SynthLib.Board;
 using SynthLib.Music;
+using System.Diagnostics;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -21,23 +22,29 @@ namespace SynthLib.MidiSampleProviders
 
         private readonly int channel;
 
-        private float frequency;
+        private float glideSamples;
 
-        private bool on;
+        private float destFreq;
 
-        private float glideTime;
+        private float freqPerSample;
 
         private List<int> currentTones;
 
-        public MonoBoard(BoardTemplate boardTemplate, int channel, int sampleRate = 44100)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="boardTemplate"></param>
+        /// <param name="channel"></param>
+        /// <param name="glideTime">Glide time in milliseconds</param>
+        /// <param name="sampleRate"></param>
+        public MonoBoard(BoardTemplate boardTemplate, int channel, float glideTime, int sampleRate = 44100)
         {
             WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 16);
             SampleRate = sampleRate;
             this.channel = channel;
             this.boardTemplate = boardTemplate;
             board = boardTemplate.CreateInstance(sampleRate);
-            frequency = 0;
-            on = false;
+            glideSamples = (glideTime * SampleRate / 1000);
             currentTones = new List<int>();
         }
 
@@ -46,32 +53,55 @@ namespace SynthLib.MidiSampleProviders
             return new MonoBoard(boardTemplate, channel, SampleRate);
         }
 
+        private bool On => currentTones.Count != 0;
+
         public void HandleNoteOn(int noteNumber)
         {
-            board.NoteOn(noteNumber);
-            if (currentTones.Contains(noteNumber))
-                currentTones.Remove(noteNumber);
-            currentTones.Add(noteNumber);
-            frequency = (float)Tone.FrequencyFromNote(noteNumber);
-            on = true;
+            if (On)
+            {
+                if (currentTones.Contains(noteNumber))
+                    currentTones.Remove(noteNumber);
+                currentTones.Add(noteNumber);
+                ChangeNote(noteNumber);
+            }
+            else
+            {
+                board.NoteOn(noteNumber);
+                currentTones.Add(noteNumber);
+                freqPerSample = 0;
+            }
         }
 
         public void HandleNoteOff(int noteNumber)
         {
             currentTones.Remove(noteNumber);
-            if (board.Note == noteNumber)
-            {
-                if (on = (currentTones.Count != 0))
-                    board.NoteOn(currentTones.Last());
-                else
-                    board.NoteOff();
-            }
+            if (On)
+                ChangeNote(currentTones.Last());
+            else
+                board.NoteOff();
+        }
+
+        private void ChangeNote(int noteNumber)
+        {
+            Debug.Assert(On);
+            destFreq = (float)Tone.FrequencyFromNote(noteNumber);
+            freqPerSample = (destFreq - board.Frequency) / glideSamples;
+            Console.WriteLine(freqPerSample);
+
         }
 
         public int Read(float[] buffer, int offset, int count)
         {
             for (int i = 0; i < count; ++i)
+            {
+                board.Frequency += freqPerSample;
+                if (freqPerSample > 0 && board.Frequency > destFreq || freqPerSample < 0 && board.Frequency < destFreq)
+                {
+                    freqPerSample = 0;
+                    board.Frequency = destFreq;
+                }
                 buffer[i] = board.Next();
+            }
             return count;
         }
     }

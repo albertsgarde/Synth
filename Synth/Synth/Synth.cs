@@ -80,7 +80,7 @@ namespace SynthLib
 
             var board = new BoardTemplate()
             {
-                end, m1,  b1, sf1, d1, o3, o2, o1, env1, t1, de1, lfo1, g1
+                end, m1, b1, sf1, d1, o3, o2, o1, env1, t1, de1, lfo1, g1
             };
 
             //board.AddConnection(lfo1, t1);
@@ -97,10 +97,11 @@ namespace SynthLib
             board.AddConnection(d1, b1);
             board.AddConnection(b1, sf1);
             board.AddConnection(sf1, g1);
+            board.AddConnection(g1, de1);
             
-            board.AddConnection(g1, end);
+            board.AddConnection(de1, end);
 
-            var superBoard = new MonoBoard(board, 6);
+            var superBoard = new MonoBoard(board, 1, 40);
             midi.NoteOn += superBoard.HandleNoteOn;
             midi.NoteOff += superBoard.HandleNoteOff;
 
