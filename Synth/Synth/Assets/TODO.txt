@@ -17,6 +17,7 @@
 	Stop throwing Exception. Find better stuff to throw.
 	Rename PathList in SynthSettings.
 	Log
+	Log all midiinputs so they can be replayed later for debugging.
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
 		SampleRate
