@@ -31,7 +31,7 @@ namespace SynthLib.Board.Modules
             return new EffectModule(effect.Clone());
         }
 
-        public override float[] Process(float[] inputs, int time, bool noteOn)
+        public override float[] Process(float[] inputs, long time, bool noteOn)
         {
             return new float[] { effect.Next(inputs) };
         }

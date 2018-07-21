@@ -29,7 +29,7 @@ namespace SynthLib.Board.Modules
             return new EndModule();
         }
 
-        public override float[] Process(float[] inputs, int time, bool noteOn)
+        public override float[] Process(float[] inputs, long time, bool noteOn)
         {
             output[0] = 0;
             for (int i = 0; i < inputs.Length; ++i)

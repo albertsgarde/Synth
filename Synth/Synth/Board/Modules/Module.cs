@@ -16,7 +16,7 @@ namespace SynthLib.Board.Modules
 
         public abstract string Type { get; }
 
-        public abstract float[] Process(float[] inputs, int time, bool noteOn);
+        public abstract float[] Process(float[] inputs, long time, bool noteOn);
 
         /// <summary>
         /// Used by module boards. Should not be touched by anything else.

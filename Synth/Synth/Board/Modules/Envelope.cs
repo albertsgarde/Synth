@@ -91,7 +91,7 @@ namespace SynthLib.Board.Modules
             return new Envelope(Attack, Decay, Sustain, Release, Outputs.Count, SampleRate);
         }
 
-        public override float[] Process(float[] inputs, int time, bool noteOn)
+        public override float[] Process(float[] inputs, long time, bool noteOn)
         {
             if (noteOn)
             {

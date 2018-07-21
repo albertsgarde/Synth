@@ -22,12 +22,12 @@ namespace SynthLib.Board
         /// <summary>
         /// Time in milliseconds since last note event.
         /// </summary>
-        public int Time { get; private set; }
+        public long Time { get; private set; }
 
         /// <summary>
         /// The number of samples since last note event;
         /// </summary>
-        private int samples;
+        private long samples;
 
         public bool IsNoteOn { get; private set; }
 
@@ -112,7 +112,7 @@ namespace SynthLib.Board
             for (int i = 0; i < modules.Length; ++i)
             {
                 curModule = inputTable.modules[i];
-                var output = curModule.Process(inputTable.input[i], (int)Time, IsNoteOn);
+                var output = curModule.Process(inputTable.input[i], Time, IsNoteOn);
                 if (curModule.Type == "E")
                     result += output[0];
                 else

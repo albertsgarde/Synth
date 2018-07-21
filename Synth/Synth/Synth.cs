@@ -54,13 +54,13 @@ namespace SynthLib
         {
             var lfo1 = new ConstantOscillatorModule(new SineOscillator(), 3, 1f);
 
-            var env1 = new Envelope(30, 80, 0.8f, 40, 3);
+            var env1 = new Envelope(30, 240, 0.6f, 40, 3);
 
             var t1 = new EffectModule(new Translate(-1.0f, 0));
 
             var o1 = new OscillatorModule(new SawOscillator(), 1);
 
-            var o2 = new OscillatorModule(new SawOscillator(), 1, 0.08f);
+            var o2 = new OscillatorModule(new SawOscillator(0.7f), 1, 0.08f);
 
             var o3 = new OscillatorModule(new SawOscillator(), 1, 11.92f);
 
@@ -74,7 +74,7 @@ namespace SynthLib
 
             var de1 = new EffectModule(new Delay(0.5f, 0.0f));
 
-            var g1 = new EffectModule(new Boost(0.04f));
+            var g1 = new EffectModule(new Boost(0.2f));
 
             var end = new EndModule();
 
@@ -101,7 +101,7 @@ namespace SynthLib
             
             board.AddConnection(de1, end);
 
-            var superBoard = new PolyBoard(board, 12, 1);
+            var superBoard = new MonoBoard(board, 1, 300);
             midi.NoteOn += superBoard.HandleNoteOn;
             midi.NoteOff += superBoard.HandleNoteOff;
 
