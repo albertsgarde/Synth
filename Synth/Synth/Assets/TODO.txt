@@ -11,6 +11,7 @@
 		Vibrato
 		Tremolo
 		Reverb
+		Compression
 	Tests
 	Documentation
 	ModuleTypes that are loaded from files.
