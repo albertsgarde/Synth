@@ -6,17 +6,20 @@
 		Filter
 		Distortion
 		Chorus
-	Glide
-	Fix weird sounds in synth.
-	Test
+		Flanger
+		Phaser
+		Vibrato
+		Tremolo
+		Reverb
+	Tests
 	Documentation
 	ModuleTypes that are loaded from files.
 	Add values to simpleFilter.
 	Stereo
-	Export to file
 	Rename PathList in SynthSettings.
 	Log
 	Log all midiinputs so they can be replayed later for debugging.
+	Let slide duration be decided by board.
 	A module holds a ModuleType from which it calls stuff?
 	Static settings?
 		SampleRate
