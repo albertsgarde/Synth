@@ -9,7 +9,6 @@
 		Flanger
 		Phaser
 		Vibrato
-		Tremolo
 		Reverb
 		Compression
 	Tests
