@@ -18,6 +18,7 @@ namespace SynthConsole
         {
             var synth = new SynthLib.Synth(new SynthSettings());
             Console.ReadLine();
+            Console.WriteLine(synth);
         }
     }
 }
