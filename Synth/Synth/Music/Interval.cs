@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -76,7 +77,7 @@ namespace SynthLib.Music
                     Debug.Assert(INTERVAL_LENGTHS[number - 1] >= halfTones % 12);
                     break;
                 default:
-                    throw new Exception("Should not be possible.");
+                    throw new Exception("Should not be possible");
             }
 
         }
@@ -108,15 +109,15 @@ namespace SynthLib.Music
                         case IntervalQuality.Diminished:
                             return -1;
                         case IntervalQuality.Minor:
-                            throw new Exception("Invalid modifier for interval. Modifier: " + quality + " Interval: " + number);
+                            throw new InvalidEnumArgumentException("Invalid quality for interval. Quality: " + quality + " Interval: " + number);
                         case IntervalQuality.Perfect:
                             return 0;
                         case IntervalQuality.Major:
-                            throw new Exception("Invalid modifier for interval. Modifier: " + quality + " Interval: " + number);
+                            throw new InvalidEnumArgumentException("Invalid quality for interval. Quality: " + quality + " Interval: " + number);
                         case IntervalQuality.Augmented:
                             return 1;
                         default:
-                            throw new Exception("Should not be possible.");
+                            throw new Exception("Should not be possible");
                     }
                 case 2:
                 case 3:
@@ -129,16 +130,16 @@ namespace SynthLib.Music
                         case IntervalQuality.Minor:
                             return -1;
                         case IntervalQuality.Perfect:
-                            throw new Exception("Invalid modifier for interval. Modifier: " + quality + " Interval: " + number);
+                            throw new InvalidEnumArgumentException("Invalid quality for interval. Quality: " + quality + " Interval: " + number);
                         case IntervalQuality.Major:
                             return 0;
                         case IntervalQuality.Augmented:
                             return 1;
                         default:
-                            throw new Exception("Should not be possible.");
+                            throw new Exception("Should not be possible");
                     }
                 default:
-                    throw new Exception("Only works with upwards intervals less than an octave.");
+                    throw new Exception("Should not be possible");
 
             }
         }

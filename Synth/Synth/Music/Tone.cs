@@ -82,7 +82,7 @@ namespace SynthLib.Music
             }
             catch
             {
-                throw new Exception("Invalid tone letter. Does not exist.");
+                throw new KeyNotFoundException("Invalid tone letter. Does not exist. Tone: " + name);
             }
             Modifier = 0;
             int i = 1;
@@ -97,7 +97,7 @@ namespace SynthLib.Music
                     Modifier--;
             }
             if (!int.TryParse(name.Substring(i), out int octave))
-                throw new Exception("Could not read tone. Incorrect format.");
+                throw new FormatException("Could not read tone. Incorrect format. Tone: " + name);
             Octave = octave;
             ToneNumber = (octave + 1) * 12 + Interval.NumberToHalfTones(Letter) + Modifier;
         }

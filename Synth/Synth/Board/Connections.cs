@@ -59,7 +59,7 @@ namespace SynthLib.Board
             if (source.Outputs.FirstFreeConnection(out int sourceIndex))
                 return NewConnection(source, sourceIndex, dest, destIndex).Item2;
             else
-                throw new Exception("Source module has no free connections.");
+                throw new NoFreeConnectionsException(source, "Source module has no free connections.");
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SynthLib.Board
             if (dest.Inputs.FirstFreeConnection(out int destIndex))
                 return NewConnection(source, sourceIndex, dest, destIndex).Item1;
             else
-                throw new Exception("Destination module has no free connections.");
+                throw new NoFreeConnectionsException(dest, "Destination module has no free connections.");
         }
 
         /// <summary>
@@ -92,10 +92,10 @@ namespace SynthLib.Board
                 if (dest.Inputs.FirstFreeConnection(out int destIndex))
                     NewConnection(source, sourceIndex, dest, destIndex);
                 else
-                    throw new Exception("Destination module has no free connections.");
+                    throw new NoFreeConnectionsException(dest, "Destination module has no free connections.");
             }
             else
-                throw new Exception("Source module has no free connections.");
+                throw new NoFreeConnectionsException(source, "Source module has no free connections.");
         }
 
         public static void Destroy(Connection con)

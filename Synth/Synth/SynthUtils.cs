@@ -49,7 +49,6 @@ namespace SynthLib
 
         public static void PlayMidi(string midiFile, IMidiSampleProvider msp, int desiredLatency)
         {
-            //throw new Exception("Doesn't work yet");
             var file = new MidiFile(midiFile);
             int ticksPerQuarterNote = file.DeltaTicksPerQuarterNote;
             var events = file.Events.Aggregate((IEnumerable<MidiEvent>)new List<MidiEvent>(), (totalList, list) => totalList.Concat(list)).OrderBy(me => me.AbsoluteTime);

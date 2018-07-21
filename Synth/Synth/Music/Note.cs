@@ -62,7 +62,7 @@ namespace SynthLib.Music
             else if (double.TryParse(value, out result))
                 ;
             else
-                throw new Exception("Failed to load note value. Value neither a number or a predefined note value. value: " + value);
+                throw new ArgumentException("Failed to load note value. Value neither a number or a predefined note value. value: " + value);
             return result;
         }
 
