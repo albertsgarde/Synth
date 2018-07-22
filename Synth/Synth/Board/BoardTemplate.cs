@@ -65,6 +65,12 @@ namespace SynthLib.Board
             modules["" + ++moduleNum] = mod;
         }
 
+        public void Add(params Module[] mods)
+        {
+            foreach (var mod in mods)
+                Add(mod);
+        }
+
         public void AddConnection(Module source, Module dest, int sourceIndex = -1, int destIndex = -1)
         {
             if (!modules.Contains(source) || !modules.Contains(dest))
