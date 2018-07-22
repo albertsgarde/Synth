@@ -9,8 +9,8 @@
 		Flanger
 		Phaser
 		Vibrato
-		Tremolo
 		Reverb
+		Compression
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
