@@ -93,6 +93,7 @@
     <Compile Include="Synth.cs" />
     <Compile Include="SynthResult.cs" />
     <Compile Include="Settings\SynthSettings.cs" />
+    <Compile Include="SynthSetup.cs" />
     <Compile Include="SynthUtils.cs" />
   </ItemGroup>
   <ItemGroup>

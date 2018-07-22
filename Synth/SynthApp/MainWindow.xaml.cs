@@ -22,12 +22,17 @@ namespace SynthApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Synth synth;
+
         public MainWindow()
         {
             InitializeComponent();
-            var synth = new Synth(new SynthSettings());
+            synth = new Synth(new SynthSettings());
         }
 
-        
+        private void SaveBoard(object sender, RoutedEventArgs e)
+        {
+            synth.Board.SaveToFile(BoardName.Text, synth.Settings);
+        }
     }
 }

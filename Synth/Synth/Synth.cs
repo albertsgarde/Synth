@@ -18,15 +18,21 @@ namespace SynthLib
     {
         public int SampleRate { get; }
 
-        private readonly SynthResult synthResult;
+        public BoardTemplate Board { get; }
+
+        public SynthResult SynthResult { get; }
+
+        public SynthSettings Settings { get; }
 
         private readonly Midi midi;
         
         public Synth(SynthSettings settings)
         {
+            Settings = settings;
+
             SampleRate = settings.SampleRate;
 
-            synthResult = new SynthResult(SampleRate, 1)
+            SynthResult = new SynthResult(SampleRate, 1)
             {
                 Gain = 1f
             };
@@ -36,12 +42,13 @@ namespace SynthLib
                 DesiredLatency = settings.DesiredLatency,
                 DeviceNumber = -1
             };
-            aOut.Init(synthResult);
+            aOut.Init(SynthResult);
             aOut.Play();
 
             midi = new Midi(2);
             midi.SetMidiIn(0);
 
+            Board = new BoardTemplate();
             Setup(settings);
         }
     }
