@@ -13,6 +13,7 @@
 		Reverb
 	Tests
 	Documentation
+		Make it clear exactly what the Clone methods should do.
 	ModuleTypes that are loaded from files.
 	Add values to simpleFilter.
 	Stereo
