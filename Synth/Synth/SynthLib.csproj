@@ -82,6 +82,7 @@
     <Compile Include="Music\Scale.cs" />
     <Compile Include="Music\Tone.cs" />
     <Compile Include="Oscillators\CompoundOscillator.cs" />
+    <Compile Include="Oscillators\CustomOscillator.cs" />
     <Compile Include="Oscillators\IOscillator.cs" />
     <Compile Include="Oscillators\RandomOscillator.cs" />
     <Compile Include="Oscillators\SawOscillator.cs" />
