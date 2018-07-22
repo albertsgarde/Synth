@@ -1,4 +1,4 @@
 ﻿root D:/PenguinAgen/Documents/Synth/
-boards D:/PenguinAgen/Documents/Synth/boards
-midi D:/PenguinAgen/Documents/Synth/midi
-wav D:/PenguinAgen/Documents/Synth/wav
+boards boards/
+midi midi/
+wav wav/

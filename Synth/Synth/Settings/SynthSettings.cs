@@ -46,7 +46,7 @@ namespace SynthLib.Settings
 
         public class PathList : IEnumerable<string>
         {
-            public string Root { get; }
+            public string Root { get; set; }
 
             private List<string> paths;
 
@@ -63,11 +63,9 @@ namespace SynthLib.Settings
                 foreach (var path in paths)
                 {
                     if (File.GetAttributes(path).HasFlag(FileAttributes.Directory) && !path.EndsWith("/"))
-                        this.paths.Add(path + "/");
+                        Add(path + "/");
                     else
-                        this.paths.Add(path);
-
-
+                        Add(path);
                 }
             }
 
@@ -75,7 +73,10 @@ namespace SynthLib.Settings
 
             public void Add(string path)
             {
-                paths.Add(path);
+                if (Path.IsPathRooted(path))
+                    paths.Add(path);
+                else
+                    paths.Add(Path.Combine(Root, path));
             }
 
             public void Remove(string path)
