@@ -26,8 +26,6 @@
 	Log all midiinputs so they can be replayed later for debugging.
 	Let slide duration be decided by board.
 	A module holds a ModuleType from which it calls stuff?
-	Static settings?
-		SampleRate
 
 Music:
 	Let most music data be in a single object that can then be passed around.
