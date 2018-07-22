@@ -36,17 +36,17 @@ namespace SynthLib.Settings
             Console.WriteLine("Should error log if root path isn't a directory.");
             if (!File.GetAttributes(rootPath).HasFlag(FileAttributes.Directory))
                 throw new SettingsException("paths", "key", "root path must be a directory");
-            BoardPaths = new PathList(settings.GetStrings("paths", "boards"));
+            BoardPaths = new PathList(settings.GetStrings("paths", "boards"), rootPath);
             Console.WriteLine("Should error log if no directory paths are given.");
-            MidiPaths = new PathList(settings.GetStrings("paths", "midi"));
+            MidiPaths = new PathList(settings.GetStrings("paths", "midi"), rootPath);
             Console.WriteLine("Should error log if no directory paths are given.");
-            WavPaths = new PathList(settings.GetStrings("paths", "wav"));
+            WavPaths = new PathList(settings.GetStrings("paths", "wav"), rootPath);
             Console.WriteLine("Should error log if no directory paths are given.");
         }
 
         public class PathList : IEnumerable<string>
         {
-            public string Root { get; set; }
+            public string Root { get; }
 
             private List<string> paths;
 
@@ -54,13 +54,14 @@ namespace SynthLib.Settings
             /// The First path is taken as the root.
             /// </summary>
             /// <param name="paths"></param>
-            public PathList(IEnumerable<string> paths)
+            public PathList(IEnumerable<string> paths, string superRoot = "")
             {
-                Root = paths.First();
+                Root = Path.IsPathRooted(paths.First()) ? paths.First() : Path.Combine(superRoot, paths.First());
                 if (!File.GetAttributes(Root).HasFlag(FileAttributes.Directory))
                     throw new DirectoryNotFoundException();
                 this.paths = new List<string>();
-                foreach (var path in paths)
+                this.paths.Add(Root);
+                foreach (var path in (from p in paths where p != paths.First() select FilePath(p)))
                 {
                     if (File.GetAttributes(path).HasFlag(FileAttributes.Directory) && !path.EndsWith("/"))
                         Add(path + "/");
@@ -89,9 +90,9 @@ namespace SynthLib.Settings
                 return Files().First();
             }
 
-            public string FilePath(string relativePath)
+            public string FilePath(string path)
             {
-                return Path.Combine(Root, relativePath);
+                return Path.IsPathRooted(path) ? path : Path.Combine(Root, path);
             }
 
             public int DirCount()
