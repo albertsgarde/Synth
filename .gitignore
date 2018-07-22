@@ -260,4 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 
-Assets/Settings/paths.txt
+Synth/Synth/Assets/Settings/paths.txt
+Synth/Synth/SynthSetup.cs
