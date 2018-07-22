@@ -22,7 +22,9 @@ namespace SynthLib.MidiSampleProviders
 
         private readonly int channel;
 
-        private float glideSamples;
+        private readonly float glideSamples;
+
+        private readonly float glideTime;
 
         private float destFreq;
 
@@ -44,13 +46,14 @@ namespace SynthLib.MidiSampleProviders
             this.channel = channel;
             this.boardTemplate = boardTemplate;
             board = boardTemplate.CreateInstance(sampleRate);
+            this.glideTime = glideTime;
             glideSamples = (glideTime * SampleRate / 1000);
             currentTones = new List<int>();
         }
 
         public IMidiSampleProvider Clone()
         {
-            return new MonoBoard(boardTemplate, channel, SampleRate);
+            return new MonoBoard(boardTemplate, channel, glideTime, SampleRate);
         }
 
         private bool On => currentTones.Count != 0;
@@ -91,7 +94,7 @@ namespace SynthLib.MidiSampleProviders
 
         public int Read(float[] buffer, int offset, int count)
         {
-            for (int i = 0; i < count; ++i)
+            for (int i = offset; i < count; ++i)
             {
                 board.Frequency += freqPerSample;
                 if (freqPerSample > 0 && board.Frequency > destFreq || freqPerSample < 0 && board.Frequency < destFreq)

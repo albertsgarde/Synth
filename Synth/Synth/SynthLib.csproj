@@ -71,6 +71,7 @@
     <Compile Include="Board\Modules\Mixer.cs" />
     <Compile Include="Board\Modules\Module.cs" />
     <Compile Include="Board\Modules\OscillatorModule.cs" />
+    <Compile Include="MidiSampleProviders\SplitBoard.cs" />
     <Compile Include="Music\BPM.cs" />
     <Compile Include="Music\Chord.cs" />
     <Compile Include="Music\Interval.cs" />

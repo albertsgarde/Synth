@@ -101,13 +101,14 @@ namespace SynthLib
             
             board.AddConnection(de1, end);
 
-            var superBoard = new MonoBoard(board, 1, 300);
-            midi.NoteOn += superBoard.HandleNoteOn;
-            midi.NoteOff += superBoard.HandleNoteOff;
+            var monoBoard = new MonoBoard(board, 1, 250);
+            var splitBoard = new SplitBoard(monoBoard, monoBoard, 60);
+            midi.NoteOn += monoBoard.HandleNoteOn;
+            midi.NoteOff += monoBoard.HandleNoteOff;
 
             board.ToXElement("board").Save(settings.BoardPaths.FilePath("board.xml"));
             //SynthUtils.PlayMidiToFile("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", settings.WavPaths.FirstDir() + "test.wav", superBoard);
-            synthResult.AddSynthProvider(superBoard);
+            synthResult.AddSynthProvider(monoBoard);
 
 
             //SynthUtils.PlayMidi("D:/PenguinAgen/Documents/Synth/midi/SynthTest.mid", superBoard, 64);
