@@ -14,6 +14,10 @@
 	Oscillators
 		Noise
 		Custom (samplewise)
+	Control Changes
+		Modulation
+		Volume
+		
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
@@ -25,6 +29,7 @@
 	Log
 	Log all midiinputs so they can be replayed later for debugging.
 	Let slide duration be decided by board.
+	Other midi inputs.
 	A module holds a ModuleType from which it calls stuff?
 
 Music:
