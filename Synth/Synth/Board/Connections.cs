@@ -32,7 +32,7 @@ namespace SynthLib.Board
         /// <param name="dest">The module to connect to.</param>
         /// <param name="destIndex">Which of the destinations input indexes to plug the connection in to.</param>
         /// <returns>A tuple of first the source's old connection and then the destination's old connection. null if there were none.</returns>
-        public static Tuple<Connection, Connection> NewConnection(Module source, int sourceIndex, Module dest, int destIndex)
+        public static (Connection, Connection) NewConnection(Module source, int sourceIndex, Module dest, int destIndex)
         {
             var con = new Connection(source, sourceIndex, dest, destIndex);
             var oldSourceCon = source.Outputs.AddConnection(con, sourceIndex);
@@ -42,7 +42,7 @@ namespace SynthLib.Board
             if (oldDestCon != null)
                 Destroy(oldDestCon);
             con.Validate();
-            return new Tuple<Connection, Connection>(oldSourceCon, oldDestCon);
+            return (oldSourceCon, oldDestCon);
         }
 
         /// <summary>
