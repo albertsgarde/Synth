@@ -11,6 +11,9 @@
 		Vibrato
 		Reverb
 		Compression
+	Oscillators
+		Noise
+		Custom (samplewise)
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
