@@ -15,6 +15,8 @@ namespace SynthLib.MidiSampleProviders
 
         void HandleNoteOff(int noteNumber);
 
+        void HandleControlChange(int controllerValue);
+
         IMidiSampleProvider Clone();
     }
 }

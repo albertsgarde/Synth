@@ -84,6 +84,11 @@ namespace SynthLib.MidiSampleProviders
                 board.NoteOff();
         }
 
+        public void HandleControlChange(int controllerValueValue)
+        {
+
+        }
+
         private void ChangeNote(int noteNumber)
         {
             Debug.Assert(On);

@@ -48,6 +48,12 @@ namespace SynthLib.MidiSampleProviders
                 upperBoard.HandleNoteOff(noteNumber);
         }
 
+        public void HandleControlChange(int controllerValue)
+        {
+            lowerBoard.HandleControlChange(controllerValue);
+            upperBoard.HandleControlChange(controllerValue);
+        }
+
         public int Read(float[] buffer, int offset, int count)
         {
             var lowerResult = new float[buffer.Length];

@@ -54,6 +54,11 @@ namespace SynthLib.MidiSampleProviders
             }
         }
 
+        public void HandleControlChange(int controllerValueValue)
+        {
+
+        }
+
         public IMidiSampleProvider Clone()
         {
             return new PolyBoard(boardTemplate, voices, channel, SampleRate);
