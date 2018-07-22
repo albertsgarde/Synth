@@ -14,10 +14,6 @@
 	Oscillators
 		Noise
 		Custom (samplewise)
-	Control Changes
-		Modulation
-		Volume
-		
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
