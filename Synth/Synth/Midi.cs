@@ -95,7 +95,6 @@ namespace SynthLib
 
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)
         {
-            Console.WriteLine("event");
             HandleMidiEvent(e.MidiEvent);
         }
 
