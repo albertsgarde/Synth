@@ -116,6 +116,16 @@ namespace SynthLib.Music
             return (440D / Math.Pow(2, (1 / 12D) * (69 - noteNumber)));
         }
 
+        public static double FrequencyMultiplierFromNoteOffset(double halfToneOffset)
+        {
+            return Math.Pow(2, (1 / 12d) * halfToneOffset);
+        }
+
+        public static double NoteOffsetFromFrequencyMultiplier(double frequencyMultplier)
+        {
+            return Math.Log(frequencyMultplier, 2) * 12;
+        }
+
         public static string ModifierToString(int modifier)
         {
             string result = "";
