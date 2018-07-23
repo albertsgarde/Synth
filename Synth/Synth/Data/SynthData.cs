@@ -10,7 +10,10 @@ using Stuff.Exceptions;
 
 namespace SynthLib.Settings
 {
-    public class SynthSettings
+    /// <summary>
+    /// Holds all global synth data and settings
+    /// </summary>
+    public class SynthData
     {
         public int SampleRate { get; }
         public int DesiredLatency { get; }
@@ -25,7 +28,7 @@ namespace SynthLib.Settings
 
         private SettingsManager settings;
 
-        public SynthSettings(string settingsPath = "Assets/Settings")
+        public SynthData(string settingsPath = "Assets/Settings")
         {
             settings = SettingsLoader.LoadSettings(settingsPath);
 
