@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 using SynthLib.Effects;
 
 namespace SynthLib.Board.Modules
 {
     public class EffectModule : Module
     {
-        private IEffect effect;
+        private Effect effect;
 
         public override Connections Inputs { get; }
 
@@ -19,19 +20,36 @@ namespace SynthLib.Board.Modules
 
         public override string Type { get; } = "Effect";
 
-        public EffectModule(IEffect effect)
+        public EffectModule()
+        {
+            useable = false;
+        }
+
+        public EffectModule(Effect effect)
         {
             this.effect = effect;
             Inputs = new ConnectionsArray(effect.Values + 1, effect.Values);
             Outputs = new ConnectionsArray(1);
         }
 
-        public override Module Clone()
+        public EffectModule(XElement element, SynthData data)
+        {
+            effect = data.EffectTypes[element.Element("effect").ElementValue("type")].Instance.CreateInstance(element.Element("type"), data);
+            Inputs = new ConnectionsArray(element.Element("inputs"));
+            Outputs = new ConnectionsArray(element.Element("outputs"));
+        }
+
+        public override Module Clone(int sampleRate = 44100)
         {
             return new EffectModule(effect.Clone());
         }
 
-        public override float[] Process(float[] inputs, long time, bool noteOn)
+        public override Module CreateInstance(XElement element, SynthData data)
+        {
+            return new EffectModule(element, data);
+        }
+
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
             return new float[] { effect.Next(inputs) };
         }

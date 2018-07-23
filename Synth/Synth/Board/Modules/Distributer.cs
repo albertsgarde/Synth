@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
@@ -23,6 +24,11 @@ namespace SynthLib.Board.Modules
         public Weights OutputWeights { get; }
 
         public override string Type { get; } = "Mixer";
+
+        public Distributer()
+        {
+            useable = false;
+        }
 
         public Distributer(int inputs, int outputs)
         {
@@ -51,6 +57,14 @@ namespace SynthLib.Board.Modules
             OutputWeights = new Weights(distributer.OutputWeights);
         }
 
+        private Distributer(XElement element)
+        {
+            Inputs = new ConnectionsArray(element.Element("inputs"));
+            Outputs = new ConnectionsArray(element.Element("outputs"));
+            InputWeights = new Weights(element.Element("inputWeights"));
+            OutputWeights = new Weights(element.Element("outputWeights"));
+        }
+
         public struct Weights : ISaveable
         {
             private readonly float[] weights;
@@ -71,6 +85,17 @@ namespace SynthLib.Board.Modules
                 Total = weights.Total;
             }
 
+            public Weights(XElement element)
+            {
+                weights = new float[element.Elements().Count()];
+                for (int i = 0; i < weights.Length; ++i)
+                {
+                    if (!float.TryParse(element.ElementValue("_" + i), out weights[i]))
+                        throw new InvalidModuleSaveElementException(element);
+                }
+                Total = weights.Sum();
+            }
+
             public float this[int i] => weights[i];
 
             public XElement ToXElement(string name)
@@ -82,12 +107,17 @@ namespace SynthLib.Board.Modules
             }
         }
 
-        public override Module Clone()
+        public override Module Clone(int sampleRate = 44100)
         {
             return new Distributer(this);
         }
 
-        public override float[] Process(float[] inputs, long time, bool noteOn)
+        public override Module CreateInstance(XElement element, SynthData data)
+        {
+            return new Distributer(element);
+        }
+
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)

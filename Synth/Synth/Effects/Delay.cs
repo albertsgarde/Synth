@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace SynthLib.Effects
     /// <summary>
     /// The traditional delay effect.
     /// </summary>
-    public class Delay : IEffect
+    public class Delay : Effect
     {
-        public string Type => "Delay";
+        public override string Type => "Delay";
 
-        public int Values => 1;
+        public override int Values => 1;
 
         private readonly float[] prevs;
 
@@ -24,6 +25,11 @@ namespace SynthLib.Effects
         private int curPrev;
 
         private readonly float feedback;
+
+        public Delay()
+        {
+            useable = false;
+        }
 
         public Delay(float delaySeconds, float feedback, float sampleRate = 44100)
         {
@@ -44,12 +50,19 @@ namespace SynthLib.Effects
             feedback = delay.feedback;
         }
 
-        public IEffect Clone()
+        public override Effect Clone()
         {
             return new Delay(this);
         }
 
-        public float Next(float[] input)
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            var delaySeconds = InvalidEffectSaveElementException.ParseFloat(element.Element("delaySeconds"));
+            var feedback = InvalidEffectSaveElementException.ParseFloat(element.Element("feedback"));
+            return new Delay(delaySeconds, feedback, data.SampleRate);
+        }
+
+        protected override float Next(float[] input)
         {
             prevs[curPrev] = prevs[curPrev] * feedback * (input[0] + 1) + input[1];
             float result = prevs[curPrev];
@@ -58,7 +71,7 @@ namespace SynthLib.Effects
             return result;
         }
 
-        public XElement ToXElement(string name)
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

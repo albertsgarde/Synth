@@ -2,3 +2,6 @@
 boards boards/
 midi midi/
 wav wav/
+moduleTypes moduleTypes/
+oscillatorTypes oscillatorTypes/
+effectTypes effectTypes/

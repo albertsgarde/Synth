@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,25 +9,25 @@ using System.Xml.Linq;
 
 namespace SynthLib.Effects
 {
-    public class SimpleFilter : IEffect
+    public class SimpleFilter : Effect
     {
-        public string Type => "SimpleFilter";
+        public override string Type => "SimpleFilter";
 
-        public int Values => 0;
+        public override int Values => 0;
 
         public float[] prev;
+
+        public SimpleFilter()
+        {
+            useable = false;
+        }
 
         public SimpleFilter(int numPrevs)
         {
             prev = new float[numPrevs];
         }
 
-        public IEffect Clone()
-        {
-            return new SimpleFilter(prev.Length);
-        }
-
-        public float Next(float[] input)
+        protected override float Next(float[] input)
         {
             if (prev.Length == 0)
                 return input[0];
@@ -42,7 +43,18 @@ namespace SynthLib.Effects
             return (result + input[0]) / prev.Length;
         }
 
-        public XElement ToXElement(string name)
+        public override Effect Clone()
+        {
+            return new SimpleFilter(prev.Length);
+        }
+
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            var numPrevs = InvalidEffectSaveElementException.ParseInt(element.Element("numPrevs"));
+            return new SimpleFilter(numPrevs);
+        }
+
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

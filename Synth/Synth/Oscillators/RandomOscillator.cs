@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace SynthLib.Oscillators
 
         private Random rand;
 
-        public RandomOscillator() : this((int)DateTime.Now.Ticks)
+        public RandomOscillator(int sampleRate = 44100) : this((int)DateTime.Now.Ticks, sampleRate)
         {
         }
 
@@ -50,9 +51,15 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public IOscillator Clone()
+        public IOscillator Clone(int sampleRate = 44100)
         {
             return new RandomOscillator(seed);
+        }
+
+        public IOscillator CreateInstance(XElement element, SynthData data)
+        {
+            var seed = InvalidOscillatorSaveElementException.ParseInt(element.Element("seed"));
+            return new RandomOscillator(seed, data.SampleRate);
         }
 
         public float CurrentValue(float min = -1F, float max = 1)

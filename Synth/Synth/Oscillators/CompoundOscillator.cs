@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
@@ -46,7 +47,7 @@ namespace SynthLib.Oscillators
         {
             private readonly IOscillator oscillator;
 
-            public float Weight { get; private set; }
+            public float Weight { get; }
 
             private readonly float frequencyMultiplier;
 
@@ -59,6 +60,13 @@ namespace SynthLib.Oscillators
                 this.oscillator = oscillator;
                 Weight = weight;
                 this.frequencyMultiplier = frequencyMultiplier;
+            }
+
+            public Oscillator(XElement element, SynthData data)
+            {
+                oscillator = data.OscillatorTypes[element.ElementValue("type")].Instance.CreateInstance(element, data);
+                Weight = InvalidOscillatorSaveElementException.ParseFloat(element.Element("weight"));
+                frequencyMultiplier = InvalidOscillatorSaveElementException.ParseFloat(element.Element("frequencyMultiplier"));
             }
 
             public void UpdateFrequency(float frequency)
@@ -91,9 +99,9 @@ namespace SynthLib.Oscillators
                 oscillator.Reset();
             }
 
-            public Oscillator Clone()
+            public Oscillator Clone(int sampleRate)
             {
-                return new Oscillator(oscillator.Clone(), Weight, frequencyMultiplier);
+                return new Oscillator(oscillator.Clone(sampleRate), Weight, frequencyMultiplier);
             }
 
             public XElement ToXElement(string name)
@@ -101,6 +109,7 @@ namespace SynthLib.Oscillators
                 var element = new XElement(name);
                 element.Add(oscillator.ToXElement("osc"));
                 element.AddValue("weight", Weight);
+                element.AddValue("frequencyMultiplier", frequencyMultiplier);
                 return element;
             }
         }
@@ -149,12 +158,20 @@ namespace SynthLib.Oscillators
                 osc.Reset();
         }
 
-        public IOscillator Clone()
+        public IOscillator Clone(int sampleRate = 44100)
         {
             var clonedOscillators = new List<Oscillator>();
-            foreach (var osc in oscillators.Select(osc => osc.Clone()))
+            foreach (var osc in oscillators.Select(osc => osc.Clone(sampleRate)))
                 clonedOscillators.Add(osc);
-            return new CompoundOscillator(clonedOscillators, SampleRate);
+            return new CompoundOscillator(clonedOscillators, sampleRate);
+        }
+
+        public IOscillator CreateInstance(XElement element, SynthData data)
+        {
+            var oscillators = new List<Oscillator>();
+            foreach (var osc in element.Elements("osc"))
+                oscillators.Add(new Oscillator(element, data));
+            return new CompoundOscillator(oscillators, data.SampleRate);
         }
 
         public XElement ToXElement(string name)

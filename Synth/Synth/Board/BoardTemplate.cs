@@ -7,7 +7,7 @@ using SynthLib.Board.Modules;
 using System.Xml.Linq;
 using Stuff;
 using System.Collections;
-using SynthLib.Settings;
+using SynthLib.Data;
 using System.IO;
 
 namespace SynthLib.Board
@@ -145,7 +145,7 @@ namespace SynthLib.Board
             return element;
         }
 
-        public void SaveToFile(string name, SynthSettings settings, string path = "")
+        public void SaveToFile(string name, SynthData settings, string path = "")
         {
             var filePath = settings.BoardPaths.FilePath(Path.Combine(path, name + ".xml"));
             var element = ToXElement(name);

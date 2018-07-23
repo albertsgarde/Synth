@@ -11,33 +11,23 @@ namespace SynthLib.Board
     {
         private Connection[] connections;
 
-        public override int FreeConnectionsStart { get; }
+        public override int Count => connections.Length;
 
-        public ConnectionsArray(int size, int freeConnectionsStart = 0)
+        public ConnectionsArray(int size, int freeConnectionsStart = 0) : base(freeConnectionsStart)
         {
-            if (size < freeConnectionsStart)
-                throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
             connections = new Connection[size];
-            FreeConnectionsStart = freeConnectionsStart;
             for (int i = 0; i < connections.Length; ++i)
                 connections[i] = null;
         }
 
-        public override Connection this[int index]
+        public ConnectionsArray(XElement element) : base(element)
         {
-            get
-            {
-                return connections[index];
-            }
+            connections = new Connection[InvalidModuleSaveElementException.ParseInt(element.Element("count"))];
+            for (int i = 0; i < connections.Length; ++i)
+                connections[i] = null;
         }
 
-        public override int Count
-        {
-            get
-            {
-                return connections.Length;
-            }
-        }
+        public override Connection this[int index] => connections[index];
         
         protected override Connection AddConnection(Connection con, int index)
         {

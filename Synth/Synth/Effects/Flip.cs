@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,28 @@ using System.Xml.Linq;
 
 namespace SynthLib.Effects
 {
-    public class Flip : IEffect
+    public class Flip : Effect
     {
-        public string Type => "Flip";
+        public override string Type => "Flip";
 
-        public int Values => 0;
+        public override int Values => 0;
 
-        public IEffect Clone()
-        {
-            return new Flip();
-        }
-
-        public float Next(float[] input)
+        protected override float Next(float[] input)
         {
             return input[0] * -1;
         }
 
-        public XElement ToXElement(string name)
+        public override Effect Clone()
+        {
+            return new Flip();
+        }
+
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            return new Flip();
+        }
+
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

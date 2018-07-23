@@ -7,6 +7,7 @@ using SynthLib.Oscillators;
 using SynthLib.Music;
 using Stuff;
 using System.Xml.Linq;
+using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
@@ -26,25 +27,40 @@ namespace SynthLib.Board.Modules
 
         private float[] output;
 
-        public OscillatorModule(IOscillator oscillator, int outputs, float halfToneOffset = 0, float gain = 1f)
+        public OscillatorModule()
         {
-            this.oscillator = oscillator.Clone();
-            frequencyMultiplier = (float) Math.Pow(2, (1 / 12d) * halfToneOffset);
+            useable = false;
+        }
+
+        public OscillatorModule(IOscillator oscillator, int outputs, float halfToneOffset = 0, float gain = 1f, int sampleRate = 44100)
+        {
+            this.oscillator = oscillator.Clone(sampleRate);
+            frequencyMultiplier = (float) Tone.FrequencyMultiplierFromNoteOffset(halfToneOffset);
             this.gain = gain;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(outputs);
             output = new float[outputs];
         }
 
-        private OscillatorModule(OscillatorModule oscMod)
+        private OscillatorModule(OscillatorModule oscMod, int sampleRate)
         {
-            oscillator = oscMod.oscillator.Clone();
+            oscillator = oscMod.oscillator.Clone(sampleRate);
             gain = oscMod.gain;
             frequencyMultiplier = oscMod.frequencyMultiplier;
             Inputs = new ConnectionsArray(1, 1);
             Outputs = new ConnectionsArray(oscMod.Outputs.Count);
             output = new float[Outputs.Count];
-            Type = oscMod.Type;
+        }
+
+        private OscillatorModule(XElement element, SynthData data)
+        {
+            oscillator = data.OscillatorTypes[element.Element("osc").ElementValue("type")].Instance.CreateInstance(element.Element("osc"), data);
+            gain = InvalidModuleSaveElementException.ParseFloat(element.Element("gain"));
+            frequencyMultiplier = InvalidModuleSaveElementException.ParseFloat(element.Element("frequencyMultiplier"));
+            var outputs = InvalidModuleSaveElementException.ParseInt(element.Element("outputs"));
+            Inputs = new ConnectionsArray(element.Element("inputs"));
+            Outputs = new ConnectionsArray(element.Element("outputs"));
+            output = new float[Outputs.Count];
         }
 
         public override void UpdateFrequency(float frequency)
@@ -52,12 +68,14 @@ namespace SynthLib.Board.Modules
             oscillator.Frequency = frequency * frequencyMultiplier;
         }
 
-        public override Module Clone()
+        public override Module Clone(int sampleRate = 44100) => new OscillatorModule(this, sampleRate);
+
+        public override Module CreateInstance(XElement element, SynthData data)
         {
-            return new OscillatorModule(this);
+            return new OscillatorModule(element, data);
         }
 
-        public override float[] Process(float[] inputs, long time, bool noteOn)
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
             var next = oscillator.NextValue() * gain * (inputs[0] + 1);
             for (int i = 0; i < output.Length; ++i)

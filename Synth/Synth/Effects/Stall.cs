@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,13 @@ namespace SynthLib.Effects
     /// <summary>
     /// Delays the signal, but does not repeat it like the delay effect does.
     /// </summary>
-    public class Stall : IEffect
+    public class Stall : Effect
     {
-        public string Type => "Stall";
+        public override string Type => "Stall";
 
         public int SampleRate { get; }
 
-        public int Values => 0;
+        public override int Values => 0;
 
         private readonly float[] prevs;
 
@@ -26,6 +27,11 @@ namespace SynthLib.Effects
         private readonly int delaySamples;
 
         private int curPrev;
+
+        public Stall()
+        {
+            useable = false;
+        }
 
         public Stall(float delaySeconds, int sampleRate = 44100) : this((int)(delaySeconds * sampleRate), sampleRate)
         {
@@ -53,12 +59,7 @@ namespace SynthLib.Effects
             curPrev = stall.curPrev;
         }
 
-        public IEffect Clone()
-        {
-            return new Stall(this);
-        }
-
-        public float Next(float[] input)
+        protected override float Next(float[] input)
         {
             float result = prevs[curPrev];
             prevs[curPrev] = input[0];
@@ -68,7 +69,18 @@ namespace SynthLib.Effects
             return result;
         }
 
-        public XElement ToXElement(string name)
+        public override Effect Clone()
+        {
+            return new Stall(this);
+        }
+
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            var delaySeconds = InvalidEffectSaveElementException.ParseFloat(element.Element("delaySeconds"));
+            return new Stall(delaySeconds, data.SampleRate);
+        }
+
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace SynthLib.Oscillators
 
         private float curValue;
 
-        public TriangleOscillator(float startValue = 0, int sampleRate = 44100)
+        public TriangleOscillator(int sampleRate = 44100)
         {
             SampleRate = sampleRate;
             Frequency = 0;
-            curValue = startValue;
+            curValue = 0;
         }
 
         public float Frequency
@@ -65,10 +66,12 @@ namespace SynthLib.Oscillators
             return curValue <= 0.5f ? curValue : 0.5f - curValue;
         }
 
-        public IOscillator Clone()
+        public IOscillator Clone(int sampleRate = 44100)
         {
-            return new TriangleOscillator(curValue, SampleRate);
+            return new TriangleOscillator(sampleRate);
         }
+
+        public IOscillator CreateInstance(XElement element, SynthData data) => new TriangleOscillator(data.SampleRate);
 
         public void Reset()
         {

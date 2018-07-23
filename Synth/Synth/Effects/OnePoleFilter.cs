@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Effects
 {
-    public class OnePoleFilter : IEffect
+    public class OnePoleFilter : Effect
     {
-        public int Values => 1;
+        public override int Values => 1;
 
         private float prev;
 
@@ -18,7 +19,12 @@ namespace SynthLib.Effects
 
         private const float MAX_A1 = 0.999f;
 
-        public string Type => "OnePoleFilter";
+        public override string Type => "OnePoleFilter";
+
+        public OnePoleFilter()
+        {
+            useable = false;
+        }
 
         public OnePoleFilter(float a1)
         {
@@ -26,18 +32,24 @@ namespace SynthLib.Effects
             this.a1 = a1;
         }
 
-        public IEffect Clone()
+        protected override float Next(float[] input)
+        {
+            prev = input[Values] + prev * -a1 * (input[0] + 1) * 0.999f;
+            return prev;
+        }
+
+        public override Effect Clone()
         {
             return new OnePoleFilter(a1);
         }
 
-        public float Next(float[] input)
+        public override Effect CreateInstance(XElement element, SynthData data)
         {
-            prev = input[Values] + prev * -a1 * (input[0] + 1)*0.999f;
-            return prev;
+            var a1 = InvalidEffectSaveElementException.ParseFloat(element.Element("a1"));
+            return new OnePoleFilter(a1);
         }
 
-        public XElement ToXElement(string name)
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

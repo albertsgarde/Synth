@@ -44,9 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board\BoardTemplate.cs" />
+    <Compile Include="Board\InvalidModuleSaveElementException.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
+    <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
     <Compile Include="MidiSampleProviders\MonoBoard.cs" />
     <Compile Include="MidiSampleProviders\PolyBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
@@ -54,7 +56,7 @@
     <Compile Include="Effects\OnePoleFilter.cs" />
     <Compile Include="Effects\Stall.cs" />
     <Compile Include="Effects\Flip.cs" />
-    <Compile Include="Effects\IEffect.cs" />
+    <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\Translate.cs" />
     <Compile Include="Effects\Pass.cs" />
     <Compile Include="Effects\SimpleFilter.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Music\Tone.cs" />
     <Compile Include="Oscillators\CompoundOscillator.cs" />
     <Compile Include="Oscillators\CustomOscillator.cs" />
+    <Compile Include="Oscillators\InvalidOscillatorSaveElementException.cs" />
     <Compile Include="Oscillators\IOscillator.cs" />
     <Compile Include="Oscillators\RandomOscillator.cs" />
     <Compile Include="Oscillators\SawOscillator.cs" />
@@ -92,7 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synth.cs" />
     <Compile Include="SynthResult.cs" />
-    <Compile Include="Settings\SynthSettings.cs" />
+    <Compile Include="Data\SynthData.cs" />
     <Compile Include="SynthSetup.cs" />
     <Compile Include="SynthUtils.cs" />
   </ItemGroup>

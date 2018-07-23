@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace SynthLib.Board
 {
@@ -11,18 +12,20 @@ namespace SynthLib.Board
     {
         private List<Connection> connections;
 
-        public override int Count => connections.Count;
-
-        public override int FreeConnectionsStart { get; }
-
         public override Connection this[int index] => connections[index];
 
-        public FlexConnections(int size = 0, int freeConnectionsStart = 0)
+        public override int Count => connections.Count;
+
+        public FlexConnections(int size = 0, int freeConnectionsStart = 0) : base(freeConnectionsStart)
         {
-            if (size < freeConnectionsStart)
-                throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
-            FreeConnectionsStart = freeConnectionsStart;
             connections = new List<Connection>(size);
+            if (Count < FreeConnectionsStart)
+                throw new ArgumentException("Size must not be smaller than freeConnectionsStart or else there won't be room for the necessary connections.");
+        }
+
+        public FlexConnections(XElement element) : base(element)
+        {
+            connections = new List<Connection>();
         }
 
         protected override Connection AddConnection(Connection con, int index)

@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace SynthLib.Effects
     /// <summary>
     /// Assuming the input is between -1 and 1, it is translated to a value between min and max.
     /// </summary>
-    public class Translate : IEffect
+    public class Translate : Effect
     {
-        public string Type => "Translate";
+        public override string Type => "Translate";
 
-        public int Values => 0;
+        public override int Values => 0;
 
         private readonly float min;
 
@@ -25,6 +26,11 @@ namespace SynthLib.Effects
 
         private readonly float mxmn2mn;
 
+        public Translate()
+        {
+            useable = false;
+        }
+
         public Translate(float min, float max)
         {
             this.min = min;
@@ -33,17 +39,24 @@ namespace SynthLib.Effects
             mxmn2mn = mxmn2 + min;
         }
 
-        public IEffect Clone()
-        {
-            return new Translate(min, max);
-        }
-
-        public float Next(float[] input)
+        protected override float Next(float[] input)
         {
             return input[0] * mxmn2 + mxmn2mn;
         }
 
-        public XElement ToXElement(string name)
+        public override Effect Clone()
+        {
+            return new Translate(min, max);
+        }
+
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            var min = InvalidEffectSaveElementException.ParseFloat(element.Element("min"));
+            var max = InvalidEffectSaveElementException.ParseFloat(element.Element("max"));
+            return new Translate(min, max);
+        }
+
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
@@ -70,9 +71,15 @@ namespace SynthLib.Oscillators
             curValue = 0;
         }
 
-        public IOscillator Clone()
+        public IOscillator Clone(int sampleRate = 44100)
         {
-            return new PulseOscillator(dutyCycle, SampleRate);
+            return new PulseOscillator(dutyCycle, sampleRate);
+        }
+
+        public IOscillator CreateInstance(XElement element, SynthData data)
+        {
+            var dutyCycle = InvalidOscillatorSaveElementException.ParseFloat(element.Element("dutyCycle"));
+            return new PulseOscillator(dutyCycle, data.SampleRate);
         }
 
         public XElement ToXElement(string name)

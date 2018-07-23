@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace SynthLib.Board.Modules
             sustainStart = Attack + Decay;
             Sustain = sustain;
             Release = release;
-            releaseIncrement = (-Sustain / Release) / (sampleRate / 1000);
+            releaseIncrement = (-Sustain / Release) / (SampleRate / 1000);
 
             curValue = -1;
 
@@ -59,12 +60,33 @@ namespace SynthLib.Board.Modules
             onValues = CalculateOnValues();
             offValues = CalculateOffValues();
 
-            output = new float[outputs];
+            output = new float[Outputs.Count];
         }
 
         public Envelope(int outputs, int sampleRate = 44100) : this(0, 0, 1, 0, outputs, sampleRate)
         {
 
+        }
+
+        public Envelope(XElement element, SynthData data)
+        {
+            SampleRate = data.SampleRate;
+            Attack = InvalidModuleSaveElementException.ParseInt(element.Element("attack"));
+            Decay = InvalidModuleSaveElementException.ParseInt(element.Element("decay"));
+            sustainStart = Attack + Decay;
+            Sustain = InvalidModuleSaveElementException.ParseFloat(element.Element("sustain"));
+            Release = InvalidModuleSaveElementException.ParseInt(element.Element("release"));
+            releaseIncrement = (-Sustain / Release) / (SampleRate / 1000);
+
+            curValue = -1;
+
+            Inputs = new ConnectionsArray(element.Element("inputs"));
+            Outputs = new ConnectionsArray(element.Element("outputs"));
+
+            onValues = CalculateOnValues();
+            offValues = CalculateOffValues();
+
+            output = new float[Outputs.Count];
         }
 
         private float[] CalculateOnValues()
@@ -86,12 +108,17 @@ namespace SynthLib.Board.Modules
             return result;
         }
 
-        public override Module Clone()
+        public override Module Clone(int sampleRate = 44100)
         {
             return new Envelope(Attack, Decay, Sustain, Release, Outputs.Count, SampleRate);
         }
 
-        public override float[] Process(float[] inputs, long time, bool noteOn)
+        public override Module CreateInstance(XElement element, SynthData data)
+        {
+            return new Envelope(element, data);
+        }
+
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
             if (noteOn)
             {

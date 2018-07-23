@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
@@ -45,11 +46,6 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public IOscillator Clone()
-        {
-            return new CustomOscillator(values, valueLength, SampleRate);
-        }
-
         private float CurrentValue()
         {
             return values[curValue] + (values[curValue + 1] - values[curValue]) * position;
@@ -87,6 +83,22 @@ namespace SynthLib.Oscillators
         {
             position = 0;
             curValue = 0;
+        }
+
+        public IOscillator Clone(int sampleRate = 44100)
+        {
+            return new CustomOscillator(values, valueLength, sampleRate);
+        }
+
+        public IOscillator CreateInstance(XElement element, SynthData data)
+        {
+            var valueLength = InvalidOscillatorSaveElementException.ParseFloat(element.Element("valueLength"));
+            var values = new List<float>();
+            foreach (var valueElement in element.Element("values").Elements())
+            {
+                values.Add(InvalidOscillatorSaveElementException.ParseFloat(valueElement));
+            }
+            return new CustomOscillator(values, valueLength, data.SampleRate);
         }
 
         public XElement ToXElement(string name)

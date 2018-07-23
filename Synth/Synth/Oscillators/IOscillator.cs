@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
@@ -46,6 +47,8 @@ namespace SynthLib.Oscillators
         /// Meant as a way of getting more of the same oscillator type.
         /// </summary>
         /// <returns>A deep copy of the Oscillator.</returns>
-        IOscillator Clone();
+        IOscillator Clone(int sampleRate);
+
+        IOscillator CreateInstance(XElement element, SynthData data);
     }
 }

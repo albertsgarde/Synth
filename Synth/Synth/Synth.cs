@@ -7,7 +7,7 @@ using SynthLib.Oscillators;
 using SynthLib.Effects;
 using SynthLib.Board.Modules;
 using SynthLib.Board;
-using SynthLib.Settings;
+using SynthLib.Data;
 using SynthLib.MidiSampleProviders;
 using NAudio.Midi;
 using NAudio.Wave;
@@ -22,11 +22,11 @@ namespace SynthLib
 
         public SynthResult SynthResult { get; }
 
-        public SynthSettings Settings { get; }
+        public SynthData Settings { get; }
 
         private readonly Midi midi;
         
-        public Synth(SynthSettings settings)
+        public Synth(SynthData settings)
         {
             Settings = settings;
 

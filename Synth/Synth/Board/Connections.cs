@@ -22,7 +22,20 @@ namespace SynthLib.Board
         /// <summary>
         /// From which index non-specifically assigned connections can be connected.
         /// </summary>
-        public abstract int FreeConnectionsStart { get; }
+        public int FreeConnectionsStart { get; }
+
+        public Connections(int freeConnectionsStart)
+        {
+            FreeConnectionsStart = freeConnectionsStart;
+        }
+
+        public Connections(XElement element)
+        {
+            if (int.TryParse(element.ElementValue("freeConnectionsStart"), out int freeConnectionsStart))
+                FreeConnectionsStart = freeConnectionsStart;
+            else
+                throw new InvalidModuleSaveElementException(element);
+        }
 
         /// <summary>
         /// Creates a new connection between two modules at the specified indexes.

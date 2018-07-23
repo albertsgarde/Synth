@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SynthLib;
-using SynthLib.Settings;
+using SynthLib.Data;
 
 namespace SynthApp
 {
@@ -27,7 +27,7 @@ namespace SynthApp
         public MainWindow()
         {
             InitializeComponent();
-            synth = new Synth(new SynthSettings());
+            synth = new Synth(new SynthData());
         }
 
         private void SaveBoard(object sender, RoutedEventArgs e)

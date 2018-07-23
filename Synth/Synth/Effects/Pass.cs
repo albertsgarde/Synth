@@ -5,26 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Stuff;
+using SynthLib.Data;
 
 namespace SynthLib.Effects
 {
-    public class Pass : IEffect
+    public class Pass : Effect
     {
-        public string Type => "Pass";
+        public override string Type => "Pass";
 
-        public int Values => 0;
+        public override int Values => 0;
 
-        public IEffect Clone()
-        {
-            return new Pass();
-        }
-
-        public float Next(float[] input)
+        protected override float Next(float[] input)
         {
             return input[0];
         }
 
-        public XElement ToXElement(string name)
+        public override Effect Clone()
+        {
+            return new Pass();
+        }
+
+        public override Effect CreateInstance(XElement element, SynthData data)
+        {
+            return new Pass();
+        }
+
+        public override XElement ToXElement(string name)
         {
             var element = new XElement(name);
             element.AddValue("type", Type);

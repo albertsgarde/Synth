@@ -1,4 +1,5 @@
 ﻿using Stuff;
+using SynthLib.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,9 @@ namespace SynthLib.Oscillators
         private const float TAU = (float)Math.PI * 2;
         
         /// <param name="startValue">The initial value of the oscillator. Used to avoid noise when switching oscillators.</param>
-        public SineOscillator (float startValue = 0, int sampleRate = 44100)
+        public SineOscillator (int sampleRate = 44100)
         {
-            curRadians = (float)Math.Asin(startValue);
+            curRadians = 0;
             Frequency = 0;
             SampleRate = sampleRate;
         }
@@ -68,10 +69,12 @@ namespace SynthLib.Oscillators
             curRadians = 0;
         }
 
-        public IOscillator Clone()
+        public IOscillator Clone(int sampleRate = 44100)
         {
-            return new SineOscillator((float)Math.Sin(curRadians), SampleRate);
+            return new SineOscillator(sampleRate);
         }
+
+        public IOscillator CreateInstance(XElement element, SynthData data) => new SineOscillator(data.SampleRate);
 
         public XElement ToXElement(string name)
         {

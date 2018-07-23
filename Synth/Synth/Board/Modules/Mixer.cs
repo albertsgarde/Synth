@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Stuff;
+using System.Diagnostics;
+using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
@@ -22,7 +23,18 @@ namespace SynthLib.Board.Modules
 
         public Gains OutputGains { get; }
 
-        public override string Type { get; } = "Mixer";
+        private const string TYPE = "Mixer";
+
+        public override string Type { get; } = TYPE;
+
+        public Mixer()
+        {
+            useable = false;
+            Inputs = new ConnectionsArray(0);
+            Outputs = new ConnectionsArray(0);
+            InputGains = new Gains(0);
+            OutputGains = new Gains(0);
+        }
 
         public Mixer(int inputs, int outputs)
         {
@@ -47,8 +59,14 @@ namespace SynthLib.Board.Modules
             
             InputGains = mixer.InputGains;
             OutputGains = mixer.OutputGains;
+        }
 
-            Type = mixer.Type;
+        private Mixer(XElement element)
+        {
+            Inputs = new ConnectionsArray(element.Element("inputs"));
+            Outputs = new ConnectionsArray(element.Element("outputs"));
+            InputGains = new Gains(element.Element("inputGains"));
+            OutputGains = new Gains(element.Element("outputGains"));
         }
 
         public struct Gains : ISaveable
@@ -72,6 +90,16 @@ namespace SynthLib.Board.Modules
                 gains.CopyTo(this.gains, 0);
             }
 
+            public Gains(XElement element)
+            {
+                gains = new float[element.Elements().Count()];
+                for (int i = 0; i < gains.Length; ++i)
+                {
+                    if (!float.TryParse(element.ElementValue("_" + i), out gains[i]))
+                        throw new InvalidModuleSaveElementException(element);
+                }
+            }
+
             public XElement ToXElement(string name)
             {
                 var element = new XElement(name);
@@ -83,13 +111,19 @@ namespace SynthLib.Board.Modules
             public int Length => gains.Length;
         }
 
-        public override Module Clone()
+        public override Module Clone(int sampleRate = 44100)
         {
             return new Mixer(this);
         }
 
-        public override float[] Process(float[] inputs, long time, bool noteOn)
+        public override Module CreateInstance(XElement element, SynthData data)
         {
+            return new Mixer(element);
+        }
+
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
+        {
+            Debug.Assert(useable);
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
                 totalInput += inputs[i] * InputGains[i];
