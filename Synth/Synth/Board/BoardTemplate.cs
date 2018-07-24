@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SynthLib.Board.Modules;
+using System.Xml;
 using System.Xml.Linq;
 using Stuff;
 using System.Collections;
@@ -14,15 +15,29 @@ namespace SynthLib.Board
 {
     public class BoardTemplate : IEnumerable<Module>, ISaveable
     {
+        public const string MODULE_SAVE_PREFIX = "savedModule";
+
         private int moduleNum = -1;
 
         private readonly CrossReferencedDictionary<string, Module> modules;
 
         private readonly List<ConnectionTemplate> connections;
 
-        public BoardTemplate(XElement element)
+        public BoardTemplate(XElement element, SynthData data)
         {
-            throw new NotImplementedException();
+            modules = new CrossReferencedDictionary<string, Module>();
+            connections = new List<ConnectionTemplate>();
+            foreach (var mod in element.Element("modules").Elements())
+            {
+                string moduleName = mod.Name.LocalName.Substring(MODULE_SAVE_PREFIX.Length);
+                string moduleType = mod.ElementValue("type");
+                modules[moduleName] = data.ModuleTypes[moduleType].Instance.CreateInstance(mod, data);
+            }
+            foreach(var con in element.Element("connections").Elements())
+            {
+                connections.Add(new ConnectionTemplate(con));
+            }
+
         }
 
         public BoardTemplate()
@@ -44,6 +59,14 @@ namespace SynthLib.Board
                 SourceIndex = sourceIndex;
                 Dest = dest;
                 DestIndex = destIndex;
+            }
+
+            public ConnectionTemplate(XElement element)
+            {
+                Source = element.ElementValue("source");
+                SourceIndex = InvalidConnectionSaveElementException.ParseInt(element.Element("sourceIndex"));
+                Dest = element.ElementValue("dest");
+                DestIndex = InvalidConnectionSaveElementException.ParseInt(element.Element("destIndex"));
             }
 
             public override string ToString()
@@ -128,19 +151,17 @@ namespace SynthLib.Board
             return GetEnumerator();
         }
 
-        public XElement ToXElement(string name)
+        public XElement ToXElement(string name = "boardTemplate")
         {
             var element = new XElement(name);
-
-            var modulesElement = new XElement("modules");
+            
+            var modulesElement = element.CreateElement("modules");
             foreach (var mod in modules.Keys2)
-                modulesElement.Add(mod.ToXElement("savedModule" + modules[mod]));
-            element.Add(modulesElement);
+                modulesElement.Add(mod.ToXElement(MODULE_SAVE_PREFIX + modules[mod]));
 
-            var connectionsElement = new XElement("connections");
+            var connectionsElement = element.CreateElement("connections");
             foreach (var con in connections)
                 connectionsElement.Add(con.ToXElement("connection"));
-            element.Add(connectionsElement);
 
             return element;
         }
@@ -148,8 +169,14 @@ namespace SynthLib.Board
         public void SaveToFile(string name, SynthData settings, string path = "")
         {
             var filePath = settings.BoardPaths.FilePath(Path.Combine(path, name + ".xml"));
-            var element = ToXElement(name);
+            var element = ToXElement();
             element.Save(filePath);
+        }
+
+        public static BoardTemplate LoadFromFile(string name, SynthData data, string path = "")
+        {
+            string wholePath = data.BoardPaths.FilePath(Path.Combine(path, name + ".xml"));
+            return new BoardTemplate(XDocument.Load(wholePath).Root, data);
         }
     }
 }

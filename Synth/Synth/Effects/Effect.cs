@@ -7,6 +7,7 @@ using Stuff;
 using System.Xml.Linq;
 using SynthLib.Data;
 using System.Diagnostics;
+using Stuff.StuffMath;
 
 namespace SynthLib.Effects
 {
@@ -30,6 +31,12 @@ namespace SynthLib.Effects
 
         protected abstract float Next(float[] input);
 
-        public abstract XElement ToXElement(string name);
+        public virtual XElement ToXElement(string name)
+        {
+            Debug.Assert(useable);
+            var element = new XElement(name);
+            element.AddValue("type", Type);
+            return element;
+        }
     }
 }

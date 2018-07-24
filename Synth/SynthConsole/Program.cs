@@ -17,7 +17,6 @@ namespace SynthConsole
         static void Main(string[] args)
         {
             var synth = new SynthLib.Synth(new SynthData());
-            Console.WriteLine(typeof(SynthData).Assembly.FullName);
             Console.ReadLine();
             Console.WriteLine(synth);
         }

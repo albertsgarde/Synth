@@ -9,9 +9,9 @@ using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
-    public class CompoundOscillator : IOscillator
+    public class CompoundOscillator : Oscillator
     {
-        public string Type => "Compound";
+        public override string Type => "Compound";
 
         private readonly Oscillator[] oscillators;
 
@@ -19,7 +19,12 @@ namespace SynthLib.Oscillators
 
         private readonly float totalWeight;
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
+
+        public CompoundOscillator()
+        {
+            useable = false;
+        }
 
         public CompoundOscillator(IEnumerable<Oscillator> oscillators, int sampleRate = 44100)
         {
@@ -32,7 +37,7 @@ namespace SynthLib.Oscillators
             SampleRate = sampleRate;
         }
 
-        public float Frequency
+        public override float Frequency
         {
             get => frequency;
             set
@@ -45,17 +50,17 @@ namespace SynthLib.Oscillators
 
         public class Oscillator : ISaveable
         {
-            private readonly IOscillator oscillator;
+            private readonly Oscillators.Oscillator oscillator;
 
             public float Weight { get; }
 
             private readonly float frequencyMultiplier;
 
-            public Oscillator(IOscillator oscillator, float weight, int halfTones, float cents) : this(oscillator, weight, (float)Math.Pow(2, (1 / 12D) * (halfTones + (cents / 100))))
+            public Oscillator(Oscillators.Oscillator oscillator, float weight, int halfTones, float cents) : this(oscillator, weight, (float)Math.Pow(2, (1 / 12D) * (halfTones + (cents / 100))))
             {
             }
 
-            private Oscillator(IOscillator oscillator, float weight, float frequencyMultiplier)
+            private Oscillator(Oscillators.Oscillator oscillator, float weight, float frequencyMultiplier)
             {
                 this.oscillator = oscillator;
                 Weight = weight;
@@ -114,13 +119,13 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public void Next()
+        public override void Next()
         {
             foreach (var osc in oscillators)
                 osc.Next();
         }
 
-        public float CurrentValue(float min = -1, float max = 1)
+        public override float CurrentValue(float min = -1, float max = 1)
         {
             float result = 0;
             float totalWeight = 0;
@@ -132,19 +137,7 @@ namespace SynthLib.Oscillators
             return result / totalWeight;
         }
 
-        public float NextValue(float min, float max = 1)
-        {
-            float result = 0;
-            float totalWeight = 0;
-            foreach (var osc in oscillators)
-            {
-                result += osc.NextValue(min, max);
-                totalWeight += osc.Weight;
-            }
-            return result / totalWeight;
-        }
-
-        public float NextValue()
+        protected override float NextValue()
         {
             float result = 0;
             for (int i = 0; i < oscillators.Length; ++i)
@@ -152,13 +145,13 @@ namespace SynthLib.Oscillators
             return result / totalWeight;
         }
 
-        public void Reset()
+        public override void Reset()
         {
             foreach (var osc in oscillators)
                 osc.Reset();
         }
 
-        public IOscillator Clone(int sampleRate = 44100)
+        public override Oscillators.Oscillator Clone(int sampleRate = 44100)
         {
             var clonedOscillators = new List<Oscillator>();
             foreach (var osc in oscillators.Select(osc => osc.Clone(sampleRate)))
@@ -166,7 +159,7 @@ namespace SynthLib.Oscillators
             return new CompoundOscillator(clonedOscillators, sampleRate);
         }
 
-        public IOscillator CreateInstance(XElement element, SynthData data)
+        public override Oscillators.Oscillator CreateInstance(XElement element, SynthData data)
         {
             var oscillators = new List<Oscillator>();
             foreach (var osc in element.Elements("osc"))
@@ -174,10 +167,9 @@ namespace SynthLib.Oscillators
             return new CompoundOscillator(oscillators, data.SampleRate);
         }
 
-        public XElement ToXElement(string name)
+        public override XElement ToXElement(string name)
         {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
+            var element = base.ToXElement(name);
             foreach (var osc in oscillators)
                 element.Add(osc.ToXElement("osc"));
             return element;

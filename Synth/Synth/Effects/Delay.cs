@@ -73,8 +73,7 @@ namespace SynthLib.Effects
 
         public override XElement ToXElement(string name)
         {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
+            var element = base.ToXElement(name);
             element.AddValue("delaySeconds", delaySeconds);
             element.AddValue("feedback", feedback);
             return element;

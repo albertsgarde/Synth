@@ -9,17 +9,22 @@ using System.Xml.Linq;
 
 namespace SynthLib.Oscillators
 {
-    public class TriangleOscillator : IOscillator
+    public class TriangleOscillator : Oscillator
     {
-        public string Type => "Triangle";
+        public override string Type => "Triangle";
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
 
         private float frequency;
 
         private float valueIncrement;
 
         private float curValue;
+
+        public TriangleOscillator() : this(44100)
+        {
+
+        }
 
         public TriangleOscillator(int sampleRate = 44100)
         {
@@ -28,7 +33,7 @@ namespace SynthLib.Oscillators
             curValue = 0;
         }
 
-        public float Frequency
+        public override float Frequency
         {
             get => frequency;
             set
@@ -38,13 +43,13 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public void Next()
+        public override void Next()
         {
             curValue += valueIncrement;
             curValue %= 1;
         }
 
-        public float CurrentValue(float min = -1F, float max = 1)
+        public override float CurrentValue(float min = -1F, float max = 1)
         {
             float result;
             if (curValue <= 0.5f)
@@ -54,35 +59,22 @@ namespace SynthLib.Oscillators
             return result * (max - min) + min;
         }
 
-        public float NextValue(float min, float max = 1)
-        {
-            Next();
-            return CurrentValue(min, max);
-        }
-
-        public float NextValue()
+        protected override float NextValue()
         {
             Next();
             return curValue <= 0.5f ? curValue : 0.5f - curValue;
         }
 
-        public IOscillator Clone(int sampleRate = 44100)
+        public override Oscillator Clone(int sampleRate = 44100)
         {
             return new TriangleOscillator(sampleRate);
         }
 
-        public IOscillator CreateInstance(XElement element, SynthData data) => new TriangleOscillator(data.SampleRate);
+        public override Oscillator CreateInstance(XElement element, SynthData data) => new TriangleOscillator(data.SampleRate);
 
-        public void Reset()
+        public override void Reset()
         {
             curValue = 0;
-        }
-
-        public XElement ToXElement(string name)
-        {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
-            return element;
         }
     }
 }

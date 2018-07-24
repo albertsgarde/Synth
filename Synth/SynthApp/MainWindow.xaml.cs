@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SynthLib;
 using SynthLib.Data;
+using System.Xml;
 
 namespace SynthApp
 {
@@ -32,7 +33,7 @@ namespace SynthApp
 
         private void SaveBoard(object sender, RoutedEventArgs e)
         {
-            synth.Board.SaveToFile(BoardName.Text, synth.Settings);
+            synth.Board.SaveToFile(boardName.Text, synth.Data);
         }
     }
 }

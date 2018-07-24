@@ -9,11 +9,11 @@ using SynthLib.Data;
 
 namespace SynthLib.Oscillators
 {
-    public class CustomOscillator : IOscillator
+    public class CustomOscillator : Oscillator
     {
-        public string Type => "Custom";
+        public override string Type => "Custom";
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
 
         private readonly IReadOnlyList<float> values;
 
@@ -26,6 +26,11 @@ namespace SynthLib.Oscillators
         private float posIncrement;
         private float frequency;
 
+        public CustomOscillator()
+        {
+            useable = false;
+        }
+
         public CustomOscillator(IReadOnlyList<float> values, float valueLength, int sampleRate = 44100)
         {
             SampleRate = sampleRate;
@@ -36,7 +41,7 @@ namespace SynthLib.Oscillators
             curValue = 0;
         }
 
-        public float Frequency
+        public override float Frequency
         {
             get => frequency;
             set
@@ -51,12 +56,12 @@ namespace SynthLib.Oscillators
             return values[curValue] + (values[curValue + 1] - values[curValue]) * position;
         }
 
-        public float CurrentValue(float min = -1F, float max = 1)
+        public override float CurrentValue(float min = -1F, float max = 1)
         {
             return (CurrentValue() + 1) * (max - min) / 2 + min;
         }
 
-        public void Next()
+        public override void Next()
         {
             position += posIncrement;
             if (position > 1)
@@ -67,30 +72,24 @@ namespace SynthLib.Oscillators
 
         }
 
-        public float NextValue(float min, float max = 1)
-        {
-            Next();
-            return CurrentValue(min, max);
-        }
-
-        public float NextValue()
+        protected override float NextValue()
         {
             Next();
             return CurrentValue();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             position = 0;
             curValue = 0;
         }
 
-        public IOscillator Clone(int sampleRate = 44100)
+        public override Oscillator Clone(int sampleRate = 44100)
         {
             return new CustomOscillator(values, valueLength, sampleRate);
         }
 
-        public IOscillator CreateInstance(XElement element, SynthData data)
+        public override Oscillator CreateInstance(XElement element, SynthData data)
         {
             var valueLength = InvalidOscillatorSaveElementException.ParseFloat(element.Element("valueLength"));
             var values = new List<float>();
@@ -101,10 +100,9 @@ namespace SynthLib.Oscillators
             return new CustomOscillator(values, valueLength, data.SampleRate);
         }
 
-        public XElement ToXElement(string name)
+        public override XElement ToXElement(string name)
         {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
+            var element = base.ToXElement(name);
             element.AddValue("valueLength", valueLength);
             var valuesElement = element.CreateElement("values");
             foreach (var value in values)

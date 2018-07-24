@@ -14,7 +14,7 @@ namespace SynthLib.Board.Modules
 {
     public class ConstantOscillatorModule : Module
     {
-        private readonly IOscillator oscillator;
+        private readonly Oscillator oscillator;
 
         private readonly float gain;
 
@@ -33,7 +33,7 @@ namespace SynthLib.Board.Modules
             useable = false;
         }
 
-        public ConstantOscillatorModule(IOscillator oscillator, int outputs, float frequency, float gain = 1f, int sampleRate = 44100)
+        public ConstantOscillatorModule(Oscillator oscillator, int outputs, float frequency, float gain = 1f, int sampleRate = 44100)
         {
             this.oscillator = oscillator.Clone(sampleRate);
             this.oscillator.Frequency = frequency;

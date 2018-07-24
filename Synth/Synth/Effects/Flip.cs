@@ -29,12 +29,5 @@ namespace SynthLib.Effects
         {
             return new Flip();
         }
-
-        public override XElement ToXElement(string name)
-        {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
-            return element;
-        }
     }
 }

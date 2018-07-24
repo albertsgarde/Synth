@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Stuff;
 using Stuff.Exceptions;
 using SynthLib.Board;
+using SynthLib.Board.Modules;
 using SynthLib.Effects;
 using SynthLib.Oscillators;
 
@@ -37,9 +38,9 @@ namespace SynthLib.Data
 
         private SettingsManager settings;
 
-        public LoaderTypes<ModuleBoard> ModuleTypes { get; }
+        public LoaderTypes<Module> ModuleTypes { get; }
 
-        public LoaderTypes<IOscillator> OscillatorTypes { get; }
+        public LoaderTypes<Oscillator> OscillatorTypes { get; }
 
         public LoaderTypes<Effect> EffectTypes { get; }
 
@@ -65,9 +66,9 @@ namespace SynthLib.Data
             OscillatorPaths = new PathList(settings.GetStrings("paths", "oscillatorTypes"), Root);
             EffectPaths = new PathList(settings.GetStrings("paths", "effectTypes"), Root);
 
-            ModuleTypes = new LoaderTypes<ModuleBoard>(ModuleTypePaths, "moduleType");
-            OscillatorTypes = new LoaderTypes<IOscillator>(OscillatorPaths, "oscillatorType");
-            EffectTypes = new LoaderTypes<Effect>(EffectPaths, "effectType");
+            ModuleTypes = new LoaderTypes<Module>(ModuleTypePaths, "moduleType", "SynthLib");
+            OscillatorTypes = new LoaderTypes<Oscillator>(OscillatorPaths, "oscillatorType", "SynthLib");
+            EffectTypes = new LoaderTypes<Effect>(EffectPaths, "effectType", "SynthLib");
         }
     }
 }

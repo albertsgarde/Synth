@@ -42,6 +42,11 @@ namespace SynthLib.Board.Modules
 
         private float[] output;
 
+        public Envelope()
+        {
+            useable = false;
+        }
+
         public Envelope(int attack, int decay, float sustain, int release, int outputs, int sampleRate = 44100)
         {
             SampleRate = sampleRate;

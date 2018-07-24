@@ -13,7 +13,7 @@ namespace SynthLib.Board.Modules
 {
     public class OscillatorModule : Module
     {
-        private readonly IOscillator oscillator;
+        private readonly Oscillator oscillator;
 
         private readonly float gain;
 
@@ -32,7 +32,7 @@ namespace SynthLib.Board.Modules
             useable = false;
         }
 
-        public OscillatorModule(IOscillator oscillator, int outputs, float halfToneOffset = 0, float gain = 1f, int sampleRate = 44100)
+        public OscillatorModule(Oscillator oscillator, int outputs, float halfToneOffset = 0, float gain = 1f, int sampleRate = 44100)
         {
             this.oscillator = oscillator.Clone(sampleRate);
             frequencyMultiplier = (float) Tone.FrequencyMultiplierFromNoteOffset(halfToneOffset);

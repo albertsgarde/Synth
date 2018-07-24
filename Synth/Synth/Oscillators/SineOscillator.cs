@@ -9,11 +9,11 @@ using System.Xml.Linq;
 
 namespace SynthLib.Oscillators
 {
-    public class SineOscillator : IOscillator
+    public class SineOscillator : Oscillator
     {
-        public string Type => "Sine";
+        public override string Type => "Sine";
 
-        public int SampleRate { get; }
+        public override int SampleRate { get; }
 
         private float frequency;
 
@@ -22,7 +22,12 @@ namespace SynthLib.Oscillators
         private float curRadians;
 
         private const float TAU = (float)Math.PI * 2;
-        
+
+        public SineOscillator() : this(44100)
+        {
+
+        }
+
         /// <param name="startValue">The initial value of the oscillator. Used to avoid noise when switching oscillators.</param>
         public SineOscillator (int sampleRate = 44100)
         {
@@ -31,7 +36,7 @@ namespace SynthLib.Oscillators
             SampleRate = sampleRate;
         }
 
-        public float Frequency
+        public override float Frequency
         {
             get => frequency;
             set
@@ -41,46 +46,33 @@ namespace SynthLib.Oscillators
             }
         }
 
-        public void Next()
+        public override void Next()
         {
             curRadians += incrementValue;
             curRadians %= TAU;
         }
 
-        public float CurrentValue(float min = -1, float max = 1)
+        public override float CurrentValue(float min = -1, float max = 1)
         {
             return ((float)Math.Sin(curRadians) + 1) * (max - min) / 2 + min;
         }
 
-        public float NextValue(float min, float max = 1)
-        {
-            Next();
-            return CurrentValue(min, max);
-        }
-
-        public float NextValue()
+        protected override float NextValue()
         {
             Next();
             return (float)Math.Sin(curRadians);
         }
 
-        public void Reset()
+        public override void Reset()
         {
             curRadians = 0;
         }
 
-        public IOscillator Clone(int sampleRate = 44100)
+        public override Oscillator Clone(int sampleRate = 44100)
         {
             return new SineOscillator(sampleRate);
         }
 
-        public IOscillator CreateInstance(XElement element, SynthData data) => new SineOscillator(data.SampleRate);
-
-        public XElement ToXElement(string name)
-        {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
-            return element;
-        }
+        public override Oscillator CreateInstance(XElement element, SynthData data) => new SineOscillator(data.SampleRate);
     }
 }

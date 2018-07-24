@@ -18,19 +18,19 @@ namespace SynthLib
     {
         public int SampleRate { get; }
 
-        public BoardTemplate Board { get; }
-
+        private BoardTemplate board;
+        
         public SynthResult SynthResult { get; }
 
-        public SynthData Settings { get; }
+        public SynthData Data { get; }
 
         private readonly Midi midi;
-        
+
         public Synth(SynthData settings)
         {
-            Settings = settings;
+            Data = settings;
 
-            SampleRate = settings.SampleRate;
+            SampleRate = Data.SampleRate;
 
             SynthResult = new SynthResult(SampleRate, 1)
             {
@@ -48,8 +48,26 @@ namespace SynthLib
             midi = new Midi(2);
             midi.SetMidiIn(0);
 
-            Board = new BoardTemplate();
-            Setup(settings);
+            board = new BoardTemplate();
+            SetupBoard(Data);
+            Setup(Data);
+        }
+
+        partial void SetupBoard(SynthData data);
+
+        /// <summary>
+        /// Called every time the Board is set.
+        /// </summary>
+        partial void Setup(SynthData data);
+
+        public BoardTemplate Board
+        {
+            get => board;
+            set
+            {
+                board = value;
+                Setup(Data);
+            }
         }
     }
 }

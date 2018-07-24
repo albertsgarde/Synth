@@ -56,8 +56,7 @@ namespace SynthLib.Effects
 
         public override XElement ToXElement(string name)
         {
-            var element = new XElement(name);
-            element.AddValue("type", Type);
+            var element = base.ToXElement(name);
             element.AddValue("numPrevs", prev.Length);
             return element;
         }

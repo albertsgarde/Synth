@@ -113,7 +113,7 @@ namespace SynthLib.Board
             {
                 curModule = inputTable.modules[i];
                 var output = curModule.Process(inputTable.input[i], Time, IsNoteOn);
-                if (curModule.Type == "E")
+                if (curModule.Type == "End")
                     result += output[0];
                 else
                 {

@@ -44,10 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board\BoardTemplate.cs" />
+    <Compile Include="Board\InvalidConnectionSaveElementException.cs" />
     <Compile Include="Board\InvalidModuleSaveElementException.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
+    <Compile Include="Effects\Filter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
     <Compile Include="MidiSampleProviders\MonoBoard.cs" />
     <Compile Include="MidiSampleProviders\PolyBoard.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="Oscillators\CompoundOscillator.cs" />
     <Compile Include="Oscillators\CustomOscillator.cs" />
     <Compile Include="Oscillators\InvalidOscillatorSaveElementException.cs" />
-    <Compile Include="Oscillators\IOscillator.cs" />
+    <Compile Include="Oscillators\Oscillator.cs" />
     <Compile Include="Oscillators\RandomOscillator.cs" />
     <Compile Include="Oscillators\SawOscillator.cs" />
     <Compile Include="Oscillators\SineOscillator.cs" />

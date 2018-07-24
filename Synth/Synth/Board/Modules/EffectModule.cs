@@ -34,7 +34,7 @@ namespace SynthLib.Board.Modules
 
         public EffectModule(XElement element, SynthData data)
         {
-            effect = data.EffectTypes[element.Element("effect").ElementValue("type")].Instance.CreateInstance(element.Element("type"), data);
+            effect = data.EffectTypes[element.Element("effect").ElementValue("type")].Instance.CreateInstance(element.Element("effect"), data);
             Inputs = new ConnectionsArray(element.Element("inputs"));
             Outputs = new ConnectionsArray(element.Element("outputs"));
         }
