@@ -9,6 +9,8 @@ using NAudio.Midi;
 using SynthLib.Board;
 using NAudio.Wave;
 using SynthLib.MidiSampleProviders;
+using Stuff.StuffMath;
+using SynthLib.Effects;
 
 namespace SynthLib
 {
@@ -81,6 +83,13 @@ namespace SynthLib
             var result = new float[samples];
             sp.Read(result, 0, samples);
             return result;
+        }
+
+        public static Signal ApplyEffect(this Signal signal, Effect effect)
+        {
+            effect = effect.Clone();
+            var effectInput = new float[effect.Values + 1];
+            return new Signal(signal.Select(s => { effectInput[effect.Values] = s; return effect.Next(effectInput); }));
         }
     }
 }
