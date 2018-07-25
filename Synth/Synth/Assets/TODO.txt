@@ -18,7 +18,6 @@
 	Documentation
 		Make it clear exactly what the Clone methods should do.
 	Add values to simpleFilter.
-	Stereo
 	Rename PathList in SynthSettings.
 	Log
 	Log all midiinputs so they can be replayed later for debugging.
@@ -26,7 +25,6 @@
 	Other midi inputs.
 	Modules can see control values.
 		A module that outputs control values.
-	Let boards read from certain modules.
 	A module holds a ModuleType from which it calls stuff?
 
 Music:
