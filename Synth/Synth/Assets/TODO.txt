@@ -17,8 +17,6 @@
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
-	ModuleTypes that are loaded from files.
-	Load board templates from files.
 	Add values to simpleFilter.
 	Stereo
 	Rename PathList in SynthSettings.
