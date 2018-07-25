@@ -31,7 +31,7 @@ namespace SynthLib.Board.Modules
 
         public Pan(float pan)
         {
-            Inputs = new ConnectionsArray(1);
+            Inputs = new ConnectionsArray(2, 1);
             Outputs = new ConnectionsArray(2);
             output = new float[2];
             this.pan = pan;
@@ -43,7 +43,7 @@ namespace SynthLib.Board.Modules
 
         protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
-            var curPan = pan * (inputs[0]);
+            var curPan = pan + (inputs[0]);
             if (curPan < -1 || curPan > 1)
                 throw new InvalidModuleValue(this, curPan, $"Pan must be between -1 and 1. Module pan value: {pan} Pan input: {inputs[0]}");
             output[0] = ValueFromPan(inputs[1], curPan);
