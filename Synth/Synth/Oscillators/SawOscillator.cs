@@ -22,14 +22,13 @@ namespace SynthLib.Oscillators
 
         public SawOscillator() : this(44100)
         {
-
         }
 
-        public SawOscillator(int sampleRate = 44100)
+        public SawOscillator(int sampleRate)
         {
+            SampleRate = sampleRate;
             Frequency = 0;
             curValue = 0;
-            SampleRate = sampleRate;
         }
 
         public override float Frequency

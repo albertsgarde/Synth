@@ -25,15 +25,14 @@ namespace SynthLib.Oscillators
 
         public SineOscillator() : this(44100)
         {
-
         }
 
         /// <param name="startValue">The initial value of the oscillator. Used to avoid noise when switching oscillators.</param>
         public SineOscillator (int sampleRate = 44100)
         {
+            SampleRate = sampleRate;
             curRadians = 0;
             Frequency = 0;
-            SampleRate = sampleRate;
         }
 
         public override float Frequency

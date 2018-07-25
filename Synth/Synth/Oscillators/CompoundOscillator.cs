@@ -28,13 +28,13 @@ namespace SynthLib.Oscillators
 
         public CompoundOscillator(IEnumerable<Oscillator> oscillators, int sampleRate = 44100)
         {
+            SampleRate = sampleRate;
             this.oscillators = oscillators.ToArray();
             Frequency = 0;
 
             totalWeight = 0;
             for (int i = 0; i < this.oscillators.Length; ++i)
                 totalWeight += this.oscillators[i].Weight;
-            SampleRate = sampleRate;
         }
 
         public override float Frequency
