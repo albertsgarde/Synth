@@ -23,7 +23,7 @@ namespace SynthLib.Board.Modules
 
         public Gains OutputGains { get; }
 
-        public override ModuleType Type { get; } = ModuleType.Standard;
+        public override BoardOutput OutputType { get; } = BoardOutput.None;
 
         public Mixer()
         {
@@ -121,7 +121,6 @@ namespace SynthLib.Board.Modules
 
         protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
         {
-            Debug.Assert(useable);
             var totalInput = 0f;
             for (int i = 0; i < inputs.Length; ++i)
                 totalInput += inputs[i] * InputGains[i];

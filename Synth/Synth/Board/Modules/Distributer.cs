@@ -23,7 +23,7 @@ namespace SynthLib.Board.Modules
 
         public Weights OutputWeights { get; }
 
-        public override ModuleType Type { get; } = ModuleType.Standard;
+        public override BoardOutput OutputType { get; } = BoardOutput.None;
 
         public Distributer()
         {

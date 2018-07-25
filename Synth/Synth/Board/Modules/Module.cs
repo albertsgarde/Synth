@@ -10,7 +10,24 @@ using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
-    public enum ModuleType { LeftOut, RightOut, Standard }
+    /// <summary>
+    /// What kind of output this module provides.
+    /// </summary>
+    public enum BoardOutput
+    {
+        /// <summary>
+        /// This modules output[0] is added to the boards left output channel.
+        /// </summary>
+        Left,
+        /// <summary>
+        /// This modules output[0] is added to the boards right output channel.
+        /// </summary>
+        Right,
+        /// <summary>
+        /// This module does not contribute directly to the board output.
+        /// </summary>
+        None
+    }
 
     public abstract class Module : ISaveable
     {
@@ -18,7 +35,10 @@ namespace SynthLib.Board.Modules
 
         public abstract Connections Outputs { get; }
 
-        public abstract ModuleType Type { get; }
+        /// <summary>
+        /// What kind of output this module provides.
+        /// </summary>
+        public abstract BoardOutput OutputType { get; }
 
         protected bool useable = true;
 

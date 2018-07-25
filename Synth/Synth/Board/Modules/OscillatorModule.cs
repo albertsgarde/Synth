@@ -23,7 +23,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override ModuleType Type { get; } = ModuleType.Standard;
+        public override BoardOutput OutputType { get; } = BoardOutput.None;
 
         private float[] output;
 

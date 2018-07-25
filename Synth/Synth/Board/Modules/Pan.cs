@@ -15,7 +15,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override ModuleType Type => ModuleType.Standard;
+        public override BoardOutput OutputType => BoardOutput.None;
 
         /// <summary>
         /// A value between -1 and 1, where -1 all signal goes to the lowest output (highest index), and 1 means all signal goes to the highest output (lowest index).

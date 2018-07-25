@@ -38,8 +38,8 @@ namespace SynthLib.Board
 
         public void Validate()
         {
-            Debug.Assert(Source.Outputs[SourceIndex] == this, "Connection invalid between modules of types " + Source.Type + " and " + Destination.Type + ".");
-            Debug.Assert(Destination.Inputs[DestinationIndex] == this, "Connection invalid between modules of types " + Source.Type + " and " + Destination.Type + ".");
+            Debug.Assert(Source.Outputs[SourceIndex] == this, "Connection invalid between modules of types " + Source.GetType().Name + " and " + Destination.GetType().Name + ".");
+            Debug.Assert(Destination.Inputs[DestinationIndex] == this, "Connection invalid between modules of types " + Source.GetType().Name + " and " + Destination.GetType().Name + ".");
         }
 
         public void Destroy()

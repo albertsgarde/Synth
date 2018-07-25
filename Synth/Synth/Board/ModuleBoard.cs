@@ -113,9 +113,9 @@ namespace SynthLib.Board
             {
                 curModule = inputTable.modules[i];
                 var output = curModule.Process(inputTable.input[i], Time, IsNoteOn);
-                if (curModule.Type == ModuleType.LeftOut)
+                if (curModule.OutputType == BoardOutput.Left)
                     result.left += output[0];
-                else if (curModule.Type == ModuleType.RightOut)
+                else if (curModule.OutputType == BoardOutput.Right)
                     result.right += output[0];
                 else
                 {
