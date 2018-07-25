@@ -100,8 +100,6 @@ namespace SynthLib.Board
 
         public (float left, float right) Next()
         {
-            if (frequency == 0)
-                return (0, 0);
             ++samples;
             Time = samples * 1000 / SampleRate; 
 
