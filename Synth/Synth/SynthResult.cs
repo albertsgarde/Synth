@@ -15,54 +15,42 @@ namespace SynthLib
 {
     public class SynthResult : ISampleProvider
     {
-        private readonly List<IMidiSampleProvider> addSynthProviders;
+        private IMidiSampleProvider synthProvider;
 
-        private readonly List<IMidiSampleProvider> synthProviders;
+        private IMidiSampleProvider newSynthProvider;
 
         public WaveFormat WaveFormat { get; private set; }
 
         public float Gain { get; set; }
 
-        public SynthResult(int sampleRate, int channel)
+        public SynthResult(int sampleRate)
         {
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channel);
-            addSynthProviders = new List<IMidiSampleProvider>();
-            synthProviders = new List<IMidiSampleProvider>();
+            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 2);
+            synthProvider = null;
+            newSynthProvider = null;
             Gain = 1;
         }
 
-        public void AddSynthProvider(IMidiSampleProvider sp)
+        public void ReplaceSynthProvider(IMidiSampleProvider synthProvider)
         {
-            lock (addSynthProviders)
-                addSynthProviders.Add(sp);
-        }
-
-        private void AddProviders()
-        {
-            lock (addSynthProviders)
-            {
-                synthProviders.AddRange(addSynthProviders);
-                addSynthProviders.Clear();
-            }
+            newSynthProvider = synthProvider;
         }
 
         public int Read(float[] buffer, int offset, int count)
         {
-            AddProviders();
-
-            var spResults = new List<float[]>();
-            foreach (var sp in synthProviders)
-                spResults.Add(sp.Next(count));
-
-            var bufferCount = 0;
-            for (var outI = 0; outI < count; outI++)
+            if (newSynthProvider != null)
             {
-                float sample = 0;
-                foreach (var spr in spResults)
-                    sample += spr[outI];
-                buffer[bufferCount++] = sample * Gain;
-
+                lock (newSynthProvider)
+                {
+                    synthProvider = newSynthProvider;
+                    newSynthProvider = null;
+                }
             }
+            if (synthProvider != null)
+            {
+                synthProvider.Next(buffer, offset, count, Gain);
+            }
+
             return count;
         }
     }

@@ -23,9 +23,7 @@ namespace SynthLib.Board.Modules
 
         public Gains OutputGains { get; }
 
-        private const string TYPE = "Mixer";
-
-        public override string Type { get; } = TYPE;
+        public override ModuleType Type { get; } = ModuleType.Standard;
 
         public Mixer()
         {

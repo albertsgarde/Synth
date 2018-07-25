@@ -38,7 +38,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override string Type => "Envelope";
+        public override ModuleType Type => ModuleType.Standard;
 
         private float[] output;
 

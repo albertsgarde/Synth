@@ -98,14 +98,14 @@ namespace SynthLib.Board
             }
         }
 
-        public float Next()
+        public (float left, float right) Next()
         {
             if (frequency == 0)
-                return 0;
+                return (0, 0);
             ++samples;
             Time = samples * 1000 / SampleRate; 
 
-            float result = 0;
+            var result = (left: 0f, right: 0f);
             Module curModule;
 
             inputTable.ResetInputs();
@@ -113,8 +113,10 @@ namespace SynthLib.Board
             {
                 curModule = inputTable.modules[i];
                 var output = curModule.Process(inputTable.input[i], Time, IsNoteOn);
-                if (curModule.Type == "End")
-                    result += output[0];
+                if (curModule.Type == ModuleType.LeftOut)
+                    result.left += output[0];
+                else if (curModule.Type == ModuleType.RightOut)
+                    result.right += output[0];
                 else
                 {
                     for (int j = 0; j < output.Length; ++j)

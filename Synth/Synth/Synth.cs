@@ -11,6 +11,7 @@ using SynthLib.Data;
 using SynthLib.MidiSampleProviders;
 using NAudio.Midi;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace SynthLib
 {
@@ -32,7 +33,7 @@ namespace SynthLib
 
             SampleRate = Data.SampleRate;
 
-            SynthResult = new SynthResult(SampleRate, 1)
+            SynthResult = new SynthResult(SampleRate)
             {
                 Gain = 1f
             };
@@ -42,6 +43,7 @@ namespace SynthLib
                 DesiredLatency = settings.DesiredLatency,
                 DeviceNumber = -1
             };
+            
             aOut.Init(SynthResult);
             aOut.Play();
 

@@ -18,10 +18,6 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
-        public WaveFormat WaveFormat { get; }
-
-        private readonly int channel;
-
         private readonly float glideSamples;
 
         private readonly float glideTime;
@@ -36,14 +32,11 @@ namespace SynthLib.MidiSampleProviders
         /// 
         /// </summary>
         /// <param name="boardTemplate"></param>
-        /// <param name="channel"></param>
         /// <param name="glideTime">Glide time in milliseconds</param>
         /// <param name="sampleRate"></param>
-        public MonoBoard(BoardTemplate boardTemplate, int channel, float glideTime, int sampleRate = 44100)
+        public MonoBoard(BoardTemplate boardTemplate, float glideTime, int sampleRate = 44100)
         {
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 16);
             SampleRate = sampleRate;
-            this.channel = channel;
             this.boardTemplate = boardTemplate;
             board = boardTemplate.CreateInstance(sampleRate);
             this.glideTime = glideTime;
@@ -53,7 +46,7 @@ namespace SynthLib.MidiSampleProviders
 
         public IMidiSampleProvider Clone()
         {
-            return new MonoBoard(boardTemplate, channel, glideTime, SampleRate);
+            return new MonoBoard(boardTemplate, glideTime, SampleRate);
         }
 
         private bool On => currentTones.Count != 0;
@@ -97,9 +90,9 @@ namespace SynthLib.MidiSampleProviders
 
         }
 
-        public int Read(float[] buffer, int offset, int count)
+        public void Next(float[] buffer, int offset, int count, float gain)
         {
-            for (int i = offset; i < count; ++i)
+            for (int i = offset; i < count + offset; i += 2)
             {
                 board.Frequency += freqPerSample;
                 if (freqPerSample > 0 && board.Frequency > destFreq || freqPerSample < 0 && board.Frequency < destFreq)
@@ -107,9 +100,8 @@ namespace SynthLib.MidiSampleProviders
                     freqPerSample = 0;
                     board.Frequency = destFreq;
                 }
-                buffer[i] = board.Next();
+                (buffer[i], buffer[i + 1]) = board.Next();
             }
-            return count;
         }
     }
 }

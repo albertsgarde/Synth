@@ -11,17 +11,18 @@ namespace SynthLib.MidiSampleProviders
     {
         public int SampleRate { get; }
 
-        public WaveFormat WaveFormat { get; }
-
         private readonly IMidiSampleProvider lowerBoard;
 
         private readonly IMidiSampleProvider upperBoard;
 
         private readonly int splitNoteNumber;
 
+        private float[] lowerResult;
+
+        private float[] upperResult;
+
         public SplitBoard(IMidiSampleProvider lowerBoard, IMidiSampleProvider upperBoard, int splitNoteNumber)
         {
-            Console.WriteLine("Should do something with waveformats");
             this.lowerBoard = lowerBoard.Clone();
             this.upperBoard = upperBoard.Clone();
             this.splitNoteNumber = splitNoteNumber;
@@ -54,15 +55,16 @@ namespace SynthLib.MidiSampleProviders
             upperBoard.HandleControlChange(controllerValue);
         }
 
-        public int Read(float[] buffer, int offset, int count)
+        public void Next(float[] buffer, int offset, int count, float gain)
         {
-            var lowerResult = new float[buffer.Length];
-            var upperResult = new float[buffer.Length];
-            lowerBoard.Read(lowerResult, offset, count);
-            upperBoard.Read(upperResult, offset, count);
-            for (int i = offset; i < count; ++i)
+            lowerResult = new float[buffer.Length];
+            upperResult = new float[buffer.Length];
+            lowerBoard.Next(lowerResult, offset, count, gain);
+            upperBoard.Next(upperResult, offset, count, gain);
+            for (int i = offset; i < offset + count; ++i)
+            {
                 buffer[i] = lowerResult[i] + upperResult[i];
-            return count;
+            }
         }
     }
 }

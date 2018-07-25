@@ -18,16 +18,10 @@ namespace SynthLib.MidiSampleProviders
 
         private readonly int voices;
 
-        private readonly int channel;
-
         public int SampleRate { get; }
 
-        public WaveFormat WaveFormat { get; }
-
-        public PolyBoard(BoardTemplate boardTemplate, int voices, int channel, int sampleRate = 44100)
+        public PolyBoard(BoardTemplate boardTemplate, int voices, int sampleRate = 44100)
         {
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 16);
-            this.channel = channel;
             SampleRate = sampleRate;
             this.boardTemplate = boardTemplate;
             this.voices = voices;
@@ -61,31 +55,30 @@ namespace SynthLib.MidiSampleProviders
 
         public IMidiSampleProvider Clone()
         {
-            return new PolyBoard(boardTemplate, voices, channel, SampleRate);
+            return new PolyBoard(boardTemplate, voices, SampleRate);
         }
 
-        public int Read(float[] buffer, int offset, int count)
+        public void Next(float[] buffer, int offset, int count, float gain)
         {
-            for (int i = 0; i < count; ++i)
+            for (int i = offset; i < count + offset; ++i)
                 buffer[i] = 0;
             Parallel.ForEach(boards, b =>
             {
-                for (int i = 0; i < count; ++i)
+                for (int i = offset; i < count + offset; i += 2)
                 {
-                    var next = b.Next();
+                    var (left, right) = b.Next();
                     lock (buffer)
-                        buffer[i] += next;
+                    {
+                        buffer[i] += left;
+                        buffer[i + 1] += right;
+                    }
                 }
             });
 
-            /*foreach (var b in boards)
+            for (int i = offset; i < count + offset; ++i)
             {
-                for (int i = 0; i < samples; ++i)
-                {
-                    result[i] += b.Next();
-                }
-            }*/
-            return count;
+                buffer[i] *= gain;
+            }
         }
     }
 }

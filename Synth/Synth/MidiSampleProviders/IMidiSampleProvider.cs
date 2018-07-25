@@ -7,7 +7,7 @@ using NAudio.Wave;
 
 namespace SynthLib.MidiSampleProviders
 {
-    public interface IMidiSampleProvider : ISampleProvider
+    public interface IMidiSampleProvider
     {
         int SampleRate { get; }
 
@@ -18,5 +18,7 @@ namespace SynthLib.MidiSampleProviders
         void HandleControlChange(int controllerValue);
 
         IMidiSampleProvider Clone();
+
+        void Next(float[] buffer, int offset, int count, float gain);
     }
 }

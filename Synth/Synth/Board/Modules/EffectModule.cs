@@ -18,7 +18,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override string Type { get; } = "Effect";
+        public override ModuleType Type { get; } = ModuleType.Standard;
 
         public EffectModule()
         {

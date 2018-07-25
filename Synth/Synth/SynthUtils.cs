@@ -11,12 +11,13 @@ using NAudio.Wave;
 using SynthLib.MidiSampleProviders;
 using Stuff.StuffMath;
 using SynthLib.Effects;
+using SynthLib.Data;
 
 namespace SynthLib
 {
     public static class SynthUtils
     {
-        public static void PlayMidiToFile(string midiFile, string destFile, IMidiSampleProvider msp)
+        public static void PlayMidiToFile(string midiFile, string destFile, IMidiSampleProvider msp, SynthData data)
         {
             float sampleNum = 0;
 
@@ -30,7 +31,7 @@ namespace SynthLib
             midi.NoteOn += board.HandleNoteOn;
             midi.NoteOff += board.HandleNoteOff;
 
-            using (var output = new WaveFileWriter(destFile, board.WaveFormat))
+            using (var output = new WaveFileWriter(destFile, WaveFormat.CreateIeeeFloatWaveFormat(data.SampleRate, 2)))
             {
                 int eventCount = 0;
                 foreach (var me in events)
@@ -39,7 +40,7 @@ namespace SynthLib
                     var samples = (int)(absSample - sampleNum);
 
                     var result = new float[samples];
-                    board.Read(result, 0, samples);
+                    board.Next(result, 0, samples, 1);
 
                     output.WriteSamples(result, 0, samples);
                     sampleNum = absSample;
@@ -49,7 +50,7 @@ namespace SynthLib
             }
         }
 
-        public static void PlayMidi(string midiFile, IMidiSampleProvider msp, int desiredLatency)
+        public static void PlayMidi(string midiFile, IMidiSampleProvider msp, SynthData data)
         {
             var file = new MidiFile(midiFile);
             int ticksPerQuarterNote = file.DeltaTicksPerQuarterNote;
@@ -61,12 +62,15 @@ namespace SynthLib
             midi.NoteOn += board.HandleNoteOn;
             midi.NoteOff += board.HandleNoteOff;
 
+            var synthResult = new SynthResult(data.SampleRate);
+            synthResult.ReplaceSynthProvider(board);
+
             var aOut = new WaveOutEvent
             {
-                DesiredLatency = desiredLatency,
+                DesiredLatency = data.DesiredLatency,
                 DeviceNumber = -1
             };
-            aOut.Init(board);
+            aOut.Init(synthResult);
             aOut.Play();
 
             long startTime = DateTime.Now.Ticks;

@@ -23,7 +23,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override string Type { get; } = "Oscillator";
+        public override ModuleType Type { get; } = ModuleType.Standard;
 
         private float[] output;
 

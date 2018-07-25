@@ -10,13 +10,15 @@ using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
+    public enum ModuleType { LeftOut, RightOut, Standard }
+
     public abstract class Module : ISaveable
     {
         public abstract Connections Inputs { get; }
 
         public abstract Connections Outputs { get; }
 
-        public abstract string Type { get; }
+        public abstract ModuleType Type { get; }
 
         protected bool useable = true;
 
@@ -60,7 +62,7 @@ namespace SynthLib.Board.Modules
         {
             Debug.Assert(useable);
             var element = new XElement(name);
-            element.AddValue("type", Type);
+            element.AddValue("type", GetType().Name);
             element.Add(Inputs.ToXElement("inputs"));
             element.Add(Outputs.ToXElement("outputs"));
             return element;

@@ -15,7 +15,7 @@ namespace SynthLib.Board.Modules
 
         public override Connections Outputs { get; }
 
-        public override string Type => "Splitter";
+        public override ModuleType Type => ModuleType.Standard;
 
         /// <summary>
         /// A value between -1 and 1, where -1 all signal goes to the lowest output (highest index), and 1 means all signal goes to the highest output (lowest index).
@@ -24,13 +24,15 @@ namespace SynthLib.Board.Modules
 
         private readonly float[] output;
 
-        public Pan()
+        public Pan() : this(0)
         {
-            useable = false;
+            
         }
 
         public Pan(float pan)
         {
+            Inputs = new ConnectionsArray(1);
+            Outputs = new ConnectionsArray(2);
             output = new float[2];
             this.pan = pan;
         }

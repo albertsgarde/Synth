@@ -48,6 +48,8 @@
     <Compile Include="Board\InvalidModuleSaveElementException.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
+    <Compile Include="Board\Modules\InvalidModuleValue.cs" />
+    <Compile Include="Board\Modules\Pan.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
     <Compile Include="Effects\Filter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
