@@ -37,9 +37,8 @@ namespace SynthLib.Board.Modules
             this.pan = pan;
         }
 
-        private Pan(XElement element)
+        private Pan(XElement element) : this(InvalidModuleSaveElementException.ParseFloat(element.Element("pan")))
         {
-            pan = InvalidModuleSaveElementException.ParseFloat(element.Element("pan"));
         }
 
         protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
