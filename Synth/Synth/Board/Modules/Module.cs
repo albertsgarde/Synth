@@ -42,13 +42,13 @@ namespace SynthLib.Board.Modules
 
         protected bool useable = true;
 
-        public float[] Process(float[] inputs, long time, bool noteOn)
+        public float[] Process(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
             Debug.Assert(useable);
-            return IntProcess(inputs, time, noteOn);
+            return IntProcess(inputs, time, noteOn, moduleBoard);
         }
 
-        protected abstract float[] IntProcess(float[] inputs, long time, bool noteOn);
+        protected abstract float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard);
 
         /// <summary>
         /// Used by module boards. Should not be touched by anything else.

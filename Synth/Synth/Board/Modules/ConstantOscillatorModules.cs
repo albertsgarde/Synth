@@ -77,7 +77,7 @@ namespace SynthLib.Board.Modules
             return new ConstantOscillatorModule(element, data);
         }
 
-        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
             var next = oscillator.NextValue() * gain * (inputs[0] + 1);
             for (int i = 0; i < output.Length; ++i)

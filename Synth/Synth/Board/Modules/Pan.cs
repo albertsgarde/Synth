@@ -41,7 +41,7 @@ namespace SynthLib.Board.Modules
         {
         }
 
-        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
             var curPan = pan + (inputs[0]);
             if (curPan < -1 || curPan > 1)

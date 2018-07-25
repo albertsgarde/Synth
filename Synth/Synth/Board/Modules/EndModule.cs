@@ -58,7 +58,7 @@ namespace SynthLib.Board.Modules
             return new EndModule(element);
         }
 
-        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
             output[0] = 0;
             for (int i = 0; i < inputs.Length; ++i)

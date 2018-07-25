@@ -123,7 +123,7 @@ namespace SynthLib.Board.Modules
             return new Envelope(element, data);
         }
 
-        protected override float[] IntProcess(float[] inputs, long time, bool noteOn)
+        protected override float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
             if (noteOn)
             {
