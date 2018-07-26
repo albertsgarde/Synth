@@ -7,6 +7,7 @@ using NAudio.Wave;
 using SynthLib.Board;
 using SynthLib.Music;
 using System.Diagnostics;
+using NAudio.Midi;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -77,7 +78,7 @@ namespace SynthLib.MidiSampleProviders
                 board.NoteOff();
         }
 
-        public void HandleControlChange(int controllerValueValue)
+        public void HandleControlChange(MidiController controller, int controllerValueValue)
         {
 
         }
