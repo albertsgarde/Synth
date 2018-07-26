@@ -17,7 +17,7 @@ namespace SynthLib
 
         public IReadOnlyCollection<int> CurrentNoteNumbers { get; private set; }
 
-        public delegate void ControlChangeEventHandler(int controllerValue);
+        public delegate void ControlChangeEventHandler(MidiController controller, int controllerValue);
 
         public event ControlChangeEventHandler ControlChange;
 
@@ -78,9 +78,9 @@ namespace SynthLib
             NoteOff?.Invoke(noteNumber);
         }
 
-        private void HandleControlChange(int controllerValue)
+        private void HandleControlChange(MidiController controller, int controllerValue)
         {
-            ControlChange?.Invoke(controllerValue);
+            ControlChange?.Invoke(controller, controllerValue);
         }
 
         private void HandleTempoChange(int microsecondsPerQuarterNote)
@@ -101,7 +101,7 @@ namespace SynthLib
                     HandleTempoChange(((TempoEvent)me).MicrosecondsPerQuarterNote);
             }
             else if (me.CommandCode == MidiCommandCode.ControlChange)
-                HandleControlChange(((ControlChangeEvent)me).ControllerValue);
+                HandleControlChange(((ControlChangeEvent)me).Controller, ((ControlChangeEvent)me).ControllerValue);
         }
 
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NAudio.Midi;
 using NAudio.Wave;
 
 namespace SynthLib.MidiSampleProviders
@@ -49,10 +50,10 @@ namespace SynthLib.MidiSampleProviders
                 upperBoard.HandleNoteOff(noteNumber);
         }
 
-        public void HandleControlChange(int controllerValue)
+        public void HandleControlChange(MidiController controller, int controllerValue)
         {
-            lowerBoard.HandleControlChange(controllerValue);
-            upperBoard.HandleControlChange(controllerValue);
+            lowerBoard.HandleControlChange(controller, controllerValue);
+            upperBoard.HandleControlChange(controller, controllerValue);
         }
 
         public void Next(float[] buffer, int offset, int count, float gain)

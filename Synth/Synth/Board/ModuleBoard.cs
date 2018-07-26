@@ -8,6 +8,7 @@ using System.Diagnostics;
 using SynthLib.Board.Modules;
 
 using Stuff;
+using NAudio.Midi;
 
 namespace SynthLib.Board
 {
@@ -15,7 +16,11 @@ namespace SynthLib.Board
     {
         private Module[] modules;
 
-        private InputTable inputTable;
+        private readonly InputTable inputTable;
+
+        private readonly List<int> controllerValues;
+
+        public IReadOnlyList<int> ControllerValues => controllerValues;
 
         private float frequency;
 
@@ -37,14 +42,18 @@ namespace SynthLib.Board
 
         public ModuleBoard(Module[] modules, int sampleRate = 44100)
         {
+            SampleRate = sampleRate;
+
             this.modules = modules;
             SortModules();
             for (int i = 0; i < modules.Length; ++i)
                 this.modules[i].num = i;
 
+            controllerValues = new List<int>(128);
+            for (int i = 0; i < controllerValues.Capacity; ++i)
+                controllerValues[i] = 0;
+
             inputTable = new InputTable(this.modules);
-            
-            SampleRate = sampleRate;
 
             frequency = 0;
 
@@ -77,6 +86,11 @@ namespace SynthLib.Board
             Time = 0;
             IsNoteOn = false;
             samples = 0;
+        }
+
+        public void ControllerChange(MidiController controller, int controllerValue)
+        {
+            controllerValues[(int)controller] = controllerValue;
         }
 
         private void SortModules()

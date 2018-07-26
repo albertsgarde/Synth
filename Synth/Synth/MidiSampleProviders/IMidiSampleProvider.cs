@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
+using NAudio.Midi;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -15,7 +16,7 @@ namespace SynthLib.MidiSampleProviders
 
         void HandleNoteOff(int noteNumber);
 
-        void HandleControlChange(int controllerValue);
+        void HandleControlChange(MidiController controller, int controllerValue);
 
         IMidiSampleProvider Clone();
 
