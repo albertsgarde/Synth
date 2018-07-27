@@ -27,32 +27,41 @@ namespace SynthLib
 
         private readonly Midi midi;
 
-        public Synth(SynthData settings)
+        public Synth(SynthData data)
         {
-            Data = settings;
-
-            SampleRate = Data.SampleRate;
-
-            SynthResult = new SynthResult(SampleRate)
+            try
             {
-                Gain = 1f
-            };
+                Data = data;
 
-            var aOut = new WaveOutEvent
+                SampleRate = Data.SampleRate;
+
+                SynthResult = new SynthResult(SampleRate)
+                {
+                    Gain = 1f
+                };
+
+                var aOut = new WaveOutEvent
+                {
+                    DesiredLatency = data.DesiredLatency,
+                    DeviceNumber = -1
+                };
+
+                aOut.Init(SynthResult);
+                aOut.Play();
+
+                midi = new Midi(2);
+                midi.SetMidiIn(0);
+
+                board = new BoardTemplate();
+                SetupBoard(Data);
+                Setup(Data);
+            }
+            catch (Exception e)
             {
-                DesiredLatency = settings.DesiredLatency,
-                DeviceNumber = -1
-            };
-            
-            aOut.Init(SynthResult);
-            aOut.Play();
-
-            midi = new Midi(2);
-            midi.SetMidiIn(0);
-
-            board = new BoardTemplate();
-            SetupBoard(Data);
-            Setup(Data);
+                data.Log.Log("loadError", "Logged exception. See loadExceptions.txt");
+                data.Log.Log("loadExceptions", e);
+                throw e;
+            }
         }
 
         partial void SetupBoard(SynthData data);

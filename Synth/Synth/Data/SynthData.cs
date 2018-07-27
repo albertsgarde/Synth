@@ -55,21 +55,17 @@ namespace SynthLib.Data
             settings = SettingsLoader.LoadSettings(settingsPath);
 
             Root = settings.GetString("paths", "root");
+            if (!File.GetAttributes(Root).HasFlag(FileAttributes.Directory))
+                throw new SettingsException("paths", "key", "root path must be a directory");
 
             Log = new Logger(new PathList(settings.GetStrings("paths", "log"), Root).Root);
 
             SampleRate = settings.GetInt("main", "sampleRate");
             DesiredLatency = settings.GetInt("main", "desiredLatency");
             PitchWheelRange = settings.GetFloat("main", "pitchWheelChange");
-            Console.WriteLine("Should error log if root path isn't a directory.");
-            if (!File.GetAttributes(Root).HasFlag(FileAttributes.Directory))
-                throw new SettingsException("paths", "key", "root path must be a directory");
             BoardPaths = new PathList(settings.GetStrings("paths", "boards"), Root);
-            Console.WriteLine("Should error log if no directory paths are given.");
             MidiPaths = new PathList(settings.GetStrings("paths", "midi"), Root);
-            Console.WriteLine("Should error log if no directory paths are given.");
             WavPaths = new PathList(settings.GetStrings("paths", "wav"), Root);
-            Console.WriteLine("Should error log if no directory paths are given.");
 
             ModuleTypePaths = new PathList(settings.GetStrings("paths", "moduleTypes"), Root);
             OscillatorPaths = new PathList(settings.GetStrings("paths", "oscillatorTypes"), Root);
