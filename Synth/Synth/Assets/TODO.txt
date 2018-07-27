@@ -19,7 +19,6 @@
 	Documentation
 		Make it clear exactly what the Clone methods should do.
 	Add values to simpleFilter.
-	Log
 	Log all midiinputs so they can be replayed later for debugging.
 	Other midi inputs.
 	A module holds a ModuleType from which it calls stuff?
