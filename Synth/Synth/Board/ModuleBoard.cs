@@ -24,11 +24,13 @@ namespace SynthLib.Board
 
         public IReadOnlyList<int> ControllerValues => controllerValues;
 
+        public int PitchWheel { get; private set; }
+
         private readonly float pitchWheelRange;
 
         private float baseFrequency;
 
-        private float pitchWheelMultiplier;
+        private float frequencyModifier;
 
         private float frequency;
 
@@ -63,15 +65,18 @@ namespace SynthLib.Board
             controllerValues = new List<int>(128);
             for (int i = 0; i < controllerValues.Capacity; ++i)
                 controllerValues.Add(64);
+            PitchWheel = 8192;
 
             inputTable = new InputTable(this.modules);
 
             baseFrequency = 0;
-            pitchWheelMultiplier = 0;
+            frequencyModifier = 1;
             frequency = baseFrequency;
 
             Time = 0;
             samples = 0;
+
+            UpdateFrequency();
         }
 
         public float BaseFrequency
@@ -86,7 +91,7 @@ namespace SynthLib.Board
 
         private void UpdateFrequency()
         {
-            frequency = baseFrequency * (float)Tone.FrequencyMultiplierFromNoteOffset(pitchWheelMultiplier);
+            frequency = baseFrequency * (float)Tone.FrequencyMultiplierFromNoteOffset(frequencyModifier);
             foreach (var mod in modules)
                 mod.UpdateFrequency(frequency);
         }
@@ -109,11 +114,7 @@ namespace SynthLib.Board
 
         public void PitchWheelChange(int pitch)
         {
-            float pitchMultiplierMultiplier = ((float)pitch / 8192) - 1;
-            pitchWheelMultiplier = pitchMultiplierMultiplier * pitchWheelRange;
-            UpdateFrequency();
-
-            Console.WriteLine($"Pitch: {pitch}, {pitchMultiplierMultiplier}, multiplier: {pitchWheelMultiplier}");
+            PitchWheel = pitch;
         }
 
         public void ControllerChange(MidiController controller, int controllerValue)
@@ -143,6 +144,7 @@ namespace SynthLib.Board
         public (float left, float right) Next()
         {
             GlideModifier = 1;
+            frequencyModifier = 1;
 
             ++samples;
             Time = samples * 1000 / SampleRate; 
@@ -165,6 +167,10 @@ namespace SynthLib.Board
                         break;
                     case BoardOutput.GlideTime:
                         GlideModifier *= output[0];
+                        break;
+                    case BoardOutput.PitchShift:
+                        frequencyModifier *= output[0] * pitchWheelRange;
+                        UpdateFrequency();
                         break;
                     case BoardOutput.None:
                         for (int j = 0; j < output.Length; ++j)

@@ -16,19 +16,23 @@ namespace SynthLib.Board.Modules
     public enum BoardOutput
     {
         /// <summary>
-        /// This module's output[0] is added to the boards left output channel.
+        /// This module's output[0] is added to the board's left output channel.
         /// </summary>
         Left,
         /// <summary>
-        /// This module's output[0] is added to the boards right output channel.
+        /// This module's output[0] is added to the board's right output channel.
         /// </summary>
         Right,
         /// <summary>
-        /// This module's output[0] is multplied with the boards glide channel.
+        /// This module's output[0] is multplied with the board's glide channel.
         /// </summary>
         GlideTime,
         /// <summary>
-        /// This module does not contribute directly to the board output.
+        /// This module's output[0] is multiplied by the board's pitch wheel range and added to the boards tone.
+        /// </summary>
+        PitchShift,
+        /// <summary>
+        /// This module has no special board hook.
         /// </summary>
         None
     }

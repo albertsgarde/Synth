@@ -52,6 +52,8 @@
     <Compile Include="Board\Modules\InvalidModuleValue.cs" />
     <Compile Include="Board\Modules\MidiControllerModule.cs" />
     <Compile Include="Board\Modules\Pan.cs" />
+    <Compile Include="Board\Modules\PitchShiftModule.cs" />
+    <Compile Include="Board\Modules\PitchWheelModule.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
     <Compile Include="Effects\Filter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />

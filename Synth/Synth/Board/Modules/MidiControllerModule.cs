@@ -24,7 +24,7 @@ namespace SynthLib.Board.Modules
 
         private readonly float[] output;
 
-        private const float TWO_OVER_128 = 2f/128;
+        public const float TWO_OVER_128 = 2f/128;
 
         public MidiControllerModule()
         {
