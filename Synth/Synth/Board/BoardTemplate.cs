@@ -113,6 +113,17 @@ namespace SynthLib.Board
                 AddConnection(modules[i - 1], modules[i]);
         }
 
+        /// <summary>
+        /// Adds an entire other board to this board.
+        /// </summary>
+        public void AddBoard(BoardTemplate bt)
+        {
+            foreach (var mod in bt.modules.Keys2)
+                Add(mod);
+            foreach (var con in bt.connections)
+                AddConnection(bt.modules[con.Source], bt.modules[con.Dest], con.SourceIndex, con.DestIndex);
+        }
+
         private void CreateConnection(ConnectionTemplate ct, CrossReferencedDictionary<string, Module> modules)
         {
             if (ct.SourceIndex == -1)
