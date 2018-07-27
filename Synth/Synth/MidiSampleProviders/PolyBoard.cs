@@ -49,9 +49,10 @@ namespace SynthLib.MidiSampleProviders
             }
         }
 
-        public void HandleControlChange(MidiController controller, int controllerValueValue)
+        public void HandleControlChange(MidiController controller, int controllerValue)
         {
-
+            foreach(var mb in boards)
+                mb.ControllerChange(controller, controllerValue);
         }
 
         public IMidiSampleProvider Clone()

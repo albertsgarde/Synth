@@ -51,7 +51,7 @@ namespace SynthLib.Board
 
             controllerValues = new List<int>(128);
             for (int i = 0; i < controllerValues.Capacity; ++i)
-                controllerValues[i] = 0;
+                controllerValues.Add(64);
 
             inputTable = new InputTable(this.modules);
 

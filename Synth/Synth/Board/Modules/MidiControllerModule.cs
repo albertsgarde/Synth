@@ -9,7 +9,10 @@ using SynthLib.Data;
 
 namespace SynthLib.Board.Modules
 {
-    public class MidiController : Module
+    /// <summary>
+    /// Outputs a value between -1 and 1 depending on the value of the given midicontroller.
+    /// </summary>
+    public class MidiControllerModule : Module
     {
         public override Connections Inputs { get; }
 
@@ -21,32 +24,34 @@ namespace SynthLib.Board.Modules
 
         private readonly float[] output;
 
-        public MidiController()
+        private const float TWO_OVER_128 = 2f/128;
+
+        public MidiControllerModule()
         {
             useable = false;
         }
 
-        public MidiController(int controller)
+        public MidiControllerModule(int controller)
         {
             this.controller = controller;
             output = new float[1];
             Inputs = new ConnectionsArray(0);
-            Outputs = new ConnectionsArray(0);
+            Outputs = new ConnectionsArray(1);
         }
 
         public override Module Clone(int sampleRate = 44100)
         {
-            return new MidiController(controller);
+            return new MidiControllerModule(controller);
         }
 
         public override Module CreateInstance(XElement element, SynthData data)
         {
-            return new MidiController(InvalidModuleSaveElementException.ParseInt(element.Element("controller")));
+            return new MidiControllerModule(InvalidModuleSaveElementException.ParseInt(element.Element("controller")));
         }
 
         protected override float[] IntProcess(float[] inputs, long time, bool noteOn, ModuleBoard moduleBoard)
         {
-            output[0] = moduleBoard.ControllerValues[controller];
+            output[0] = moduleBoard.ControllerValues[controller] * TWO_OVER_128 - 1;
             return output;
         }
 

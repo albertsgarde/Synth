@@ -13,7 +13,7 @@ namespace SynthLib.Effects
     {
         public override string Type => "Boost";
 
-        public override int Values => 1;
+        public override int Values => 1; // 0: Gain modifier;
 
         public float Gain { get; }
 
