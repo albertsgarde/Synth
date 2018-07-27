@@ -48,6 +48,7 @@
     <Compile Include="Board\InvalidModuleSaveElementException.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
+    <Compile Include="Board\Modules\GlideModifier.cs" />
     <Compile Include="Board\Modules\InvalidModuleValue.cs" />
     <Compile Include="Board\Modules\MidiControllerModule.cs" />
     <Compile Include="Board\Modules\Pan.cs" />

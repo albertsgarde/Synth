@@ -20,13 +20,16 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
-        private readonly float glideSamples;
+        private readonly float baseGlideSamples;
 
-        private readonly float glideTime;
+        private readonly float baseGlideTime;
+        private float glideSamples;
 
         private float destFreq;
 
-        private float freqPerSample;
+        private float baseFreqPerSample;
+
+        private float freqPerSampleMod;
 
         private List<int> currentTones;
 
@@ -41,14 +44,16 @@ namespace SynthLib.MidiSampleProviders
             SampleRate = data.SampleRate;
             this.boardTemplate = boardTemplate;
             board = boardTemplate.CreateInstance(data);
-            this.glideTime = glideTime;
-            glideSamples = (glideTime * SampleRate / 1000);
+            baseGlideTime = glideTime;
+            glideSamples = baseGlideSamples = (glideTime * SampleRate / 1000);
+            baseFreqPerSample = 10e8f;
+            freqPerSampleMod = 1;
             currentTones = new List<int>();
         }
 
         public IMidiSampleProvider Clone(SynthData data)
         {
-            return new MonoBoard(boardTemplate, glideTime, data);
+            return new MonoBoard(boardTemplate, baseGlideTime, data);
         }
 
         private bool On => currentTones.Count != 0;
@@ -66,7 +71,7 @@ namespace SynthLib.MidiSampleProviders
             {
                 board.NoteOn(noteNumber);
                 currentTones.Add(noteNumber);
-                freqPerSample = 0;
+                baseFreqPerSample = 0;
             }
         }
 
@@ -93,7 +98,7 @@ namespace SynthLib.MidiSampleProviders
         {
             Debug.Assert(On);
             destFreq = (float)Tone.FrequencyFromNote(noteNumber);
-            freqPerSample = (destFreq - board.BaseFrequency) / glideSamples;
+            baseFreqPerSample = (destFreq - board.BaseFrequency) / glideSamples;
 
         }
 
@@ -101,10 +106,10 @@ namespace SynthLib.MidiSampleProviders
         {
             for (int i = offset; i < count + offset; i += 2)
             {
-                board.BaseFrequency += freqPerSample;
-                if (freqPerSample > 0 && board.BaseFrequency > destFreq || freqPerSample < 0 && board.BaseFrequency < destFreq)
+                board.BaseFrequency += baseFreqPerSample / board.GlideModifier;
+                if (baseFreqPerSample > 0 && board.BaseFrequency > destFreq || baseFreqPerSample < 0 && board.BaseFrequency < destFreq)
                 {
-                    freqPerSample = 0;
+                    baseFreqPerSample = 0;
                     board.BaseFrequency = destFreq;
                 }
                 (buffer[i], buffer[i + 1]) = board.Next();

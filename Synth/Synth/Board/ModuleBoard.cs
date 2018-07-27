@@ -48,6 +48,8 @@ namespace SynthLib.Board
 
         public int SampleRate { get; }
 
+        public float GlideModifier { get; private set; }
+
         public ModuleBoard(Module[] modules, SynthData data)
         {
             SampleRate = data.SampleRate;
@@ -140,6 +142,8 @@ namespace SynthLib.Board
 
         public (float left, float right) Next()
         {
+            GlideModifier = 1;
+
             ++samples;
             Time = samples * 1000 / SampleRate; 
 
@@ -151,20 +155,27 @@ namespace SynthLib.Board
             {
                 curModule = inputTable.modules[i];
                 var output = curModule.Process(inputTable.input[i], Time, IsNoteOn, this);
-                if (curModule.OutputType == BoardOutput.Left)
-                    result.left += output[0];
-                else if (curModule.OutputType == BoardOutput.Right)
-                    result.right += output[0];
-                else
+                switch (curModule.OutputType)
                 {
-                    for (int j = 0; j < output.Length; ++j)
-                    {
-                        if (curModule.Outputs[j] != null)
+                    case BoardOutput.Left:
+                        result.left += output[0];
+                        break;
+                    case BoardOutput.Right:
+                        result.right += output[0];
+                        break;
+                    case BoardOutput.GlideTime:
+                        GlideModifier *= output[0];
+                        break;
+                    case BoardOutput.None:
+                        for (int j = 0; j < output.Length; ++j)
                         {
-                            var dest = curModule.Outputs[j];
-                            inputTable.input[dest.Destination.num][dest.DestinationIndex] = output[j];
+                            if (curModule.Outputs[j] != null)
+                            {
+                                var dest = curModule.Outputs[j];
+                                inputTable.input[dest.Destination.num][dest.DestinationIndex] = output[j];
+                            }
                         }
-                    }
+                        break;
                 }
             }
             return result;
