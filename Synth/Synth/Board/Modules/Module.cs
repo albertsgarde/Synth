@@ -28,9 +28,13 @@ namespace SynthLib.Board.Modules
         /// </summary>
         GlideTime,
         /// <summary>
-        /// This module's output[0] is multiplied by the board's pitch wheel range and added to the boards tone.
+        /// This module's output[0] is multiplied by the board's pitch wheel range and added to the board's tone.
         /// </summary>
         PitchShift,
+        /// <summary>
+        /// This module's output[0] is multiplied with the board's gain.
+        /// </summary>
+        Gain,
         /// <summary>
         /// This module has no special board hook.
         /// </summary>

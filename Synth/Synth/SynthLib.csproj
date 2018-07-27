@@ -48,11 +48,10 @@
     <Compile Include="Board\InvalidModuleSaveElementException.cs" />
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
-    <Compile Include="Board\Modules\GlideModifier.cs" />
+    <Compile Include="Board\Modules\BoardModifierModule.cs" />
     <Compile Include="Board\Modules\InvalidModuleValue.cs" />
     <Compile Include="Board\Modules\MidiControllerModule.cs" />
     <Compile Include="Board\Modules\Pan.cs" />
-    <Compile Include="Board\Modules\PitchShiftModule.cs" />
     <Compile Include="Board\Modules\PitchWheelModule.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
     <Compile Include="Effects\Filter.cs" />

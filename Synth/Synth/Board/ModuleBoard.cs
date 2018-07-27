@@ -34,6 +34,8 @@ namespace SynthLib.Board
 
         private float frequency;
 
+        private float gain;
+
         /// <summary>
         /// Time in milliseconds since last note event.
         /// </summary>
@@ -72,6 +74,8 @@ namespace SynthLib.Board
             baseFrequency = 0;
             frequencyModifier = 1;
             frequency = baseFrequency;
+
+            gain = 1;
 
             Time = 0;
             samples = 0;
@@ -145,6 +149,7 @@ namespace SynthLib.Board
         {
             GlideModifier = 1;
             frequencyModifier = 1;
+            gain = 1;
 
             ++samples;
             Time = samples * 1000 / SampleRate; 
@@ -172,6 +177,9 @@ namespace SynthLib.Board
                         frequencyModifier *= output[0] * pitchWheelRange;
                         UpdateFrequency();
                         break;
+                    case BoardOutput.Gain:
+                        gain *= output[0];
+                        break;
                     case BoardOutput.None:
                         for (int j = 0; j < output.Length; ++j)
                         {
@@ -184,7 +192,7 @@ namespace SynthLib.Board
                         break;
                 }
             }
-            return result;
+            return (result.left * gain, result.right * gain);
         }
 
         private struct InputTable
