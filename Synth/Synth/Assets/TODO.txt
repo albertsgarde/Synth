@@ -14,6 +14,7 @@
 	Oscillators
 		Noise
 		Custom (samplewise)
+	Fix high pitched sound when attacking low notes.
 	Tests
 	Documentation
 		Make it clear exactly what the Clone methods should do.
