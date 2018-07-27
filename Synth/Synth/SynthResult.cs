@@ -10,6 +10,7 @@ using SynthLib.Oscillators;
 using SynthLib.Effects;
 using Stuff;
 using SynthLib.MidiSampleProviders;
+using SynthLib.Data;
 
 namespace SynthLib
 {
@@ -21,11 +22,14 @@ namespace SynthLib
 
         public WaveFormat WaveFormat { get; private set; }
 
+        public SynthData Data { get; }
+
         public float Gain { get; set; }
 
-        public SynthResult(int sampleRate)
+        public SynthResult(SynthData data)
         {
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 2);
+            Data = data;
+            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(data.SampleRate, 2);
             synthProvider = null;
             newSynthProvider = null;
             Gain = 1;
@@ -38,17 +42,25 @@ namespace SynthLib
 
         public int Read(float[] buffer, int offset, int count)
         {
-            if (newSynthProvider != null)
+            try
             {
-                lock (newSynthProvider)
+                if (newSynthProvider != null)
                 {
-                    synthProvider = newSynthProvider;
-                    newSynthProvider = null;
+                    lock (newSynthProvider)
+                    {
+                        synthProvider = newSynthProvider;
+                        newSynthProvider = null;
+                    }
+                }
+                if (synthProvider != null)
+                {
+                    synthProvider.Next(buffer, offset, count, Gain);
                 }
             }
-            if (synthProvider != null)
+            catch(Exception e)
             {
-                synthProvider.Next(buffer, offset, count, Gain);
+                Data.Log.Log("exceptions", e);
+                throw e;
             }
 
             return count;
