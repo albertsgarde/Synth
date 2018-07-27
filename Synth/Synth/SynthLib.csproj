@@ -92,6 +92,7 @@
     <Compile Include="Music\Tone.cs" />
     <Compile Include="Oscillators\CompoundOscillator.cs" />
     <Compile Include="Oscillators\CustomOscillator.cs" />
+    <Compile Include="Oscillators\DCOscillator.cs" />
     <Compile Include="Oscillators\InvalidOscillatorSaveElementException.cs" />
     <Compile Include="Oscillators\Oscillator.cs" />
     <Compile Include="Oscillators\RandomOscillator.cs" />

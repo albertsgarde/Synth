@@ -62,7 +62,7 @@ namespace SynthLib
             midi.NoteOn += board.HandleNoteOn;
             midi.NoteOff += board.HandleNoteOff;
 
-            var synthResult = new SynthResult(data.SampleRate);
+            var synthResult = new SynthResult(data);
             synthResult.ReplaceSynthProvider(board);
 
             var aOut = new WaveOutEvent

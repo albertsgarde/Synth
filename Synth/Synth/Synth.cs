@@ -35,7 +35,7 @@ namespace SynthLib
 
                 SampleRate = Data.SampleRate;
 
-                SynthResult = new SynthResult(SampleRate)
+                SynthResult = new SynthResult(data)
                 {
                     Gain = 1f
                 };
