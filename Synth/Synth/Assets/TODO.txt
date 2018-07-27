@@ -21,7 +21,6 @@
 	Add values to simpleFilter.
 	Log all midiinputs so they can be replayed later for debugging.
 	Other midi inputs.
-	A module holds a ModuleType from which it calls stuff?
 
 Music:
 	Let most music data be in a single object that can then be passed around.
