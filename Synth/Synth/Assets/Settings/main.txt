@@ -1,2 +1,3 @@
 ﻿sampleRate 44100
 desiredLatency 64
+pitchWheelChange 1

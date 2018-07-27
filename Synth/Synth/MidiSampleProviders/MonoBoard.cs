@@ -8,6 +8,7 @@ using SynthLib.Board;
 using SynthLib.Music;
 using System.Diagnostics;
 using NAudio.Midi;
+using SynthLib.Data;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -35,19 +36,19 @@ namespace SynthLib.MidiSampleProviders
         /// <param name="boardTemplate"></param>
         /// <param name="glideTime">Glide time in milliseconds</param>
         /// <param name="sampleRate"></param>
-        public MonoBoard(BoardTemplate boardTemplate, float glideTime, int sampleRate = 44100)
+        public MonoBoard(BoardTemplate boardTemplate, float glideTime, SynthData data)
         {
-            SampleRate = sampleRate;
+            SampleRate = data.SampleRate;
             this.boardTemplate = boardTemplate;
-            board = boardTemplate.CreateInstance(sampleRate);
+            board = boardTemplate.CreateInstance(data);
             this.glideTime = glideTime;
             glideSamples = (glideTime * SampleRate / 1000);
             currentTones = new List<int>();
         }
 
-        public IMidiSampleProvider Clone()
+        public IMidiSampleProvider Clone(SynthData data)
         {
-            return new MonoBoard(boardTemplate, glideTime, SampleRate);
+            return new MonoBoard(boardTemplate, glideTime, data);
         }
 
         private bool On => currentTones.Count != 0;
@@ -78,6 +79,11 @@ namespace SynthLib.MidiSampleProviders
                 board.NoteOff();
         }
 
+        public void HandlePitchWheelChange(int pitch)
+        {
+            board.PitchWheelChange(pitch);
+        }
+
         public void HandleControlChange(MidiController controller, int controllerValue)
         {
             board.ControllerChange(controller, controllerValue);
@@ -87,7 +93,7 @@ namespace SynthLib.MidiSampleProviders
         {
             Debug.Assert(On);
             destFreq = (float)Tone.FrequencyFromNote(noteNumber);
-            freqPerSample = (destFreq - board.Frequency) / glideSamples;
+            freqPerSample = (destFreq - board.BaseFrequency) / glideSamples;
 
         }
 
@@ -95,11 +101,11 @@ namespace SynthLib.MidiSampleProviders
         {
             for (int i = offset; i < count + offset; i += 2)
             {
-                board.Frequency += freqPerSample;
-                if (freqPerSample > 0 && board.Frequency > destFreq || freqPerSample < 0 && board.Frequency < destFreq)
+                board.BaseFrequency += freqPerSample;
+                if (freqPerSample > 0 && board.BaseFrequency > destFreq || freqPerSample < 0 && board.BaseFrequency < destFreq)
                 {
                     freqPerSample = 0;
-                    board.Frequency = destFreq;
+                    board.BaseFrequency = destFreq;
                 }
                 (buffer[i], buffer[i + 1]) = board.Next();
             }

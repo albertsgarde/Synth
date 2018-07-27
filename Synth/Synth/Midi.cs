@@ -21,6 +21,10 @@ namespace SynthLib
 
         public event ControlChangeEventHandler ControlChange;
 
+        public delegate void PitchWheelChangeEventHandler(int pitch);
+
+        public event PitchWheelChangeEventHandler PitchWheelChange;
+
         public delegate void NoteEventHandler(int noteNumber);
 
         public event NoteEventHandler NoteOn;
@@ -78,6 +82,11 @@ namespace SynthLib
             NoteOff?.Invoke(noteNumber);
         }
 
+        private void HandlePitchWheelChange(int pitch)
+        {
+            PitchWheelChange?.Invoke(pitch);
+        }
+
         private void HandleControlChange(MidiController controller, int controllerValue)
         {
             ControlChange?.Invoke(controller, controllerValue);
@@ -94,14 +103,16 @@ namespace SynthLib
                 HandleNoteOn(((NoteOnEvent)me).NoteNumber);
             else if (MidiEvent.IsNoteOff(me))
                 HandleNoteOff(((NoteEvent)me).NoteNumber);
+            else if (me.CommandCode == MidiCommandCode.PitchWheelChange)
+                HandlePitchWheelChange(((PitchWheelChangeEvent)me).Pitch);
+            else if (me.CommandCode == MidiCommandCode.ControlChange)
+                HandleControlChange(((ControlChangeEvent)me).Controller, ((ControlChangeEvent)me).ControllerValue);
             else if (me.CommandCode == MidiCommandCode.MetaEvent)
             {
                 Debug.Assert(me is MetaEvent);
                 if (me is TempoEvent)
                     HandleTempoChange(((TempoEvent)me).MicrosecondsPerQuarterNote);
             }
-            else if (me.CommandCode == MidiCommandCode.ControlChange)
-                HandleControlChange(((ControlChangeEvent)me).Controller, ((ControlChangeEvent)me).ControllerValue);
         }
 
         private void HandleMidiIn(object sender, MidiInMessageEventArgs e)

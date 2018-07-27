@@ -26,7 +26,7 @@ namespace SynthLib
             var events = file.Events.Aggregate((IEnumerable<MidiEvent>)new List<MidiEvent>(), (totalList, list) => totalList.Concat(list)).OrderBy(me => me.AbsoluteTime);
             var totalEvents = events.Count();
 
-            var board = msp.Clone();
+            var board = msp.Clone(data);
             var midi = new Midi(ticksPerQuarterNote);
             midi.NoteOn += board.HandleNoteOn;
             midi.NoteOff += board.HandleNoteOff;
@@ -57,7 +57,7 @@ namespace SynthLib
             var events = file.Events.Aggregate((IEnumerable<MidiEvent>)new List<MidiEvent>(), (totalList, list) => totalList.Concat(list)).OrderBy(me => me.AbsoluteTime);
             var totalEvents = events.Count();
 
-            var board = msp.Clone();
+            var board = msp.Clone(data);
             var midi = new Midi(ticksPerQuarterNote);
             midi.NoteOn += board.HandleNoteOn;
             midi.NoteOff += board.HandleNoteOff;

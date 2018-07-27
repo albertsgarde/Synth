@@ -21,6 +21,10 @@ namespace SynthLib.Data
     {
         public int SampleRate { get; }
         public int DesiredLatency { get; }
+        /// <summary>
+        /// How far the pitch wheel can bend. In semitones.
+        /// </summary>
+        public float PitchWheelRange { get; }
 
         public string Root { get; }
 
@@ -50,6 +54,7 @@ namespace SynthLib.Data
 
             SampleRate = settings.GetInt("main", "sampleRate");
             DesiredLatency = settings.GetInt("main", "desiredLatency");
+            PitchWheelRange = settings.GetFloat("main", "pitchWheelChange");
 
             Root = settings.GetString("paths", "root");
             Console.WriteLine("Should error log if root path isn't a directory.");

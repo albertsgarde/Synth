@@ -9,6 +9,8 @@ using SynthLib.Board.Modules;
 
 using Stuff;
 using NAudio.Midi;
+using SynthLib.Data;
+using SynthLib.Music;
 
 namespace SynthLib.Board
 {
@@ -21,6 +23,12 @@ namespace SynthLib.Board
         private readonly List<int> controllerValues;
 
         public IReadOnlyList<int> ControllerValues => controllerValues;
+
+        private readonly float pitchWheelRange;
+
+        private float baseFrequency;
+
+        private float pitchWheelMultiplier;
 
         private float frequency;
 
@@ -40,9 +48,10 @@ namespace SynthLib.Board
 
         public int SampleRate { get; }
 
-        public ModuleBoard(Module[] modules, int sampleRate = 44100)
+        public ModuleBoard(Module[] modules, SynthData data)
         {
-            SampleRate = sampleRate;
+            SampleRate = data.SampleRate;
+            pitchWheelRange = data.PitchWheelRange;
 
             this.modules = modules;
             SortModules();
@@ -55,26 +64,34 @@ namespace SynthLib.Board
 
             inputTable = new InputTable(this.modules);
 
-            frequency = 0;
+            baseFrequency = 0;
+            pitchWheelMultiplier = 0;
+            frequency = baseFrequency;
 
             Time = 0;
             samples = 0;
         }
 
-        public float Frequency
+        public float BaseFrequency
         {
-            get => frequency;
+            get => baseFrequency;
             set
             {
-                frequency = value;
-                foreach (var mod in modules)
-                    mod.UpdateFrequency(value);
+                baseFrequency = value;
+                UpdateFrequency();
             }
+        }
+
+        private void UpdateFrequency()
+        {
+            frequency = baseFrequency * (float)Tone.FrequencyMultiplierFromNoteOffset(pitchWheelMultiplier);
+            foreach (var mod in modules)
+                mod.UpdateFrequency(frequency);
         }
 
         public void NoteOn(int note)
         {
-            Frequency = Midi.Frequencies[note];
+            BaseFrequency = Midi.Frequencies[note];
             Note = note;
             Time = 0;
             IsNoteOn = true;
@@ -86,6 +103,15 @@ namespace SynthLib.Board
             Time = 0;
             IsNoteOn = false;
             samples = 0;
+        }
+
+        public void PitchWheelChange(int pitch)
+        {
+            float pitchMultiplierMultiplier = ((float)pitch / 8192) - 1;
+            pitchWheelMultiplier = pitchMultiplierMultiplier * pitchWheelRange;
+            UpdateFrequency();
+
+            Console.WriteLine($"Pitch: {pitch}, {pitchMultiplierMultiplier}, multiplier: {pitchWheelMultiplier}");
         }
 
         public void ControllerChange(MidiController controller, int controllerValue)

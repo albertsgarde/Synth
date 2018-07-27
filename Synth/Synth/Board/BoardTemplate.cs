@@ -122,7 +122,7 @@ namespace SynthLib.Board
             }
         }
 
-        public ModuleBoard CreateInstance(int sampleRate = 44100)
+        public ModuleBoard CreateInstance(SynthData data)
         {
             var boardModules = new CrossReferencedDictionary<string, Module>();
             foreach (var m in modules)
@@ -136,7 +136,7 @@ namespace SynthLib.Board
             }
 
 
-            var board = new ModuleBoard(boardModules.Keys2.ToArray(), sampleRate);
+            var board = new ModuleBoard(boardModules.Keys2.ToArray(), data);
 
             return board;
         }

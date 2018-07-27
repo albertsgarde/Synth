@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Midi;
 using NAudio.Wave;
+using SynthLib.Data;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -22,16 +23,16 @@ namespace SynthLib.MidiSampleProviders
 
         private float[] upperResult;
 
-        public SplitBoard(IMidiSampleProvider lowerBoard, IMidiSampleProvider upperBoard, int splitNoteNumber)
+        public SplitBoard(IMidiSampleProvider lowerBoard, IMidiSampleProvider upperBoard, int splitNoteNumber, SynthData data)
         {
-            this.lowerBoard = lowerBoard.Clone();
-            this.upperBoard = upperBoard.Clone();
+            this.lowerBoard = lowerBoard.Clone(data);
+            this.upperBoard = upperBoard.Clone(data);
             this.splitNoteNumber = splitNoteNumber;
         }
 
-        public IMidiSampleProvider Clone()
+        public IMidiSampleProvider Clone(SynthData data)
         {
-            return new SplitBoard(lowerBoard.Clone(), upperBoard.Clone(), splitNoteNumber);
+            return new SplitBoard(lowerBoard.Clone(data), upperBoard.Clone(data), splitNoteNumber, data);
         }
 
         public void HandleNoteOn(int noteNumber)
@@ -48,6 +49,12 @@ namespace SynthLib.MidiSampleProviders
                 lowerBoard.HandleNoteOff(noteNumber);
             else
                 upperBoard.HandleNoteOff(noteNumber);
+        }
+
+        public void HandlePitchWheelChange(int pitch)
+        {
+            lowerBoard.HandlePitchWheelChange(pitch);
+            upperBoard.HandlePitchWheelChange(pitch);
         }
 
         public void HandleControlChange(MidiController controller, int controllerValue)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
 using NAudio.Midi;
+using SynthLib.Data;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -16,9 +17,11 @@ namespace SynthLib.MidiSampleProviders
 
         void HandleNoteOff(int noteNumber);
 
+        void HandlePitchWheelChange(int pitch);
+
         void HandleControlChange(MidiController controller, int controllerValue);
 
-        IMidiSampleProvider Clone();
+        IMidiSampleProvider Clone(SynthData data);
 
         void Next(float[] buffer, int offset, int count, float gain);
     }

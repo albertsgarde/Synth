@@ -8,6 +8,7 @@ using Stuff;
 using NAudio.Wave;
 using SynthLib.Board;
 using NAudio.Midi;
+using SynthLib.Data;
 
 namespace SynthLib.MidiSampleProviders
 {
@@ -21,15 +22,15 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
-        public PolyBoard(BoardTemplate boardTemplate, int voices, int sampleRate = 44100)
+        public PolyBoard(BoardTemplate boardTemplate, int voices, SynthData data)
         {
-            SampleRate = sampleRate;
+            SampleRate = data.SampleRate;
             this.boardTemplate = boardTemplate;
             this.voices = voices;
             boards = new ModuleBoard[voices];
 
             for (int i = 0; i < voices; ++i)
-                boards[i] = boardTemplate.CreateInstance(sampleRate);
+                boards[i] = boardTemplate.CreateInstance(data);
         }
 
         public void HandleNoteOn(int noteNumber)
@@ -49,15 +50,21 @@ namespace SynthLib.MidiSampleProviders
             }
         }
 
+        public void HandlePitchWheelChange(int pitch)
+        {
+            foreach (var mb in boards)
+                mb.PitchWheelChange(pitch);
+        }
+
         public void HandleControlChange(MidiController controller, int controllerValue)
         {
             foreach(var mb in boards)
                 mb.ControllerChange(controller, controllerValue);
         }
 
-        public IMidiSampleProvider Clone()
+        public IMidiSampleProvider Clone(SynthData data)
         {
-            return new PolyBoard(boardTemplate, voices, SampleRate);
+            return new PolyBoard(boardTemplate, voices, data);
         }
 
         public void Next(float[] buffer, int offset, int count, float gain)
