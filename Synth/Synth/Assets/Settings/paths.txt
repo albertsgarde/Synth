@@ -5,3 +5,4 @@ wav wav/
 moduleTypes moduleTypes/
 oscillatorTypes oscillatorTypes/
 effectTypes effectTypes/
+log log/

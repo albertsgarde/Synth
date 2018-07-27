@@ -19,6 +19,10 @@ namespace SynthLib.Data
     /// </summary>
     public class SynthData
     {
+        private SettingsManager settings;
+
+        public Logger Log { get; }
+
         public int SampleRate { get; }
         public int DesiredLatency { get; }
         /// <summary>
@@ -40,8 +44,6 @@ namespace SynthLib.Data
 
         public PathList EffectPaths { get; }
 
-        private SettingsManager settings;
-
         public LoaderTypes<Module> ModuleTypes { get; }
 
         public LoaderTypes<Oscillator> OscillatorTypes { get; }
@@ -52,11 +54,13 @@ namespace SynthLib.Data
         {
             settings = SettingsLoader.LoadSettings(settingsPath);
 
+            Root = settings.GetString("paths", "root");
+
+            Log = new Logger(new PathList(settings.GetStrings("paths", "log"), Root).Root);
+
             SampleRate = settings.GetInt("main", "sampleRate");
             DesiredLatency = settings.GetInt("main", "desiredLatency");
             PitchWheelRange = settings.GetFloat("main", "pitchWheelChange");
-
-            Root = settings.GetString("paths", "root");
             Console.WriteLine("Should error log if root path isn't a directory.");
             if (!File.GetAttributes(Root).HasFlag(FileAttributes.Directory))
                 throw new SettingsException("paths", "key", "root path must be a directory");
