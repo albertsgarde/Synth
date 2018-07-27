@@ -104,6 +104,15 @@ namespace SynthLib.Board
             connections.Add(new ConnectionTemplate(modules[source], sourceIndex, modules[dest], destIndex));
         }
 
+        /// <summary>
+        /// Connects all the given modules. The first to the second, the second to the third, the third to the fourth, and so one.
+        /// </summary>
+        public void AddConnections(params Module[] modules)
+        {
+            for (int i = 1; i < modules.Length; ++i)
+                AddConnection(modules[i - 1], modules[i]);
+        }
+
         private void CreateConnection(ConnectionTemplate ct, CrossReferencedDictionary<string, Module> modules)
         {
             if (ct.SourceIndex == -1)
