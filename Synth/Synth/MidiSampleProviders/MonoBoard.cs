@@ -23,13 +23,11 @@ namespace SynthLib.MidiSampleProviders
         private readonly float baseGlideSamples;
 
         private readonly float baseGlideTime;
-        private float glideSamples;
+        private readonly float glideSamples;
 
         private float destFreq;
 
         private float baseFreqPerSample;
-
-        private float freqPerSampleMod;
 
         private List<int> currentTones;
 
@@ -47,7 +45,6 @@ namespace SynthLib.MidiSampleProviders
             baseGlideTime = glideTime;
             glideSamples = baseGlideSamples = (glideTime * SampleRate / 1000);
             baseFreqPerSample = 10e8f;
-            freqPerSampleMod = 1;
             currentTones = new List<int>();
         }
 
