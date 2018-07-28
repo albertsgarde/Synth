@@ -21,6 +21,10 @@
 	Add values to simpleFilter.
 	Log all midiinputs so they can be replayed later for debugging.
 	Other midi inputs.
+	"BoardBit"'s (find better name)
+		Boards that can be added into other boards. 
+		For example for various standard midi controls.
+		Could take arguments that set specific things in its modules.
 
 Music:
 	Let most music data be in a single object that can then be passed around.
