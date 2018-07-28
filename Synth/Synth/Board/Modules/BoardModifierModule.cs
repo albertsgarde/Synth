@@ -49,10 +49,10 @@ namespace SynthLib.Board.Modules
             return inputs;
         }
 
-        public XElement ToXElement(string name, SynthData data)
+        public override XElement ToXElement(string name)
         {
             var element = base.ToXElement(name);
-            element.AddValue("output", OutputType);
+            element.AddValue("output", (int)OutputType);
             return element;
         }
     }

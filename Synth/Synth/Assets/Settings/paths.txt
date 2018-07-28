@@ -1,5 +1,6 @@
 ﻿root D:/PenguinAgen/Documents/Synth/
-boards boards/
+savedBoards savedBoards/
+defaultBoards boards/
 midi midi/
 wav wav/
 moduleTypes moduleTypes/

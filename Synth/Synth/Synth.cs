@@ -29,39 +29,30 @@ namespace SynthLib
 
         public Synth(SynthData data)
         {
-            try
+            Data = data;
+
+            SampleRate = Data.SampleRate;
+
+            SynthResult = new SynthResult(data)
             {
-                Data = data;
+                Gain = 1f
+            };
 
-                SampleRate = Data.SampleRate;
-
-                SynthResult = new SynthResult(data)
-                {
-                    Gain = 1f
-                };
-
-                var aOut = new WaveOutEvent
-                {
-                    DesiredLatency = data.DesiredLatency,
-                    DeviceNumber = -1
-                };
-
-                aOut.Init(SynthResult);
-                aOut.Play();
-
-                midi = new Midi(2);
-                midi.SetMidiIn(0);
-
-                board = new BoardTemplate();
-                SetupBoard(Data);
-                Setup(Data);
-            }
-            catch (Exception e)
+            var aOut = new WaveOutEvent
             {
-                data.Log.Log("loadError", "Logged exception. See loadExceptions.txt");
-                data.Log.Log("loadExceptions", e);
-                throw e;
-            }
+                DesiredLatency = data.DesiredLatency,
+                DeviceNumber = -1
+            };
+
+            aOut.Init(SynthResult);
+            aOut.Play();
+
+            midi = new Midi(2);
+            midi.SetMidiIn(0);
+
+            board = new BoardTemplate();
+            SetupBoard(Data);
+            Setup(Data);
         }
 
         partial void SetupBoard(SynthData data);

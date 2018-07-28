@@ -186,16 +186,16 @@ namespace SynthLib.Board
             return element;
         }
 
-        public void SaveToFile(string name, SynthData settings, string path = "")
+        public void SaveToFile(string name, SynthData data, string path = "", bool preDef = false)
         {
-            var filePath = settings.BoardPaths.FilePath(Path.Combine(path, name + ".xml"));
+            var filePath = (preDef ? data.DefaultBoardsPaths : data.SavedBoardsPaths).FilePath(Path.Combine(path, name + ".xml"));
             var element = ToXElement();
             element.Save(filePath);
         }
 
-        public static BoardTemplate LoadFromFile(string name, SynthData data, string path = "")
+        public static BoardTemplate LoadFromFile(string name, SynthData data, string path = "", bool preDef = false)
         {
-            string wholePath = data.BoardPaths.FilePath(Path.Combine(path, name + ".xml"));
+            string wholePath = (preDef ? data.DefaultBoardsPaths : data.SavedBoardsPaths).FilePath(Path.Combine(path, name + ".xml"));
             return new BoardTemplate(XDocument.Load(wholePath).Root, data);
         }
     }
