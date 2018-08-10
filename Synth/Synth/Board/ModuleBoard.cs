@@ -24,6 +24,8 @@ namespace SynthLib.Board
 
         public IReadOnlyList<int> ControllerValues => controllerValues;
 
+        private readonly Dictionary<int, float> transmitionData;
+
         public int PitchWheel { get; private set; }
 
         private readonly float pitchWheelRange;
@@ -58,6 +60,8 @@ namespace SynthLib.Board
         {
             SampleRate = data.SampleRate;
             pitchWheelRange = data.PitchWheelRange;
+
+            transmitionData = new Dictionary<int, float>();
 
             this.modules = modules;
             SortModules();
@@ -126,6 +130,19 @@ namespace SynthLib.Board
             controllerValues[(int)controller] = controllerValue;
         }
 
+        public void TransmitValue(int id, float value)
+        {
+            transmitionData[id] = value;
+        }
+
+        public float RecieveValue(int id)
+        {
+            if (transmitionData.ContainsKey(id))
+                return transmitionData[id];
+            else
+                return 0;
+        }
+
         private void SortModules()
         {
             Validate();
@@ -147,6 +164,7 @@ namespace SynthLib.Board
 
         public (float left, float right) Next()
         {
+
             GlideModifier = 1;
             frequencyModifier = 1;
             gain = 1;
@@ -154,7 +172,7 @@ namespace SynthLib.Board
             ++samples;
             Time = samples * 1000 / SampleRate; 
 
-            var result = (left: 0f, right: 0f);
+            float leftResult = 0f, rightResult = 0f;
             Module curModule;
 
             inputTable.ResetInputs();
@@ -165,10 +183,10 @@ namespace SynthLib.Board
                 switch (curModule.OutputType)
                 {
                     case BoardOutput.Left:
-                        result.left += output[0];
+                        leftResult += output[0];
                         break;
                     case BoardOutput.Right:
-                        result.right += output[0];
+                        rightResult += output[0];
                         break;
                     case BoardOutput.GlideTime:
                         GlideModifier *= output[0];
@@ -192,7 +210,7 @@ namespace SynthLib.Board
                         break;
                 }
             }
-            return (result.left * gain, result.right * gain);
+            return (leftResult * gain, rightResult * gain);
         }
 
         private struct InputTable

@@ -34,5 +34,12 @@ namespace SynthLib.Board
                 throw new InvalidModuleSaveElementException(element, element.Name + " not a int. value: " + element.Value);
             return result;
         }
+
+        public static bool ParseBool(XElement element)
+        {
+            if (!bool.TryParse(element.Value, out bool result))
+                throw new InvalidModuleSaveElementException(element, element.Name + " not a bool. value: " + element.Value);
+            return result;
+        }
     }
 }
