@@ -20,6 +20,7 @@ using SynthLib.Board;
 using SynthLib.Board.Modules;
 using SynthLib.Oscillators;
 using SynthLib.Effects;
+using System.Threading;
 
 namespace SynthApp
 {
@@ -31,6 +32,8 @@ namespace SynthApp
         private readonly Synth synth;
 
         private readonly SynthData data;
+        
+        private Thread updateThread;
 
         public MainWindow()
         {
@@ -41,6 +44,8 @@ namespace SynthApp
                 BoardTemplate = new BoardTemplate()
             };
             InitializeComponent();
+            updateThread = new Thread(UpdateGUI);
+            updateThread.Start();
             RefreshBoard();
         }
 
@@ -57,6 +62,23 @@ namespace SynthApp
         private void RefreshBoard(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             RefreshBoard();
+        }
+
+        private void UpdateGUI()
+        {
+            long updateTime = (long)1e5;
+            long prevUpdate = DateTime.Now.Ticks;
+            while (true)
+            {
+                while (DateTime.Now.Ticks - prevUpdate < updateTime) ;
+                prevUpdate = DateTime.Now.Ticks;
+                Dispatcher.BeginInvoke(
+                new ThreadStart(() =>
+                {
+                    leftMax.Text = "" + synth.MaxValue.left;
+                    rightMax.Text = "" + synth.MaxValue.right;
+                }));
+            }
         }
 
         private BoardTemplate SetupBoard()

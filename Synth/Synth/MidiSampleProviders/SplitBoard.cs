@@ -11,7 +11,9 @@ namespace SynthLib.MidiSampleProviders
 {
     public class SplitBoard : IMidiSampleProvider
     {
-        public int SampleRate { get; }
+        public int SampleRate => lowerBoard.SampleRate;
+
+        public (float left, float right) MaxValue { get; private set; }
 
         private readonly IMidiSampleProvider lowerBoard;
 
@@ -25,6 +27,7 @@ namespace SynthLib.MidiSampleProviders
 
         public SplitBoard(IMidiSampleProvider lowerBoard, IMidiSampleProvider upperBoard, int splitNoteNumber, SynthData data)
         {
+            MaxValue = (0, 0);
             this.lowerBoard = lowerBoard.Clone(data);
             this.upperBoard = upperBoard.Clone(data);
             this.splitNoteNumber = splitNoteNumber;
@@ -72,6 +75,10 @@ namespace SynthLib.MidiSampleProviders
             for (int i = offset; i < offset + count; ++i)
             {
                 buffer[i] = lowerResult[i] + upperResult[i];
+            }
+            for (int i = offset; i < count + offset; i += 2)
+            {
+                MaxValue = (Math.Max(MaxValue.left, Math.Abs(buffer[i])), Math.Max(MaxValue.right, Math.Abs(buffer[i + 1])));
             }
         }
     }

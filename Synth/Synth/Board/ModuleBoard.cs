@@ -38,6 +38,8 @@ namespace SynthLib.Board
 
         private float gain;
 
+        public (float left, float right) MaxValue { get; private set; }
+
         /// <summary>
         /// Time in milliseconds since last note event.
         /// </summary>
@@ -80,6 +82,8 @@ namespace SynthLib.Board
             frequency = baseFrequency;
 
             gain = 1;
+
+            MaxValue = (0, 0);
 
             Time = 0;
             samples = 0;
@@ -210,7 +214,8 @@ namespace SynthLib.Board
                         break;
                 }
             }
-            return (leftResult * gain, rightResult * gain);
+            var result = (left: leftResult * gain, right: rightResult * gain);
+            return result;
         }
 
         private struct InputTable

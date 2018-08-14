@@ -22,9 +22,12 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
+        public (float left, float right) MaxValue { get; private set; }
+
         public PolyBoard(BoardTemplate boardTemplate, int voices, SynthData data)
         {
             SampleRate = data.SampleRate;
+            MaxValue = (0, 0);
             this.boardTemplate = boardTemplate;
             this.voices = voices;
             boards = new ModuleBoard[voices];
@@ -81,6 +84,7 @@ namespace SynthLib.MidiSampleProviders
                         buffer[i] += left;
                         buffer[i + 1] += right;
                     }
+                    MaxValue = (Math.Max(MaxValue.left, Math.Abs(buffer[i])), Math.Max(MaxValue.right, Math.Abs(buffer[i + 1])));
                 }
             });
 

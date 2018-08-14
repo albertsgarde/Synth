@@ -16,6 +16,8 @@
         <TextBlock x:Name="errorText" HorizontalAlignment="Left" Margin="50,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="251" Foreground="Red"/>
         <Slider x:Name="SimpleFilter" HorizontalAlignment="Left" Margin="138,231,0,0" VerticalAlignment="Top" Width="179" Maximum="20" SmallChange="1" Value="5" TickPlacement="BottomRight" ValueChanged="RefreshBoard"/>
         <TextBlock HorizontalAlignment="Left" Margin="138,210,0,0" TextWrapping="Wrap" Text="Simple Filter" VerticalAlignment="Top" Width="179" TextAlignment="Center"/>
+        <TextBlock x:Name="leftMax" HorizontalAlignment="Left" Margin="466,64,0,0" TextWrapping="Wrap" Text="leftMax" VerticalAlignment="Top"/>
+        <TextBlock x:Name="rightMax" HorizontalAlignment="Left" Margin="531,64,0,0" TextWrapping="Wrap" Text="rightMax" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

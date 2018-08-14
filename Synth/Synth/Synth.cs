@@ -27,6 +27,8 @@ namespace SynthLib
 
         private readonly SynthResult synthResult;
 
+        public (float left, float right) MaxValue => synthResult.MaxValue;
+
         public SynthData Data { get; }
 
         private readonly Midi midi;

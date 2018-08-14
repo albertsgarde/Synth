@@ -26,6 +26,8 @@ namespace SynthLib
 
         public float Gain { get; set; }
 
+        public (float left, float right) MaxValue => synthProvider.MaxValue;
+
         public SynthResult(SynthData data)
         {
             Data = data;

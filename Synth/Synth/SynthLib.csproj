@@ -59,6 +59,7 @@
     <Compile Include="Effects\DelegateEffect.cs" />
     <Compile Include="Effects\Filter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
+    <Compile Include="Effects\Limiter.cs" />
     <Compile Include="Effects\UnsaveableEffectException.cs" />
     <Compile Include="MidiSampleProviders\MonoBoard.cs" />
     <Compile Include="MidiSampleProviders\NullProvider.cs" />

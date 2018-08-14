@@ -13,6 +13,8 @@ namespace SynthLib.MidiSampleProviders
     {
         int SampleRate { get; }
 
+        (float left, float right) MaxValue { get; }
+
         void HandleNoteOn(int noteNumber);
 
         void HandleNoteOff(int noteNumber);

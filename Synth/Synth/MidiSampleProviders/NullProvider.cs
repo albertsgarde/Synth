@@ -12,6 +12,8 @@ namespace SynthLib.MidiSampleProviders
     {
         public int SampleRate { get; }
 
+        public (float, float) MaxValue => (0, 0);
+
         public IMidiSampleProvider Clone(SynthData data)
         {
             return new NullProvider();

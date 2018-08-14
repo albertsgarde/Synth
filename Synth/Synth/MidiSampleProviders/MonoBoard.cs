@@ -20,6 +20,8 @@ namespace SynthLib.MidiSampleProviders
 
         public int SampleRate { get; }
 
+        public (float left, float right) MaxValue { get; private set; }
+
         private readonly float baseGlideSamples;
 
         private readonly float baseGlideTime;
@@ -40,6 +42,7 @@ namespace SynthLib.MidiSampleProviders
         public MonoBoard(BoardTemplate boardTemplate, float glideTime, SynthData data)
         {
             SampleRate = data.SampleRate;
+            MaxValue = (0, 0);
             this.boardTemplate = boardTemplate;
             board = boardTemplate.CreateInstance(data);
             baseGlideTime = glideTime;
@@ -110,6 +113,7 @@ namespace SynthLib.MidiSampleProviders
                     board.BaseFrequency = destFreq;
                 }
                 (buffer[i], buffer[i + 1]) = board.Next();
+                MaxValue = (Math.Max(MaxValue.left, Math.Abs(buffer[i])), Math.Max(MaxValue.right, Math.Abs(buffer[i + 1])));
             }
         }
     }
