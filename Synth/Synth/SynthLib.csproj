@@ -56,9 +56,12 @@
     <Compile Include="Board\Modules\Reciever.cs" />
     <Compile Include="Board\Modules\Transmitter.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
+    <Compile Include="Effects\DelegateEffect.cs" />
     <Compile Include="Effects\Filter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
+    <Compile Include="Effects\UnsaveableEffectException.cs" />
     <Compile Include="MidiSampleProviders\MonoBoard.cs" />
+    <Compile Include="MidiSampleProviders\NullProvider.cs" />
     <Compile Include="MidiSampleProviders\PolyBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />

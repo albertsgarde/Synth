@@ -15,13 +15,17 @@ using NAudio.Wave.SampleProviders;
 
 namespace SynthLib
 {
-    public partial class Synth
+    public class Synth
     {
         public int SampleRate { get; }
 
-        private BoardTemplate board;
-        
-        public SynthResult SynthResult { get; }
+        private BoardTemplate boardTemplate;
+
+        private IMidiSampleProvider msp;
+
+        private Func<BoardTemplate, IMidiSampleProvider> midiSampleProviderCreator;
+
+        private readonly SynthResult synthResult;
 
         public SynthData Data { get; }
 
@@ -33,7 +37,7 @@ namespace SynthLib
 
             SampleRate = Data.SampleRate;
 
-            SynthResult = new SynthResult(data)
+            synthResult = new SynthResult(data)
             {
                 Gain = 1f
             };
@@ -44,7 +48,7 @@ namespace SynthLib
                 DeviceNumber = -1
             };
 
-            aOut.Init(SynthResult);
+            aOut.Init(synthResult);
             aOut.Play();
 
             midi = new Midi(240);
@@ -55,26 +59,41 @@ namespace SynthLib
                     midi.SetMidiIn(i);
             }
 
-            board = new BoardTemplate();
-            SetupBoard(Data);
-            Setup(Data);
+            msp = new NullProvider();
+            msp.SubscribeToMidi(midi);
+            boardTemplate = SynthSetup.SetupBoard(Data);
+            MidiSampleProviderCreator = SynthSetup.DefaultMidiSampleProviderCreator(Data);
         }
 
-        partial void SetupBoard(SynthData data);
-
-        /// <summary>
-        /// Called every time the Board is set.
-        /// </summary>
-        partial void Setup(SynthData data);
-
-        public BoardTemplate Board
+        public BoardTemplate BoardTemplate
         {
-            get => board;
+            get => boardTemplate;
             set
             {
-                board = value;
-                Setup(Data);
+                boardTemplate = value;
+                ReplaceSampleProvider();
             }
+        }
+
+        public Func<BoardTemplate, IMidiSampleProvider> MidiSampleProviderCreator
+        {
+            get => midiSampleProviderCreator;
+            set
+            {
+                midiSampleProviderCreator = value;
+                ReplaceSampleProvider();
+            }
+        }
+
+        private void ReplaceSampleProvider()
+        {
+            msp.UnsubscribeFromMidi(midi);
+            
+            msp = midiSampleProviderCreator.Invoke(boardTemplate);
+
+            msp.SubscribeToMidi(midi);
+
+            synthResult.ReplaceSynthProvider(msp);
         }
     }
 }

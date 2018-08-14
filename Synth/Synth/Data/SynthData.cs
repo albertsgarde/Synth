@@ -81,7 +81,7 @@ namespace SynthLib.Data
             OscillatorTypes = new LoaderTypes<Oscillator>(OscillatorPaths, "oscillatorType", "SynthLib");
             EffectTypes = new LoaderTypes<Effect>(EffectPaths, "effectType", "SynthLib");
 
-
+            Console.WriteLine(DefaultBoardsPaths);
             var subBoards = new Dictionary<string, BoardTemplate>();
             foreach (var f in DefaultBoardsPaths.Files())
             {

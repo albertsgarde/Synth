@@ -95,5 +95,23 @@ namespace SynthLib
             var effectInput = new float[effect.Values + 1];
             return new Signal(signal.Select(s => { effectInput[effect.Values] = s; return effect.Next(effectInput); }));
         }
+
+        public static void SubscribeToMidi(this IMidiSampleProvider msp, Midi midi)
+        {
+
+            midi.NoteOn += msp.HandleNoteOn;
+            midi.NoteOff += msp.HandleNoteOff;
+            midi.PitchWheelChange += msp.HandlePitchWheelChange;
+            midi.ControlChange += msp.HandleControlChange;
+        }
+
+        public static void UnsubscribeFromMidi(this IMidiSampleProvider msp, Midi midi)
+        {
+
+            midi.NoteOn -= msp.HandleNoteOn;
+            midi.NoteOff -= msp.HandleNoteOff;
+            midi.PitchWheelChange -= msp.HandlePitchWheelChange;
+            midi.ControlChange -= msp.HandleControlChange;
+        }
     }
 }
