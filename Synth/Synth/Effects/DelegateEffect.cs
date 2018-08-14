@@ -14,7 +14,7 @@ namespace SynthLib.Effects
 
         public override int Values => 0;
 
-        private Func<float, float> effect;
+        private readonly Func<float, float> effect;
 
         public DelegateEffect(Func<float, float> effect)
         {
