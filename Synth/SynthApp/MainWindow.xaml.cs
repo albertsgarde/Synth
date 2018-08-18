@@ -106,6 +106,8 @@ namespace SynthApp
 
             var g1 = new EffectModule(new Boost(0.2f));
 
+            var dist = new EffectModule(new Limiter(0.3f));
+
             var lfo2 = new ConstantOscillatorModule(new SineOscillator(), 1, 0.5f);
 
             var p1 = new Pan();
@@ -113,7 +115,7 @@ namespace SynthApp
             var endLeft = new EndModule(false);
             var endRight = new EndModule(true);
 
-            board.Add(endLeft, endRight, sf1, d1, o3, o2, o1, env1, g1, lfo2, p1 /*, volumeControl, glideIn, glideOut, glideTranslate, pitchShift, pitchWheel, boardGain, volumeTranslate*/);
+            board.Add(endLeft, endRight, sf1, d1, o3, o2, o1, env1, g1, lfo2, p1, dist /*, volumeControl, glideIn, glideOut, glideTranslate, pitchShift, pitchWheel, boardGain, volumeTranslate*/);
 
             //board.AddConnections(glideIn, glideTranslate, glideOut);
 
@@ -131,7 +133,7 @@ namespace SynthApp
             board.AddConnections(o2, d1);
             board.AddConnections(o3, d1);
 
-            board.AddConnections(d1, sf1, g1, p1);
+            board.AddConnections(d1, sf1, g1, dist, p1);
 
             board.AddConnection(p1, endLeft);
             board.AddConnection(p1, endRight);
