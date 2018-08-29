@@ -69,16 +69,20 @@ namespace SynthLib.Effects
         /// <param name="cutoffFrequency">The cutoff frequency of the generated low pass filter kernel, given as fraction of sample rate.</param>
         /// <param name="length">The length of the kernel</param>
         /// <returns></returns>
-        public static float[] GenerateLowPassKernel(float cutoffFrequency, int length)
+        public static float[] GenerateSincKernal(float cutoffFrequency, int length)
         {
             if (length % 2 == 0)
                 length++;
             var result = new float[length];
+
             var halfLength = length / 2;
             result[halfLength] = 0;
             for (int i = 1; i <= halfLength; i++)
                 result[halfLength + i] = result[halfLength - i] = (float)(Math.Sin(2 * Math.PI * cutoffFrequency * i) / (i * Math.PI));
-            Console.WriteLine(result.AsString());
+
+            /*result[0] = 0;
+            for (int i = 1; i < length; i++)
+                result[i] = (float)(Math.Sin(2 * Math.PI * cutoffFrequency * i) / (i * Math.PI));*/
             return result;
         }
 
@@ -88,9 +92,9 @@ namespace SynthLib.Effects
         /// <param name="cutoffFrequency">Given as Hz</param>
         /// <param name="length">The length of the kernel</param>
         /// <returns></returns>
-        public static float[] GenerateLowPassKernel(float cutoffFrequency, int length, int sampleRate)
+        public static float[] GenerateSincKernel(float cutoffFrequency, int length, int sampleRate)
         {
-            return GenerateLowPassKernel(cutoffFrequency / sampleRate, length);
+            return GenerateSincKernal(cutoffFrequency / sampleRate, length);
         }
     }
 }
