@@ -62,6 +62,8 @@ namespace SynthLib
             }
             catch (NAudio.MmException mme)
             {
+                Console.WriteLine(MidiIn.NumberOfDevices);
+                Console.WriteLine(MidiIn.DeviceInfo(deviceNo).ProductName);
                 Console.WriteLine($"Midi device {deviceNo} not available.");
                 throw mme;
             }

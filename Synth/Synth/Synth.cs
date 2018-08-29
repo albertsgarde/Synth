@@ -54,7 +54,6 @@ namespace SynthLib
             aOut.Play();
 
             midi = new Midi(240);
-            midi.SetMidiIn(0);
             for (int i = 0; i < MidiIn.NumberOfDevices; ++i)
             {
                 if (MidiIn.DeviceInfo(i).ProductName == "MPKmini2")
