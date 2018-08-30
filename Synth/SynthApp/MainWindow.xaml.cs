@@ -80,7 +80,7 @@ namespace SynthApp
                 }));
             }
         }
-        public static BoardTemplate SetupBoard(SynthData data)
+        public BoardTemplate SetupBoard(SynthData data)
         {
             var board = new BoardTemplate();
 
@@ -102,11 +102,7 @@ namespace SynthApp
             var d1 = new Distributer(new float[] { 1, 0.7f, 0.0f }, new float[] { 1 });
 
             //var sf1 = new EffectModule(new SimpleFilter(5));
-            var sf1 = new EffectModule(new Filter(Filter.GenerateSincKernel(20000, 16, data.SampleRate)));
-
-            var sine = new ConstantOscillatorModule(new SineOscillator(), 1, 40, 1);
-
-            var m1 = new Multiply();
+            var sf1 = new EffectModule(new Filter(Filter.GenerateSincKernel((float)FilterCutoff.Value, 16, data.SampleRate)));
 
             var g1 = new EffectModule(new Boost(0.2f));
 
@@ -117,7 +113,7 @@ namespace SynthApp
             var endLeft = new EndModule(false);
             var endRight = new EndModule(true);
 
-            board.Add(endLeft, endRight, sf1, d1, o3, o2, o1, env1, g1, lfo2, p1, m1, sine/*, volumeControl, glideIn, glideOut, glideTranslate, pitchShift, pitchWheel, boardGain, volumeTranslate*/);
+            board.Add(endLeft, endRight, sf1, d1, o3, o2, o1, env1, g1, lfo2, p1);
 
             //board.AddConnections(glideIn, glideTranslate, glideOut);
 
@@ -135,9 +131,7 @@ namespace SynthApp
             board.AddConnection(o2, d1);
             board.AddConnection(o3, d1);
 
-            board.AddConnections(sine, m1);
-
-            board.AddConnections(d1, m1, g1, p1);
+            board.AddConnections(d1, g1, sf1, p1);
 
             board.AddConnection(p1, endLeft);
             board.AddConnection(p1, endRight);
