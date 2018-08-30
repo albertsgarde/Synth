@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SynthLib</RootNamespace>
     <AssemblyName>SynthLib</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,13 +52,17 @@
     <Compile Include="Board\Modules\BoardModifierModule.cs" />
     <Compile Include="Board\Modules\InvalidModuleValue.cs" />
     <Compile Include="Board\Modules\MidiControllerModule.cs" />
+    <Compile Include="Board\Modules\Multiply.cs" />
     <Compile Include="Board\Modules\Pan.cs" />
     <Compile Include="Board\Modules\PitchWheelModule.cs" />
     <Compile Include="Board\Modules\Reciever.cs" />
     <Compile Include="Board\Modules\Transmitter.cs" />
     <Compile Include="Board\NoFreeConnectionsException.cs" />
     <Compile Include="Effects\DelegateEffect.cs" />
-    <Compile Include="Effects\Filter.cs" />
+    <Compile Include="Effects\Filters\Filter.cs" />
+    <Compile Include="Effects\Filters\LowPassFilter.cs" />
+    <Compile Include="Effects\Filters\OnePoleFilter.cs" />
+    <Compile Include="Effects\Filters\SimpleFilter.cs" />
     <Compile Include="Effects\InvalidEffectSaveElementException.cs" />
     <Compile Include="Effects\Limiter.cs" />
     <Compile Include="Effects\UnsaveableEffectException.cs" />
@@ -66,13 +71,11 @@
     <Compile Include="MidiSampleProviders\PolyBoard.cs" />
     <Compile Include="Effects\Boost.cs" />
     <Compile Include="Effects\Delay.cs" />
-    <Compile Include="Effects\OnePoleFilter.cs" />
     <Compile Include="Effects\Stall.cs" />
     <Compile Include="Effects\Flip.cs" />
     <Compile Include="Effects\Effect.cs" />
     <Compile Include="Effects\Translate.cs" />
     <Compile Include="Effects\Pass.cs" />
-    <Compile Include="Effects\SimpleFilter.cs" />
     <Compile Include="MidiSampleProviders\IMidiSampleProvider.cs" />
     <Compile Include="Midi.cs" />
     <Compile Include="Board\Connection.cs" />

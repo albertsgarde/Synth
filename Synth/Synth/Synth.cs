@@ -44,10 +44,12 @@ namespace SynthLib
                 Gain = 1f
             };
 
+
+
             var aOut = new WaveOutEvent
             {
                 DesiredLatency = data.DesiredLatency,
-                DeviceNumber = -1
+                DeviceNumber = FindAudioDevice()
             };
 
             aOut.Init(synthResult);
@@ -64,6 +66,17 @@ namespace SynthLib
             msp.SubscribeToMidi(midi);
             boardTemplate = SynthSetup.SetupBoard(Data);
             MidiSampleProviderCreator = SynthSetup.DefaultMidiSampleProviderCreator(Data);
+        }
+
+        public int FindAudioDevice()
+        {
+            for (int n = 0; n < WaveOut.DeviceCount; n++)
+            {
+                var caps = WaveOut.GetCapabilities(n);
+                if (caps.ProductName == "Speakers (3- AudioBox USB 96)")
+                    return n;
+            }
+            return -1;
         }
 
         public BoardTemplate BoardTemplate

@@ -1,4 +1,4 @@
-﻿root D:/PenguinAgen/Documents/Synth/
+﻿root C:/Users/alber/Documents/Synth
 savedBoards savedBoards/
 defaultBoards boards/
 midi midi/
