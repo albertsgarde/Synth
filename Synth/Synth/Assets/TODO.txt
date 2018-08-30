@@ -22,6 +22,7 @@
 	Log all midiinputs so they can be replayed later for debugging.
 	Other midi inputs.
 	Let glide time be 0 without breaking everything.
+	Stop volume change from creating noise.
 	SubBoards
 		Boards that can be added into other boards. 
 		For example for various standard midi controls.
