@@ -174,9 +174,9 @@ namespace SynthLib.Board
             gain = 1;
 
             ++samples;
-            Time = samples * 1000 / SampleRate; 
+            Time = samples * 1000 / SampleRate;
 
-            float leftResult = 0f, rightResult = 0f;
+            (float left, float right) result = (1f, 1f);
             Module curModule;
 
             inputTable.ResetInputs();
@@ -187,10 +187,10 @@ namespace SynthLib.Board
                 switch (curModule.OutputType)
                 {
                     case BoardOutput.Left:
-                        leftResult += output[0];
+                        result.left += output[0];
                         break;
                     case BoardOutput.Right:
-                        rightResult += output[0];
+                        result.right += output[0];
                         break;
                     case BoardOutput.GlideTime:
                         GlideModifier *= output[0];
@@ -214,7 +214,8 @@ namespace SynthLib.Board
                         break;
                 }
             }
-            var result = (left: leftResult * gain, right: rightResult * gain);
+            result.left *= gain;
+            result.right *= gain;
             return result;
         }
 
