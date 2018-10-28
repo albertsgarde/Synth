@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
 using SynthLib.Board;
-using SynthLib.Music;
+using Stuff.Music;
 using System.Diagnostics;
 using NAudio.Midi;
 using SynthLib.Data;

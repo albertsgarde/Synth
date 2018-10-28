@@ -10,7 +10,7 @@ using SynthLib.Board.Modules;
 using Stuff;
 using NAudio.Midi;
 using SynthLib.Data;
-using SynthLib.Music;
+using Stuff.Music;
 
 namespace SynthLib.Board
 {

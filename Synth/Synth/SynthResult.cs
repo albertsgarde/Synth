@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
-using SynthLib.Music;
+using Stuff.Music;
 using SynthLib.Oscillators;
 using SynthLib.Effects;
 using Stuff;

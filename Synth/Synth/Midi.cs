@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NAudio.Midi;
-using Stuff;
+using Stuff.Music;
 using System.Diagnostics;
 
 namespace SynthLib
@@ -41,7 +41,7 @@ namespace SynthLib
         {
             var frequencies = new List<float>(128);
             for (int i = 0; i < 128; ++i)
-                frequencies.Add((float)Music.Tone.FrequencyFromNote(i));
+                frequencies.Add((float)Tone.FrequencyFromNote(i));
             Frequencies = frequencies;
         }
 
@@ -101,6 +101,7 @@ namespace SynthLib
 
         public void HandleMidiEvent(MidiEvent me)
         {
+            Console.WriteLine(me);
             if (MidiEvent.IsNoteOn(me))
                 HandleNoteOn(((NoteOnEvent)me).NoteNumber);
             else if (MidiEvent.IsNoteOff(me))

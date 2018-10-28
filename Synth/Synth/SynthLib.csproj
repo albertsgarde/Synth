@@ -50,6 +50,7 @@
     <Compile Include="Board\Modules\ConstantOscillatorModules.cs" />
     <Compile Include="Board\Modules\Envelope.cs" />
     <Compile Include="Board\Modules\BoardModifierModule.cs" />
+    <Compile Include="Board\Modules\InputModule.cs" />
     <Compile Include="Board\Modules\InvalidModuleValue.cs" />
     <Compile Include="Board\Modules\MidiControllerModule.cs" />
     <Compile Include="Board\Modules\Multiply.cs" />
@@ -90,15 +91,6 @@
     <Compile Include="Board\Modules\Module.cs" />
     <Compile Include="Board\Modules\OscillatorModule.cs" />
     <Compile Include="MidiSampleProviders\SplitBoard.cs" />
-    <Compile Include="Music\BPM.cs" />
-    <Compile Include="Music\Chord.cs" />
-    <Compile Include="Music\Interval.cs" />
-    <Compile Include="Music\Key.cs" />
-    <Compile Include="Music\Melody.cs" />
-    <Compile Include="Music\MusicData.cs" />
-    <Compile Include="Music\Note.cs" />
-    <Compile Include="Music\Scale.cs" />
-    <Compile Include="Music\Tone.cs" />
     <Compile Include="Oscillators\CompoundOscillator.cs" />
     <Compile Include="Oscillators\CustomOscillator.cs" />
     <Compile Include="Oscillators\DCOscillator.cs" />

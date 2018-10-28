@@ -61,7 +61,6 @@ namespace SynthLib
                 if (MidiIn.DeviceInfo(i).ProductName == "MPKmini2")
                     midi.SetMidiIn(i);
             }
-
             msp = new NullProvider();
             msp.SubscribeToMidi(midi);
             boardTemplate = SynthSetup.SetupBoard(Data);

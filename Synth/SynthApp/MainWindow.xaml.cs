@@ -37,10 +37,13 @@ namespace SynthApp
 
         public MainWindow()
         {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+
             data = new SynthData();
             synth = new Synth(data)
             {
-                MidiSampleProviderCreator = bt => new MonoBoard(bt, 100, data),
+                MidiSampleProviderCreator = bt => new PolyBoard(bt, 6, data),
                 BoardTemplate = new BoardTemplate()
             };
             InitializeComponent();
@@ -102,7 +105,7 @@ namespace SynthApp
             var d1 = new Distributer(new float[] { 1, 0.7f, 0.0f }, new float[] { 1 });
 
             //var sf1 = new EffectModule(new SimpleFilter(5));
-            var sf1 = new EffectModule(new Filter(Filter.GenerateSincKernel((float)FilterCutoff.Value, 16, data.SampleRate)));
+            var sf1 = new EffectModule(new Filter(Filter.GenerateSincKernel((float)FilterCutoff.Value, 64, data.SampleRate)));
 
             var g1 = new EffectModule(new Boost(0.2f));
 

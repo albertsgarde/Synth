@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SynthLib.Oscillators;
-using SynthLib.Music;
+using Stuff.Music;
 using NAudio.Midi;
 using SynthLib.Board;
 using NAudio.Wave;
@@ -12,6 +12,7 @@ using SynthLib.MidiSampleProviders;
 using Stuff.StuffMath;
 using SynthLib.Effects;
 using SynthLib.Data;
+using Stuff.DSP;
 
 namespace SynthLib
 {

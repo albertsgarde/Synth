@@ -63,6 +63,15 @@ namespace SynthLib.Effects
             return element;
         }
 
+        public static float[] BlackmanWindow(int m)
+        {
+            var result = new float[m];
+            var TWO_PI_OVER_M = Math.PI * 2 / m;
+            for (int i = 0; i < m; ++i)
+                result[i] = (float)(0.42 - 0.5 * Math.Cos(i * TWO_PI_OVER_M) + 0.08 * Math.Cos(i * TWO_PI_OVER_M * 2));
+            return result;
+        }
+
         /// <summary>
         /// Generates a kernel for a low pass filter with a specific cutoff frequency.
         /// </summary>
@@ -75,10 +84,17 @@ namespace SynthLib.Effects
                 length++;
             var result = new float[length];
 
+            var window = BlackmanWindow(length);
+
             var halfLength = length / 2;
             result[halfLength] = 0;
+            var totalValue = 0f;
             for (int i = 1; i <= halfLength; i++)
-                result[halfLength + i] = result[halfLength - i] = (float)(Math.Sin(2 * Math.PI * cutoffFrequency * i) / (i * Math.PI));
+                totalValue += result[halfLength + i] = result[halfLength - i] = (float)(Math.Sin(2 * Math.PI * cutoffFrequency * i) / (i * Math.PI));// * window[i];
+
+            var normalizationFactor = 1 / totalValue;
+            for (int i = 0; i < result.Length; ++i)
+                result[i] *= normalizationFactor;
 
             /*result[0] = 0;
             for (int i = 1; i < length; i++)

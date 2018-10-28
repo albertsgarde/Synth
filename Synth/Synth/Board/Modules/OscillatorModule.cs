@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SynthLib.Oscillators;
-using SynthLib.Music;
+using Stuff.Music;
 using Stuff;
 using System.Xml.Linq;
 using SynthLib.Data;
