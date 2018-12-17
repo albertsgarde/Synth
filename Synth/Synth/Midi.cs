@@ -101,7 +101,6 @@ namespace SynthLib
 
         public void HandleMidiEvent(MidiEvent me)
         {
-            Console.WriteLine(me);
             if (MidiEvent.IsNoteOn(me))
                 HandleNoteOn(((NoteOnEvent)me).NoteNumber);
             else if (MidiEvent.IsNoteOff(me))
