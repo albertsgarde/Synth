@@ -44,7 +44,7 @@ namespace SynthLib
                 Gain = 1f
             };
 
-
+            
 
             var aOut = new WaveOutEvent
             {
@@ -56,15 +56,21 @@ namespace SynthLib
             aOut.Play();
 
             midi = new Midi(240);
-            for (int i = 0; i < MidiIn.NumberOfDevices; ++i)
-            {
-                if (MidiIn.DeviceInfo(i).ProductName == "MPKmini2")
-                    midi.SetMidiIn(i);
-            }
+            midi.SetMidiIn(FindMidiDevice());
             msp = new NullProvider();
             msp.SubscribeToMidi(midi);
             boardTemplate = SynthSetup.SetupBoard(Data);
             MidiSampleProviderCreator = SynthSetup.DefaultMidiSampleProviderCreator(Data);
+        }
+
+        public int FindMidiDevice()
+        {
+            for (int i = 0; i < MidiIn.NumberOfDevices; ++i)
+            {
+                if (MidiIn.DeviceInfo(i).ProductName == "MPKmini2")
+                    return i;
+            }
+            return -1;
         }
 
         public int FindAudioDevice()
